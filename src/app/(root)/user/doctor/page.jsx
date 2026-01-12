@@ -1,5 +1,5 @@
 "use client";
-import HomeAppointment from "@/components/HomeAppointment";
+import MyAppointment from "@/components/MyAppointment";
 import NewAppoint from "@/components/NewAppoint";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
@@ -30,11 +30,11 @@ const DoctorPage = () => {
                 : "text-[#3497F9] bg-transparent"
             } `}
           >
-            Mew Appointent
+            New Appointent
           </Button>
         </div>
         {/* list  */}
-        <div>{isActive === "new" ? <NewAppoint /> : <HomeAppointment />}</div>
+        <div>{isActive === "new" ? <NewAppoint /> : <MyAppointment />}</div>
       </div>
     </div>
   );
