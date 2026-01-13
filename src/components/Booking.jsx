@@ -34,8 +34,8 @@ const Booking = ({ onClose, Loading }) => {
   const handleSubmit = () => {
     // console.log(selectedSlot);
     // console.log(value);
-    ()=>onClose
     setPayment(true)
+    // onClose()
   };
   const renderSlots = (slotList) => (
     <div className="grid grid-cols-3 gap-3 mt-3">

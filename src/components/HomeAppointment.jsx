@@ -59,7 +59,7 @@ const HomeAppointment = () => {
       <div className="max-h-[320px] overflow-y-auto   modern-scroll">
         <div className="grid grid-cols-1 lg:grid-cols-2  gap-5">
           {cardData.map((data, index) => (
-            <Card key={index} className="bg-blue-500">
+            <Card key={index} className="bg-blue-300">
               <CardContent className="flex items-center p-0 justify-center md:gap-8">
                 <div className="">
                   <img src={data.img} className="hidden sm:flex" alt="doctor" />
@@ -73,7 +73,7 @@ const HomeAppointment = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="bg-blue-700 px-1 rounded-md text-sm mt-3">
+                  <p className="bg-blue-500 px-1 rounded-md text-sm">
                     {data.time}
                   </p>
                 </div>
