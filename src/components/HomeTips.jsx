@@ -2,79 +2,44 @@ import React from 'react'
 import { Card, CardContent } from './ui/card'
 import Image from 'next/image'
 
-const tips=[
-    {
-        id:1,
-        img:"/tip1.png",
-        title:"6 Healthy Excercises for Everyone"
-    },
-    {
-        id:2,
-        img:"/tip2.png",
-        title:"Healthy Diet for Everyone"
-    },
-    {
-        id:3,
-        img:"/tip1.png",
-        title:"6 Healthy Excercises for Everyone"
-    },
-    {
-        id:4,
-        img:"/tip2.png",
-        title:"Healthy Diet for Everyone"
-    },
-    {
-        id:5,
-        img:"/tip1.png",
-        title:"6 Healthy Excercises for Everyone"
-    },
-    {
-        id:2,
-        img:"/tip2.png",
-        title:"Healthy Diet for Everyone"
-    },
-    {
-        id:3,
-        img:"/tip1.png",
-        title:"6 Healthy Excercises for Everyone"
-    },
-    {
-        id:4,
-        img:"/tip2.png",
-        title:"Healthy Diet for Everyone"
-    },
-    {
-        id:5,
-        img:"/tip1.png",
-        title:"6 Healthy Excercises for Everyone"
-    },  
+const tips = [
+  { id: 1, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
+  { id: 2, img: "/tip2.png", title: "Healthy Diet for Everyone" },
+  { id: 3, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
+  { id: 4, img: "/tip2.png", title: "Healthy Diet for Everyone" },
+  { id: 5, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
+  { id: 6, img: "/tip2.png", title: "Healthy Diet for Everyone" },
+  { id: 7, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
+  { id: 8, img: "/tip2.png", title: "Healthy Diet for Everyone" },
+  { id: 9, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
 ]
 
 const HomeTips = () => {
   return (
-    <div className="w-full my-10">
-      {/* Scroll Container */}
-      <div className="flex gap-8 overflow-x-auto pb-2 modern-scroll">
-        {tips.map((data, index) => (
-          <Card
-            key={index}
-            className="min-w-[250px] max-w-[250px] flex-shrink-0 p-0"
+    <section className=" my-10 overflow-x-hidden modern-scroll">
+    
+
+      {/* Horizontal scroll ONLY inside this div */}
+      <div className="flex gap-4 overflow-auto pb-2">
+        {tips.map((data) => (
+          <div
+            key={data.id}
+            className=" shrink-0 rounded-lg overflow-hidden"
           >
-            <CardContent className="p-0">
-              <Image
-                src={data.img}
-                height={160}
-                width={250}
-                alt="tip"
-                className="object-cover w-full h-[160px]"
-              />
-              <p className="px-2 py-4 text-gray-600 font-semibold text-sm">{data.title}</p>
-            </CardContent>
-          </Card>
+            <Image
+              src={data.img}
+              alt={data.title}
+              width={220}
+              height={140}
+              className="object-cover"
+            />
+            <div>
+              <p className='text-sm py-2 text-gray-600'>{data.title}</p>
+            </div>
+          </div>
         ))}
       </div>
-    </div>
+    </section>
   )
 }
-
 export default HomeTips
