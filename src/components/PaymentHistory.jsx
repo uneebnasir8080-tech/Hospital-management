@@ -45,11 +45,11 @@ const PaymentHistory = ({ onClose, onOpen }) => {
             {history.map((data, index) => (
               <div className="my-5 space-y-5 " key={index}>
                 <div className="flex items-center w-full my-6">
-                  <div className="flex-grow border-t border-dashed border-gray-400"></div>
+                  <div className="grow border-t border-dashed border-gray-400"></div>
                   <span className="mx-4 text-sm font-medium text-gray-500 whitespace-nowrap">
                     {data.date}
                   </span>
-                  <div className=" flex-grow border-t border-dashed border-gray-400"></div>
+                  <div className=" grow border-t border-dashed border-gray-400"></div>
                 </div>
                 {/* data  */}
                 {data.payment.map((items, index) => (

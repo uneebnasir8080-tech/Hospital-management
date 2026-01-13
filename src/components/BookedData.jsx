@@ -58,13 +58,13 @@ const BookedData = ({ onClose, Loading }) => {
             {/* qr code scanner */}
             <div className="w-[50%]">
               <div className="flex items-center w-full my-6">
-                <div className="flex-grow border-t border-gray-300"></div>
+                <div className="grow border-t border-gray-300"></div>
 
                 <span className="mx-4 text-xs font-medium text-gray-500 whitespace-nowrap">
                   SCAN QR CODE AT RECEPTION
                 </span>
 
-                <div className="flex-grow border-t border-gray-300"></div>
+                <div className="grow border-t border-gray-300"></div>
               </div>
               <div className="flex justify-center my-2">
                 <QRCode

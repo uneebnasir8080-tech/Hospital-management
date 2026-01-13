@@ -56,7 +56,7 @@ const cardData = [
 const HomeAppointment = () => {
   return (
     <>
-      <div className="max-h-[320px] overflow-y-auto   modern-scroll">
+      <div className="max-h-80 overflow-y-auto   modern-scroll">
         <div className="grid grid-cols-1 lg:grid-cols-2  gap-5">
           {cardData.map((data, index) => (
             <Card key={index} className="bg-blue-300">
