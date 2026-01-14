@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
   const pathName = usePathname();
-  const isActive = (path) => pathName.startsWith(path);
+  // const isActive = (path) => pathName.startsWith(path);
   return (
     <div className="bg-gray-50 w-15 md:w-45 lg:w-50 xl:w-60 shrink-0 min-h-screen ">
       <div className="flex flex-col sticky top-6">

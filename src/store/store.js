@@ -4,5 +4,9 @@ import { create } from "zustand";
 export const useStore= create((set)=>({
     isOpen: false,
     open:()=>set({ isOpen: true }),
-    close:()=> set({isOpen: false})
+    close:()=> set({isOpen: false}),
+
+    appointment:"new",
+    new:()=>set({appointment:"new"}),
+    complete:()=>set({appointment:"complete"})
 }))

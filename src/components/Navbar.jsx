@@ -19,7 +19,6 @@ const Navbar = () => {
             onClick={open}
           >
             <HiBell className="text-3xl text-black/50" />
-            {console.log("open is", isOpen)}
             <div className="bg-red-500 absolute p-1 rounded-full top-1/6 right-1/4"></div>
           </div>
           <a
