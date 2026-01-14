@@ -11,13 +11,13 @@ const AppointmentPage = () => {
   const newAppoint = useStore((state) => state.new);
   const complete = useStore((state) => state.complete);
   return (
-    <div className="bg-white h-full rounded-lg ">
+    <div className="bg-white  rounded-lg">
       {/* header  */}
-      <div className="flex  justify-between px-10 h-15 border-b  items-center ">
-        <div className="flex gap-5 font-medium  text-black/60 justify-end">
+      <div className="flex  justify-between px-10 h-17 border-b   items-center overflow-hidden ">
+        <div className=" flex gap-5 font-medium  text-black/60 justify-end">
           <button
             onClick={newAppoint}
-            className={`${
+            className={`text-xs sm:text-sm lg:text-[16px] ${
               appointment === "new" ? "border-b-4 border-[#3497F9] text-black/80" : ""
             }  py-1 pt-8`}
           >
@@ -25,18 +25,19 @@ const AppointmentPage = () => {
           </button>
           <button
             onClick={complete}
-            className={`${
+            className={`text-xs sm:text-sm lg:text-[16px] ${
               appointment === "complete" ? "border-b-4 border-[#3497F9] text-black/80" : ""
             }  py-1 pt-8`}
           >
             COMPLETED APPOINTMENTS
           </button>
         </div>
-        <div className="flex items-center gap-10 ">
-          <Button className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer">
-            <span className="text-xl">+</span> New Appointment
+        <div className="md:hidden w-20"></div>
+        <div className="flex items-center gap-10  ">
+          <Button className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer text-xs ">
+            <span className="text-[16px] lg:text-xl">+</span> <span className="hidden md:block">New Appointment</span>
           </Button>
-          <button className="text-[#3497F9] text-lg ">
+          <button className="text-[#3497F9] text-lg hidden lg:block">
             <BsArrowsAngleContract />
           </button>
         </div>
