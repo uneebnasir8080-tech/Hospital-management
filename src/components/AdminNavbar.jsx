@@ -3,17 +3,22 @@ import { FaBell } from "react-icons/fa";
 import React from "react";
 import { FaBars } from "react-icons/fa";
 import { useStore } from "@/store/store";
+import { usePathname } from "next/navigation";
 
 const AdminNavbar = () => {
   const open = useStore((state) => state.openSideBar);
+  const pathname= usePathname()
+  
+  const pageName = pathname.split("/").filter(Boolean).pop();
+  console.log("navbar",pageName)
   return (
     <div className="flex justify-between px-4 items-center  h-20">
       <div className="flex gap-4">
         <button className="md:hidden cursor-pointer" onClick={open}>
           <FaBars />
         </button>
-        <p className=" font-semibold text-[#374858] text-md sm:text-lg lg:text-2xl">
-          Dashboard
+        <p className=" font-semibold text-[#374858] text-md sm:text-lg lg:text-2xl capitalize">
+          {pageName}
         </p>
       </div>
       <div className="flex gap-3 items-center">

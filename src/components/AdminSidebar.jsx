@@ -91,7 +91,7 @@ const AdminSidebar = () => {
                 <div key={index}>
                   <a
                     href={data.link}
-                    className={`text-sm lg:text-lg py-2 px-3 ${
+                    className={`text-sm lg:text-[16px] py-2 px-3 ${
                       isActive
                         ? "text-[#3497F9] bg-blue-100 border-l-4 border-blue-500"
                         : "text-gray-500 hover:bg-gray-300"
@@ -124,7 +124,7 @@ const AdminSidebar = () => {
               <div key={index}>
                 <a
                   href={data.link}
-                  className={`text-sm lg:text-lg py-2 px-3 ${
+                  className={`text-sm lg:text-[17px] py-2 px-3 ${
                     isActive
                       ? "text-[#3497F9] bg-blue-100 border-l-4 border-blue-500"
                       : "text-gray-500 hover:bg-gray-300"

@@ -54,7 +54,7 @@ const data = [
 const AdminNewAppoint = () => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="px-3 lg:px-10  ">
+    <div className=" px-3 lg:px-5  ">
       {/* inputs  */}
       <div className="flex gap-10  h-10 md:h-15 lg:h-22 items-center flex-wrap">
         <div className="flex items-center rounded-full shadow-sm px-4 py-1 md:py-2 text-sm md:text-[16px]  md:w-50 lg:w-64">
@@ -70,7 +70,7 @@ const AdminNewAppoint = () => {
         </div>
       </div>
       {/* table  */}
-      <div className="w-full overflow-x-scroll">
+      <div className="">
         {/* heading  */}
         <div className="grid grid-cols-6 justify-center border-b-2 pb-2 text-xs lg:text-[17px]  ">
           <p className=" pl-2 font-medium flex items-center gap-1">
