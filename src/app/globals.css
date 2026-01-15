@@ -125,9 +125,9 @@
   clip-path: polygon(
     0 0,
     100% 0,
-    100% 85%, 
-    50% 100%,  /* middle peak of the wave */
-    0 85%
+    100% 85%,
+    50% 100%,
+    /* middle peak of the wave */ 0 85%
   );
 }
 /* Modern Scrollbar */
@@ -152,4 +152,34 @@
 .modern-scroll {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.35s ease-out forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.35s ease-in-out forwards;
 }

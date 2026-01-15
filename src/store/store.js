@@ -11,4 +11,7 @@ export const useStore = create((set) => ({
 
   sideBar: false,
   openSideBar: () => set((state) => ({ sideBar: !state.sideBar })),
+
+  msgScreen:false,
+  openScreen:()=>set((state)=>({msgScreen: !state.msgScreen})),
 }));
