@@ -1,9 +1,18 @@
-import React from 'react'
+import ChatScreen from "@/components/ChatScreen";
+import Message from "@/components/Message";
+import React from "react";
 
 const MessagePage = () => {
   return (
-    <div>MessagePage</div>
-  )
-}
+    <div className="flex flex-5 gap-3 h-full">
+      <div className="lg:flex-1"> 
+        <Message/>
+      </div>
+      <div className="flex-2 bg-white rounded-t-xl">
+        <ChatScreen/>
+      </div>
+    </div>
+  );
+};
 
-export default MessagePage
+export default MessagePage;

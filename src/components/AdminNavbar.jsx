@@ -12,7 +12,7 @@ const AdminNavbar = () => {
   const pageName = pathname.split("/").filter(Boolean).pop();
   console.log("navbar",pageName)
   return (
-    <div className="flex justify-between px-4 items-center  h-20">
+    <div className="flex justify-between px-4 items-center  h-[12%]">
       <div className="flex gap-4">
         <button className="md:hidden cursor-pointer" onClick={open}>
           <FaBars />
