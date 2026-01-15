@@ -70,7 +70,8 @@ const AdminSidebar = () => {
   return (
     <>
       {sideBar && (
-        <div className="min-h-screen  min-w-45 fixed bg-white">
+        <div className={`min-h-screen  min-w-45 fixed bg-white  transform transition-transform duration-300 ease-in-out
+          ${sideBar ? "translate-x-0" : "-translate-x-full"}`}>
           <p
             className="text-end px-4 py-1 font-bold cursor-pointer"
             onClick={open}

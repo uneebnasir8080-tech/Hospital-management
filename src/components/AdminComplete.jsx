@@ -64,7 +64,7 @@ const AdminComplete = () => {
     <div className=" px-3 lg:px-5  ">
       {/* inputs  */}
       <div className="flex gap-10  h-10 md:h-15 lg:h-22 items-center flex-wrap">
-        <div className="flex items-center rounded-full shadow-sm px-4 py-1 md:py-2 text-sm md:text-[16px]  md:w-50 lg:w-64">
+        <div className="flex items-center rounded-full shadow-sm px-4 py-1 md:py-2 text-sm lg:text-[16px]   w-40 sm:w-50 md:w-55 lg:w-64">
           <FaSearch className="w-4 h-4 text-gray-400 mr-2" />
           <input
             type="text"
@@ -77,114 +77,116 @@ const AdminComplete = () => {
         </div>
       </div>
       {/* table  */}
-      <div className="">
-        {/* heading  */}
-        <div className="grid grid-cols-7 justify-center border-b-2 pb-2 text-xs lg:text-[17px]  ">
-          <p className=" pl-2 font-medium flex items-center gap-1">
-            Time{" "}
-            <span
-              onClick={() => setOpen(!open)}
-              className={`cursor-pointer inline-block transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
-            >
-              <IoMdArrowDropdown size={20} />
-            </span>
-          </p>
-          <p className="font-medium flex items-center gap-1">
-            Date{" "}
-            <span
-              onClick={() => setOpen(!open)}
-              className={`cursor-pointer inline-block transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
-            >
-              <IoMdArrowDropdown size={20} />
-            </span>
-          </p>
-          <p className="  font-medium flex items-center gap-1">
-            Patient Name{" "}
-            <span
-              onClick={() => setOpen(!open)}
-              className={`cursor-pointer inline-block transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
-            >
-              <IoMdArrowDropdown size={20} />
-            </span>
-          </p>
-          <p className="  font-medium flex items-center gap-1">
-            Patient Age{" "}
-            <span
-              onClick={() => setOpen(!open)}
-              className={`cursor-pointer inline-block transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
-            >
-              <IoMdArrowDropdown size={20} />
-            </span>
-          </p>
-          <p className=" font-medium flex items-center gap-1">
-            Doctor
-            <span
-              onClick={() => setOpen(!open)}
-              className={`cursor-pointer inline-block transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
-            >
-              <IoMdArrowDropdown size={20} />
-            </span>
-          </p>
-          <p className=" font-medium flex items-center gap-1">
-            Fee Status
-            <span
-              onClick={() => setOpen(!open)}
-              className={`cursor-pointer inline-block transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
-            >
-              <IoMdArrowDropdown size={20} />
-            </span>
-          </p>
-          <p className="  font-medium flex items-center gap-1">
-            User Action{" "}
-            <span
-              onClick={() => setOpen(!open)}
-              className={`cursor-pointer inline-block transition-transform duration-300 ${
-                open ? "rotate-180" : "rotate-0"
-              }`}
-            >
-              <IoMdArrowDropdown size={20} />
-            </span>
-          </p>
-        </div>
-        {data.map((items, index) => (
-          <div
-            key={index}
-            className="grid text-gray-600 grid-cols-7 w-full border-b py-3 text-xs lg:text-[16px]"
-          >
-            {/* data  */}
-            <p className="grird  pl-2 ">{items.time}</p>
-            <p className="grird ">{items.date}</p>
-            <p className="grird ">{items.name}</p>
-            <p className=" pl-8 grird ">{items.age}</p>
-            <p className="grird ">{items.doctor}</p>
-            <p
-              className={`${
-                items.pay === "UnPaid" ? "text-red-500" : "text-green-500"
-              }`}
-            >
-              {items.pay}
+      <div className="overflow-x-scroll  modern-scroll">
+        <div className=" min-w-180">
+          {/* heading  */}
+          <div className="grid grid-cols-7 justify-center border-b-2 pb-2 text-xs lg:text-[17px]  ">
+            <p className=" pl-2 font-medium flex items-center gap-1">
+              Time{" "}
+              <span
+                onClick={() => setOpen(!open)}
+                className={`cursor-pointer inline-block transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                <IoMdArrowDropdown size={20} />
+              </span>
             </p>
-            <p
-              className={`${
-                items.id % 2 === 0 ? "text-blue-600" : "text-gray-500"
-              }`}
-            >
-              {items.link}
+            <p className="font-medium flex items-center gap-1">
+              Date{" "}
+              <span
+                onClick={() => setOpen(!open)}
+                className={`cursor-pointer inline-block transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                <IoMdArrowDropdown size={20} />
+              </span>
+            </p>
+            <p className="  font-medium flex items-center gap-1">
+              Patient Name{" "}
+              <span
+                onClick={() => setOpen(!open)}
+                className={`cursor-pointer inline-block transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                <IoMdArrowDropdown size={20} />
+              </span>
+            </p>
+            <p className="  font-medium flex items-center gap-1">
+              Patient Age{" "}
+              <span
+                onClick={() => setOpen(!open)}
+                className={`cursor-pointer inline-block transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                <IoMdArrowDropdown size={20} />
+              </span>
+            </p>
+            <p className=" font-medium flex items-center gap-1">
+              Doctor
+              <span
+                onClick={() => setOpen(!open)}
+                className={`cursor-pointer inline-block transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                <IoMdArrowDropdown size={20} />
+              </span>
+            </p>
+            <p className=" font-medium flex items-center gap-1">
+              Fee Status
+              <span
+                onClick={() => setOpen(!open)}
+                className={`cursor-pointer inline-block transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                <IoMdArrowDropdown size={20} />
+              </span>
+            </p>
+            <p className="  font-medium flex items-center gap-1">
+              User Action{" "}
+              <span
+                onClick={() => setOpen(!open)}
+                className={`cursor-pointer inline-block transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                <IoMdArrowDropdown size={20} />
+              </span>
             </p>
           </div>
-        ))}
+          {data.map((items, index) => (
+            <div
+              key={index}
+              className="grid text-gray-600 grid-cols-7 w-full border-b py-3 text-xs lg:text-[16px]"
+            >
+              {/* data  */}
+              <p className="grird  pl-2 ">{items.time}</p>
+              <p className="grird ">{items.date}</p>
+              <p className="grird ">{items.name}</p>
+              <p className=" pl-8 grird ">{items.age}</p>
+              <p className="grird ">{items.doctor}</p>
+              <p
+                className={`${
+                  items.pay === "UnPaid" ? "text-red-500" : "text-green-500"
+                }`}
+              >
+                {items.pay}
+              </p>
+              <p
+                className={`${
+                  items.id % 2 === 0 ? "text-blue-600" : "text-gray-500"
+                }`}
+              >
+                {items.link}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="py-2 md:text-sm flex justify-end text-xs">
         <button className="py-1 px-2 focus:bg-blue-400 text-gray-600 focus:text-white cursor-pointer rounded-sm">
