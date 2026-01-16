@@ -110,9 +110,9 @@ const AdminSidebar = () => {
 
       {/* screen  */}
 
-      <div className="min-h-screen hidden md:block md:min-w-45 lg:min-w-50 xl:min-w-66">
+      <div className="min-h-screen hidden md:block md:min-w-45 lg:min-w-50 xl:min-w-66 ">
         {/* img  */}
-        <div className="h-20 flex items-center pl-1">
+        <div className="h-20 flex items-center pl-2">
           <div className="h-10">
             <Image src="/logo.png" height={20} width={150} alt="logo" />
           </div>
@@ -125,9 +125,9 @@ const AdminSidebar = () => {
               <div key={index}>
                 <a
                   href={data.link}
-                  className={`text-sm lg:text-[17px] py-2 px-3 ${
+                  className={`text-sm lg:text-[16px] py-2 px-3 ${
                     isActive
-                      ? "text-[#3497F9] bg-blue-100 border-l-4 border-blue-500"
+                      ? "text-[#3497F9] bg-blue-100 border-l-6 rounded-l-xl border-blue-600"
                       : "text-gray-500 hover:bg-gray-300"
                   }  flex items-center gap-3 font-medium cursor-pointer`}
                 >
