@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import { IoSpeedometer } from "react-icons/io5";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { IoDocumentTextOutline } from "react-icons/io5";
@@ -8,7 +8,7 @@ import { IoPersonSharp } from "react-icons/io5";
 import { LuMessageSquareMore } from "react-icons/lu";
 import { BiSolidSchool } from "react-icons/bi";
 import { MdOutlineInventory2 } from "react-icons/md";
-import { IoMdSettings } from "react-icons/io";
+import { IoIosLogOut, IoMdSettings } from "react-icons/io";
 import { usePathname } from "next/navigation";
 import { useStore } from "@/store/store";
 
@@ -70,8 +70,10 @@ const AdminSidebar = () => {
   return (
     <>
       {sideBar && (
-        <div className={`min-h-screen  min-w-45 fixed bg-white  transform transition-transform duration-300 ease-in-out
-          ${sideBar ? "translate-x-0" : "-translate-x-full"}`}>
+        <div
+          className={`min-h-screen  min-w-45 fixed bg-white  transform transition-transform duration-300 ease-in-out
+          ${sideBar ? "translate-x-0" : "-translate-x-full"}`}
+        >
           <p
             className="text-end px-4 py-1 font-bold cursor-pointer"
             onClick={open}
@@ -110,7 +112,7 @@ const AdminSidebar = () => {
 
       {/* screen  */}
 
-      <div className="min-h-screen hidden md:block md:min-w-45 lg:min-w-50 xl:min-w-66 ">
+      <div className="min-h-screen hidden md:min-w-45 lg:min-w-50 xl:min-w-66 md:flex justify-between flex-col">
         {/* img  */}
         <div className="h-20 flex items-center pl-2">
           <div className="h-10">
@@ -118,7 +120,7 @@ const AdminSidebar = () => {
           </div>
         </div>
         {/* icons  */}
-        <div className="space-y-4 lg:space-y-3 mt-5">
+        <div className="space-y-4 lg:space-y-3 mt-5 flex-1">
           {logo.map((data, index) => {
             const isActive = pathname.startsWith(data.link);
             return (
@@ -137,6 +139,9 @@ const AdminSidebar = () => {
               </div>
             );
           })}
+        </div>
+        <div className="h-20 pl-3">
+          <button className="flex gap-2 items-center text-xl text-gray-600 cursor-pointer"><IoIosLogOut /> Logout</button>
         </div>
       </div>
     </>
