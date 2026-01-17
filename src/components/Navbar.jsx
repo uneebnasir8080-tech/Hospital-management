@@ -10,7 +10,7 @@ const Navbar = () => {
   const open = useStore((state) => state.open);
   const close = useStore((state) => state.close);
   return (
-    <div className="sticky top-0 place-items-end z-10 bg-gray-50 px-5 md:px-10 h-20">
+    <div className="sticky top-0 place-items-end z-10 bg-blue-100 px-5 md:px-10 h-20">
       <div className="flex justify-between items-center min-h-full">
         {/* icons  */}
         <div className="flex gap-4 ">

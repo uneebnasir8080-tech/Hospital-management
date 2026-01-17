@@ -32,7 +32,7 @@ const HomeMedicine = () => {
           <div className="space-y-2">
             <p className="font-semibold text-black/70">{data.title}</p>
 
-            <a href="#">
+            <a href="/user/medicine ">
               {" "}
               <img src={data.img} alt="" className="h-25" />
             </a>
