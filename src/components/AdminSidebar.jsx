@@ -11,6 +11,7 @@ import { MdOutlineInventory2 } from "react-icons/md";
 import { IoIosLogOut, IoMdSettings } from "react-icons/io";
 import { usePathname } from "next/navigation";
 import { useStore } from "@/store/store";
+import { signOut } from "next-auth/react";
 
 const logo = [
   {
@@ -67,6 +68,12 @@ const AdminSidebar = () => {
   const pathname = usePathname();
   const sideBar = useStore((state) => state.sideBar);
   const open = useStore((state) => state.openSideBar);
+  const handleLogout = async () => {
+    await signOut({
+      redirect: true,
+      callbackUrl: "/auth/login",
+    });
+  };
   return (
     <>
       {sideBar && (
@@ -141,7 +148,7 @@ const AdminSidebar = () => {
           })}
         </div>
         <div className="h-20 pl-3">
-          <button className="flex gap-2 items-center text-xl text-gray-600 cursor-pointer"><IoIosLogOut /> Logout</button>
+          <button className="flex gap-2 items-center text-xl text-gray-600 cursor-pointer" onClick={handleLogout}><IoIosLogOut /> Logout</button>
         </div>
       </div>
     </>

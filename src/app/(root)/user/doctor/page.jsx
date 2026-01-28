@@ -2,10 +2,13 @@
 import MyAppointment from "@/components/MyAppointment";
 import NewAppoint from "@/components/NewAppoint";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 
 const DoctorPage = () => {
   const [isActive, setIsActive] = useState("old");
+  const { data, status } = useSession();
+    console.log("data",data)
 
   return (
     <div className="p-6">

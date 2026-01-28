@@ -4,6 +4,7 @@ import HomeTips from '@/components/HomeTips'
 import React from 'react'
 
 const HomePage = () => {
+  
   return (
     <div className='p-6'>
         <h1 className='text-center my-5 text-2xl text-black/70 font-semibold'>My Appointments</h1>
