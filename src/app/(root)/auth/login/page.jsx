@@ -7,6 +7,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { getSession, signIn, useSession } from "next-auth/react";
 import { zScehma } from "@/lib/zodSchema";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,11 +17,13 @@ import z from "zod";
 import { Button } from "@/components/ui/button";
 import { TfiEmail } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
+import { useRouter } from "next/navigation";
+import { showToast } from "@/lib/showToastify";
 
 const LoginPage = () => {
   const [isPassword, setIsPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   const formSchema = zScehma
     .pick({
       email: true,
@@ -36,18 +39,88 @@ const LoginPage = () => {
     },
   });
 
-  const handleOnSubmit = (values, e) => {
+  // const { data: session, status } = useSession();
+  // const handleOnSubmit = async (values) => {
+  //   try {
+  //     setIsLoading(true);
+  //     const res = await signIn("credentials", {
+  //       redirect: false,
+  //       email: values.email,
+  //       password: values.password,
+  //     });
+  //     if (!res.ok) {
+  //       showToast("error", "Invalid Credentials");
+  //       return;
+  //     }
+  //     if (res?.error) {
+  //       showToast("error", "Something went wrong");
+  //       return;
+  //     }
+  //     if (res?.ok) {
+  //       showToast("success", "Login successful");
+  //       if (session?.role === "patient") {
+  //         router.push("/user/home");
+  //       }
+  //       if (session?.role === "admin" || session?.role === "doctor") {
+  //         router.push("/admin/dashboard");
+  //       }
+  //       form.reset();
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     showToast("error", error?.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const handleOnSubmit = async (values) => {
     try {
       setIsLoading(true);
-      e.preventDefault();
-      console.log(values);
+
+      // Sign in with credentials
+      const res = await signIn("credentials", {
+        redirect: false, // we handle redirect manually
+        email: values.email,
+        password: values.password,
+      });
+
+      if (!res.ok) {
+        showToast("error", "Invalid Credentials");
+        return;
+      }
+      if (res?.error) {
+        showToast("error", "Something went wrong");
+        return;
+      }
+
+      // Fetch latest session after sign in
+      const sessionData = await getSession();
+      if (!sessionData) {
+        showToast("error", "Session not found");
+        return;
+      }
+
+      // Role-based redirect
+      if (sessionData?.role === "patient") {
+        router.push("/user/home");
+      } else if (
+        sessionData?.role === "admin" ||
+        sessionData?.role === "doctor"
+      ) {
+        router.push("/admin/dashboard");
+      }
+
+      showToast("success", "Login successful");
       form.reset();
     } catch (error) {
-      console.log("error");
+      console.error(error);
+      showToast("error", error?.message);
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="flex min-h-screen py-5 px-4 bg-gray-100 ">
       <Card className=" flex h-full  w-140 lg:w-160 mx-auto p-0 overflow-hidden">
