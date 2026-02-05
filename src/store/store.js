@@ -14,4 +14,8 @@ export const useStore = create((set) => ({
 
   msgScreen:false,
   openScreen:()=>set((state)=>({msgScreen: !state.msgScreen})),
+
+  // set image data 
+  // image:"",
+  // setImage:()=>set((state)=>(image))
 }));

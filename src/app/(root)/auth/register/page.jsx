@@ -17,10 +17,14 @@ import { Button } from "@/components/ui/button";
 import { IoPersonOutline } from "react-icons/io5";
 import { TfiEmail } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
+import { api } from "@/lib/apiCall";
+import { showToast } from "@/lib/showToastify";
+import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
   const [isPassword, setIsPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
 
   const formSchema = zScehma
     .pick({
@@ -30,6 +34,7 @@ const RegisterPage = () => {
     })
     .extend({
       ConfirmPassword: z.string(),
+      role:z.string(),
     })
     .refine((data) => data.password === data.ConfirmPassword, {
       message: "Password and confirm password must be same",
@@ -45,17 +50,24 @@ const RegisterPage = () => {
     },
   });
 
-  const handleOnSubmit = (values, e) => {
+  const handleOnSubmit = async(values, e) => {
     try {
-      setIsLoading(true);
-      e.preventDefault();
-      console.log(values);
-      form.reset();
-    } catch (error) {
-      console.log("error");
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+
+    const res = await api.post("/create", values);
+    
+    // Success handling
+    showToast("success", res.data.message || "Account created successfully");
+    form.reset();
+     router.push("/auth/login")   
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Something went wrong. Please try again.";
+
+    showToast("error", message);
+  } finally {
+    setIsLoading(false);
+  }
   };
   return (
     <div className="flex min-h-screen py-8 px-4 bg-gray-100 ">
@@ -181,6 +193,30 @@ const RegisterPage = () => {
                   )}
                 />
               </div>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="role"
+                  defaultValue="patient"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="relative">
+                          <select
+                            {...field}
+                            className="w-full pl-3 py-2 border-b border-b-gray-400 outline-none cursor-pointer text-gray-500 bg-transparent"
+                          >
+                            <option value="patient">Patient</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </Form>
             <Button
               type="submit"
@@ -196,9 +232,9 @@ const RegisterPage = () => {
           </form>
 
           <div className="flex items-center mb-3 mx-7">
-            <hr className="flex-grow border-gray-400" />
+            <hr className="grow border-gray-400" />
             <span className="mx-4 text-gray-500">or sign up with</span>
-            <hr className="flex-grow border-gray-400" />
+            <hr className="grow border-gray-400" />
           </div>
           <div className="flex justify-center gap-9">
             <a href="#">

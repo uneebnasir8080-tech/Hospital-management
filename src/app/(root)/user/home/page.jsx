@@ -12,7 +12,7 @@ const HomePage = () => {
         {/* medicine  */}
         <HomeMedicine/>
         <h1 className='text-center text-black/70 my-10 text-2xl font-semibold'>Healthy Tips</h1>
-        <HomeTips/>
+        {/* <HomeTips/> */}
     </div>
   )
 }
