@@ -4,7 +4,6 @@ import { getToken } from "next-auth/jwt";
 export async function proxy(req) {
   const token = await getToken({ req });
   const url = req.nextUrl;
-
   if (token) {
     if (url.pathname === "/auth/login") {
       if(token.role==="admin" || token.role==="doctor"){
@@ -23,8 +22,12 @@ export async function proxy(req) {
   return NextResponse.redirect(new URL("/auth/login", req.url));
 }
 export const config = {
-  matcher: [
-    // Run middleware on everything EXCEPT API routes, Next.js static files, and favicon
-   "/((?!api|_next|favicon.ico||icons|assets|auth/login|auth/register).*)",
-  ],
+  //  matcher: [
+  //   "/((?!api|_next/static|_next/image|favicon.ico|auth/login|auth/register).*)",
+  // ],
+matcher: [
+  "/((?!api|_next|favicon.ico|auth/login|auth/register|.*\\..*).*)",
+],
+  
+
 };

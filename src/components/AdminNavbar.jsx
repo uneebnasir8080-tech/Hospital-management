@@ -10,7 +10,7 @@ const AdminNavbar = () => {
   const pathname= usePathname()
   
   const pageName = pathname.split("/").filter(Boolean).pop();
-  console.log("navbar",pageName)
+
   return (
     <div className="flex justify-between px-4 items-center  h-[12%]">
       <div className="flex gap-4">

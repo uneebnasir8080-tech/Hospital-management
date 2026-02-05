@@ -22,12 +22,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
-import ImageDropField from "@/components/ImageDropField";
 import { showToast } from "@/lib/showToastify";
 import { api } from "@/lib/apiCall";
-const PatientData = () => {
+
+const DoctorData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { data, status } = useSession();
   const [preview, setPreview] = useState(null);
@@ -49,11 +48,11 @@ const PatientData = () => {
           { message: "Only JPG, PNG, WEBP allowed" },
         ),
       age: z.string().min(1, "Age is required"),
-      history: z.string(),
+      specialization: z.string(),
       gender: z.enum(["male", "female", "other"], {
         errorMap: () => ({ message: "Please select a gender" }),
       }),
-      blood: z.string().min(1, "Blood group is required"),
+      experience: z.string(),
     });
 
   const form = useForm({
@@ -61,9 +60,9 @@ const PatientData = () => {
     defaultValues: {
       profileImage: undefined,
       age: "",
-      history: "",
+      specialization: "",
       gender: undefined,
-      blood: "",
+      experience: "",
     },
   });
   const handleFile = (file, field) => {
@@ -79,19 +78,22 @@ const PatientData = () => {
   const handleOnSubmit = async (values) => {
     try {
       setIsLoading(true);
+      console.log("first", values);
       const formData = new FormData();
-      formData.append("patient", values.profileImage);
+      formData.append("doctor", values.profileImage);
       formData.append("age", values.age);
-      formData.append("history", values.history);
+      formData.append("specialization", values.specialization);
       formData.append("gender", values.gender);
-      formData.append("blood", values.blood);
-      const res = await api.post("/patient", formData, {
+      formData.append("experience", values.experience);
+      formData.append("role", data.role)
+      const res = await api.post("/doctor", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${data?.token}`,
         },
       });
 
+      console.log("res", res);
       showToast("success", res.data.message);
       form.reset();
     } catch (error) {
@@ -108,10 +110,10 @@ const PatientData = () => {
 
           <div
             className="h-65  bg-center relative bg-no-repeat bg-cover clip-zigzag "
-            style={{ backgroundImage: `url('/patient.png')` }}
+            style={{ backgroundImage: `url('/BGLogin.png')` }}
           >
             <h1 className="absolute inset-0 flex items-center justify-center text-4xl font-semibold text-white">
-              PATIENT DETAILS
+              DOCTOR DETAILS
             </h1>
           </div>
 
@@ -206,14 +208,14 @@ const PatientData = () => {
               <div className="relative">
                 <FormField
                   control={form.control}
-                  name="history"
+                  name="specialization"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <input
                           className="pl-7 w-full py-2 border-b border-b-gray-400 outline-none text-gray-00"
                           type="text"
-                          placeholder="Symptoms"
+                          placeholder="Specialization"
                           {...field}
                         />
                       </FormControl>
@@ -246,27 +248,23 @@ const PatientData = () => {
                   )}
                 />
               </div>
-              <div>
+                <div className="relative">
                 <FormField
-                  name="blood"
                   control={form.control}
-                  rules={{ required: "Blood group is required" }}
+                  name="experience"
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className=" w-full border-0 border-b border-b-gray-400 pl-7 py-2 rounded-none">
-                        <SelectValue placeholder="Blood Group" />
-                      </SelectTrigger>
+                    <FormItem>
+                      <FormControl>
+                        <input
+                          className="pl-7 w-full py-2 border-b border-b-gray-400 outline-none text-gray-00"
+                          type="text"
+                          placeholder="Experience"
+                          {...field}
+                        />
+                      </FormControl>
 
-                      <SelectContent>
-                        {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
-                          (group) => (
-                            <SelectItem key={group} value={group}>
-                              {group}
-                            </SelectItem>
-                          ),
-                        )}
-                      </SelectContent>
-                    </Select>
+                      <FormMessage />
+                    </FormItem>
                   )}
                 />
               </div>
@@ -289,4 +287,4 @@ const PatientData = () => {
   );
 };
 
-export default PatientData;
+export default DoctorData;

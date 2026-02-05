@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
   providers: [
+    
     CredentialsProvider({
       id: "credentials",
       name: "credentials",
@@ -14,10 +15,10 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           const { data } = await api.post("/login", credentials);
+          
           if (data && data.token) {
             const { user, token } = data;
-
-            return {
+            return {  
               id: user.id,
               email: user.email,
               name: user.name,

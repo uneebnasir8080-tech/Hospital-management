@@ -76,6 +76,7 @@ const LoginPage = () => {
 
   const handleOnSubmit = async (values) => {
     try {
+      // console.log("first", values)
       setIsLoading(true);
 
       // Sign in with credentials
@@ -84,15 +85,15 @@ const LoginPage = () => {
         email: values.email,
         password: values.password,
       });
-
+      console.log("first", res)
       if (!res.ok) {
         showToast("error", "Invalid Credentials");
         return;
       }
-      if (res?.error) {
-        showToast("error", "Something went wrong");
-        return;
-      }
+      // if (res?.error || res?.error!=="undefined" ) {
+      //   showToast("error", "Something went wrong");
+      //   return;
+      // }
 
       // Fetch latest session after sign in
       const sessionData = await getSession();
