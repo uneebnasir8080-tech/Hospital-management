@@ -1,21 +1,43 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-export const useStore = create((set) => ({
-  isOpen: false,
-  open: () => set({ isOpen: true }),
-  close: () => set({ isOpen: false }),
+export const useStore = create(
+  persist(
+    (set) => ({
+      isOpen: false,
+      open: () => set({ isOpen: true }),
+      close: () => set({ isOpen: false }),
 
-  appointment: "new",
-  new: () => set({ appointment: "new" }),
-  complete: () => set({ appointment: "complete" }),
+      appointment: "new",
+      new: () => set({ appointment: "new" }),
+      complete: () => set({ appointment: "complete" }),
 
-  sideBar: false,
-  openSideBar: () => set((state) => ({ sideBar: !state.sideBar })),
+      sideBar: false,
+      openSideBar: () => set((state) => ({ sideBar: !state.sideBar })),
 
-  msgScreen:false,
-  openScreen:()=>set((state)=>({msgScreen: !state.msgScreen})),
+      msgScreen: false,
+      openScreen: () => set((state) => ({ msgScreen: !state.msgScreen })),
 
-  // set image data 
-  // image:"",
-  // setImage:()=>set((state)=>(image))
-}));
+      // // set name
+      // name: "",
+      // setName: (name) => set({ name }),
+      user: {
+        name: "",
+        role: "",
+      },
+
+      setUser: (userData) =>
+        set((state) => ({
+          user: { ...state.user, ...userData },
+        })),
+
+      clearUser: () =>
+        set({
+          user: { name: "", role: "" },
+        }),
+    }),
+    {
+      name: "user-storage", // key in localStorage
+    },
+  ),
+);

@@ -19,10 +19,12 @@ import { TfiEmail } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/lib/showToastify";
+import { useStore } from "@/store/store";
 
 const LoginPage = () => {
   const [isPassword, setIsPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const setUser = useStore((state) => state.setUser);
   const router = useRouter();
   const formSchema = zScehma
     .pick({
@@ -85,7 +87,6 @@ const LoginPage = () => {
         email: values.email,
         password: values.password,
       });
-      console.log("first", res)
       if (!res.ok) {
         showToast("error", "Invalid Credentials");
         return;
@@ -97,11 +98,17 @@ const LoginPage = () => {
 
       // Fetch latest session after sign in
       const sessionData = await getSession();
+      // console.log("first",sessionData.name)
       if (!sessionData) {
         showToast("error", "Session not found");
         return;
       }
-
+      setUser({
+        name:sessionData.name,
+        email:sessionData.email,
+        role:sessionData.role
+      })
+     
       // Role-based redirect
       if (sessionData?.role === "patient") {
         router.push("/user/home");
