@@ -20,15 +20,41 @@ const paymentMethods = [
   { id: "wallet", label: "Wallet (₹500)", icon: <FaWallet /> },
 ];
 
-const Payment = ({ onClose, Loading }) => {
+const Payment = ({ onClose, Loading, date, slot, docId, response }) => {
   const [selectedMethod, setSelectedMethod] = useState("cod");
   const [inClick, setInClick] = useState("amount");
+
+  /* ======================
+     Safe Data Extraction
+  ====================== */
+  const fees = Number(response?.doctor?.schedule?.fee) || 0;
+  const tax = Number(((fees * 5) / 100).toFixed(2));
+  const total = Number((fees + tax).toFixed(2));
+
+  /* ======================
+     Date Formatter
+  ====================== */
+  const formatFullDate = (dateStr) => {
+    if (!dateStr) return "";
+
+    const [year, month, day] = dateStr.split("-").map(Number);
+    const newDate = new Date(year, month - 1, day);
+
+    return newDate.toLocaleDateString("en-US", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 z-150 flex items-center">
+      {/* ===================== AMOUNT SCREEN ===================== */}
       {inClick === "amount" && (
-        <Card className="flex mx-auto  w-200">
+        <Card className="flex mx-auto w-200">
           <CardContent>
-            {/* heading  */}
+            {/* Header */}
             <div className="flex gap-2 pb-2">
               <button className="cursor-pointer" onClick={onClose}>
                 <X size={20} />
@@ -36,59 +62,78 @@ const Payment = ({ onClose, Loading }) => {
               <p className="font-medium text-lg">Checkout</p>
             </div>
             <hr />
-            {/* input  */}{" "}
+
             <div className="mb-5 mt-3 flex flex-2 gap-10">
-              {/* card and data  */}
+              
+              {/* Doctor Card */}
               <div>
                 <Card className="p-0">
                   <CardContent className="flex items-center gap-4">
-                    <Image
-                      src="/doc1.png"
-                      height={20}
-                      width={120}
-                      alt="doctor"
-                    />
+                    
+                    {/* FIXED IMAGE SIZE */}
+                    <div className="relative w-22 h-22 rounded-lg overflow-hidden my-2 bg-gray-100 shrink-0">
+                      <Image
+                        src={response?.doctor?.profile || "/doc1.png"}
+                        alt="doctor"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+
                     <div>
-                      <h1 className="font-semibold">Dr Joel Paulliston</h1>
-                      <p className="text-sm text-gray-600">Otolarynologist</p>
+                      <h1 className="font-semibold capitalize">
+                        Dr {response?.name}
+                      </h1>
+                      <p className="text-sm text-gray-600 capitalize">
+                        {response?.doctor?.specialization}
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
+
                 <p className="my-1 text-sm text-gray-600">
-                  Appointment Date:{" "}
-                  <span className="text-black px-2">08th Dec 2022</span>
+                  Appointment Date:
+                  <span className="text-black px-2">
+                    {formatFullDate(date)}
+                  </span>
                 </p>
+
                 <p className="my-1 text-sm text-gray-600">
-                  Appointment Time:{" "}
-                  <span className="text-black px-2">11:30 Am</span>
+                  Appointment Time:
+                  <span className="text-black px-2">{slot}</span>
                 </p>
               </div>
+
+              {/* Booking Summary */}
               <div className="w-[50%]">
                 <h1 className="text-gray-600 my-2">Booking Summary</h1>
                 <hr />
+
                 <div className="flex justify-between my-1 text-gray-600">
                   <p>Booking Charges</p>
-                  <p>$250</p>
+                  <p>Rs {fees}</p>
                 </div>
+
                 <div className="flex justify-between my-2 text-gray-600">
-                  <p>GST</p>
-                  <p>$30</p>
+                  <p>GST 5%</p>
+                  <p>Rs {tax}</p>
                 </div>
-                <div className="flex justify-between mt-7 ">
+
+                <div className="flex justify-between mt-7">
                   <p className="font-semibold">Total</p>
-                  <p className="text-blue-400">$280</p>
+                  <p className="text-blue-400">Rs {total}</p>
                 </div>
               </div>
             </div>
-            {/* btns */}
+
             <hr />
+
             <div className="w-full mt-3">
               <Button
                 onClick={() => setInClick("method")}
                 disabled={Loading}
-                className="bg-[#7ab3ec] w-full hover:bg-[#1fb2d3] cursor-pointer "
+                className="bg-[#7ab3ec] w-full hover:bg-[#1fb2d3] cursor-pointer"
               >
-                {" "}
                 {Loading && (
                   <AiOutlineLoading3Quarters className="animate-spin mr-2 h-5 w-5" />
                 )}
@@ -99,10 +144,10 @@ const Payment = ({ onClose, Loading }) => {
         </Card>
       )}
 
+      {/* ===================== METHOD SCREEN ===================== */}
       {inClick === "method" && (
-        <Card className="flex mx-auto  w-200">
+        <Card className="flex mx-auto w-200">
           <CardContent>
-            {/* heading  */}
             <div className="flex gap-2 pb-2">
               <button className="cursor-pointer" onClick={onClose}>
                 <X size={20} />
@@ -110,10 +155,10 @@ const Payment = ({ onClose, Loading }) => {
               <p className="font-medium text-lg">Payment Methods</p>
             </div>
             <hr />
-            {/* input  */}{" "}
-            <div className="mb-5 mt-3 flex flex-col  gap-7">
+
+            <div className="mb-5 mt-3 flex flex-col gap-7">
               {paymentMethods.map((data, index) => (
-                <div key={index} className="">
+                <div key={index}>
                   <label
                     className={`flex justify-between border-2 ${
                       selectedMethod === data.id
@@ -125,6 +170,7 @@ const Payment = ({ onClose, Loading }) => {
                       {data.icon}
                       <h1>{data.label}</h1>
                     </div>
+
                     <input
                       type="radio"
                       name="payment"
@@ -136,15 +182,15 @@ const Payment = ({ onClose, Loading }) => {
                 </div>
               ))}
             </div>
-            {/* btns */}
+
             <hr />
+
             <div className="w-full mt-3">
               <Button
                 onClick={() => setInClick("data")}
                 disabled={Loading}
-                className="bg-[#7ab3ec] w-full hover:bg-[#1fb2d3] cursor-pointer "
+                className="bg-[#7ab3ec] w-full hover:bg-[#1fb2d3] cursor-pointer"
               >
-                {" "}
                 {Loading && (
                   <AiOutlineLoading3Quarters className="animate-spin mr-2 h-5 w-5" />
                 )}
@@ -154,6 +200,7 @@ const Payment = ({ onClose, Loading }) => {
           </CardContent>
         </Card>
       )}
+
       {inClick === "data" && <BookedData onClose={onClose} />}
     </div>
   );

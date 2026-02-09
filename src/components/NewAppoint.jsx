@@ -30,7 +30,7 @@ const NewAppoint = () => {
       });
 
       const doctors = res?.data?.getDoc ?? [];
-
+     
       if (!Array.isArray(doctors)) {
         throw new Error("Invalid doctor data format");
       }
@@ -126,7 +126,7 @@ const NewAppoint = () => {
       <Button
         disabled={!docId}
         onClick={() => setIsActive(true)}
-        className="w-full text-white bg-[#3497F9] hover:bg-[#137ee9]"
+        className="w-full text-white bg-[#3497F9] cursor-pointer hover:bg-[#137ee9]"
       >
         Continue
       </Button>
