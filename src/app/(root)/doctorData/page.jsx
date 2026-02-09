@@ -78,7 +78,6 @@ const DoctorData = () => {
   const handleOnSubmit = async (values) => {
     try {
       setIsLoading(true);
-      console.log("first", values);
       const formData = new FormData();
       formData.append("doctor", values.profileImage);
       formData.append("age", values.age);
@@ -93,7 +92,6 @@ const DoctorData = () => {
         },
       });
 
-      console.log("res", res);
       showToast("success", res.data.message);
       form.reset();
     } catch (error) {

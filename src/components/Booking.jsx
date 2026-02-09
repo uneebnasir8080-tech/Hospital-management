@@ -5,6 +5,8 @@ import { X } from "lucide-react";
 import { Button } from "./ui/button";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Payment from "./Payment";
+import { api } from "@/lib/apiCall";
+import { useSession } from "next-auth/react";
 
 const slots = {
   morning: [
@@ -31,6 +33,17 @@ const Booking = ({ onClose, Loading }) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [value, setValue] = useState("");
   const [payment, setPayment]= useState(false)
+  const {data:session, status}=useSession(null)
+
+
+  const getDoc=async()=>{
+    const res= await api.get("/doctor/schedule",{
+      headers:{
+        Authorization:`Bearer ${session?.token}`
+      }
+    })
+  }
+
   const handleSubmit = () => {
     // console.log(selectedSlot);
     // console.log(value);
@@ -122,7 +135,7 @@ const Booking = ({ onClose, Loading }) => {
             <Button
               onClick={() => handleSubmit()}
               disabled={!value || !selectedSlot}
-              className="bg-[#7ab3ec] w-full hover:bg-[#1fb2d3] cursor-pointer "
+              className="bg-[#7ab3ec] w-full hover:bg-[#1fb2d3] cursor-pointer disabled:cursor-not-allowed"
             >
               {" "}
               {Loading && (
