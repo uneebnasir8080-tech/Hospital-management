@@ -1,147 +1,137 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Booking from "./Booking";
-
-const appoint = [
-  {
-    id: 1,
-    img: "/doc1.png",
-    title: "Dr John Paulliston",
-    desc: "Paediatrician",
-    imagePostion: "left",
-  },
-  {
-    id: 2,
-    img: "/doc2.png",
-    title: "Dr Joel Paulliston",
-    desc: "Otolaryngologist",
-    imagePostion: "right",
-  },
-  {
-    id: 3,
-    img: "/doc1.png",
-    title: "Dr John Paulliston",
-    desc: "Paediatrician",
-    imagePostion: "left",
-  },
-  {
-    id: 4,
-    img: "/doc2.png",
-    title: "Dr Joel Paulliston",
-    desc: "Otolaryngologist",
-    imagePostion: "right",
-  },
-  {
-    id: 1,
-    img: "/doc1.png",
-    title: "Dr John Paulliston",
-    desc: "Paediatrician",
-    imagePostion: "left",
-  },
-  {
-    id: 2,
-    img: "/doc2.png",
-    title: "Dr Joel Paulliston",
-    desc: "Otolaryngologist",
-    imagePostion: "right",
-  },
-  {
-    id: 3,
-    img: "/doc1.png",
-    title: "Dr John Paulliston",
-    desc: "Paediatrician",
-    imagePostion: "left",
-  },
-  {
-    id: 4,
-    img: "/doc2.png",
-    title: "Dr Joel Paulliston",
-    desc: "Otolaryngologist",
-    imagePostion: "right",
-  },
-  {
-    id: 1,
-    img: "/doc1.png",
-    title: "Dr John Paulliston",
-    desc: "Paediatrician",
-    imagePostion: "left",
-  },
-  {
-    id: 2,
-    img: "/doc2.png",
-    title: "Dr Joel Paulliston",
-    desc: "Otolaryngologist",
-    imagePostion: "right",
-  },
-  {
-    id: 3,
-    img: "/doc1.png",
-    title: "Dr John Paulliston",
-    desc: "Paediatrician",
-    imagePostion: "left",
-  },
-  {
-    id: 4,
-    img: "/doc2.png",
-    title: "Dr Joel Paulliston",
-    desc: "Otolaryngologist",
-    imagePostion: "right",
-  },
-];
+import { api } from "@/lib/apiCall";
+import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 const NewAppoint = () => {
-  const [docId, setDocId] = useState();
+  const [docId, setDocId] = useState(null);
+  const [doctor, setDoctor] = useState([]);
   const [isActive, setIsActive] = useState(false);
-  // const [isOpen, setIsActive]= useState(false)
+  const [loading, setLoading] = useState(false);
+
+  const { data: session, status } = useSession();
+
+  const getData = useCallback(async () => {
+    if (!session?.token) return;
+
+    try {
+      setLoading(true);
+
+      const res = await api.get("/all-doctor", {
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+      });
+
+      const doctors = res?.data?.getDoc ?? [];
+
+      if (!Array.isArray(doctors)) {
+        throw new Error("Invalid doctor data format");
+      }
+
+      setDoctor(doctors);
+
+    } catch (error) {
+      console.error("Doctor Fetch Error:", error);
+
+      toast.error(
+        error?.response?.data?.message ||
+          error.message ||
+          "Failed to fetch doctors"
+      );
+
+      setDoctor([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [session?.token]);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      getData();
+    }
+  }, [status, getData]);
 
   return (
     <div>
       <p className="font-semibold mt-3 sm:text-lg">
         Select a Doctor for Appointment
       </p>
-      <div
-        className={`space-y-3 my-5 flex flex-col px-5 max-h-[55vh] 2xl:max-h-[62vh] overflow-auto modern-scroll `}
-      >
-        {appoint.map((data, index) => (
+
+      {/* Loading */}
+      {loading && (
+        <p className="text-center my-5 text-gray-500">Loading doctors...</p>
+      )}
+
+      {/* Doctor List */}
+      <div className="space-y-4 my-5 px-5 max-h-[55vh] 2xl:max-h-[62vh] overflow-auto modern-scroll">
+        {!loading && doctor.length === 0 && (
+          <p className="text-center text-gray-500">No doctors available</p>
+        )}
+
+        {doctor.map((data, index) => (
           <Card
-            onClick={() => setDocId(data.id)}
-            key={index}
-            className={`flex w-full md:w-[50%]  ${
-              data.imagePostion === "right" ? "ml-auto" : "mr-auto "
-            }  cursor-pointer ${docId === data.id ? "bg-[#7ab3ec]" : ""} py-2`}
+            key={data?.id || index}
+            onClick={() => setDocId(data?.id)}
+            className={`
+              w-full md:w-[50%] justify-center
+              ${index % 2 !== 0 ? "ml-auto" : "mr-auto"}
+              cursor-pointer 
+              transition-all duration-200
+              ${
+                docId === data?.id
+                  ? "bg-[#7ab3ec] border-2 border-blue-500"
+                  : "hover:shadow-lg"
+              }
+              py-2 min-h-30
+            `}
           >
             <CardContent
-              className={`flex gap-7 ${
-                data.imagePostion === "left" ? "flex-row" : "flex-row-reverse"
-              } items-center `}
+              className={`
+                flex gap-6 items-center  h-full
+                ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}
+              `}
             >
-              <Image
-                src={data.img}
-                alt="doc"
-                width={90}
-                height={98}
-                className="rounded-xl object-cover hidden sm:block"
-              />
-              <div>
-                <h1 className="font-semibold sm:text-xl">{data.title}</h1>
-                <p className="text-gray-700">{data.desc}</p>
+              {/* Fixed Image Container */}
+              <div className="w-20.5 h-20.5 relative shrink-0">
+                <Image
+                  src={data?.doctor?.profile || "/doc1.png"}
+                  alt="Doctor"
+                  fill
+                  className="rounded-xl object-cover"
+                  sizes="90px"
+                />
+              </div>
+
+              <div className="flex flex-col justify-center">
+                <h1 className="font-semibold sm:text-xl capitalize">
+                  {data?.name || "Doctor Name"}
+                </h1>
+                <p className="text-gray-700 capitalize">
+                  {data?.doctor?.specialization || "Specialization"}
+                </p>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
+      {/* Continue Button */}
       <Button
         disabled={!docId}
         onClick={() => setIsActive(true)}
-        className="w-full text-[#ffff] bg-[#3497F9] hover:bg-[#137ee9] cursor-pointer"
+        className="w-full text-white bg-[#3497F9] hover:bg-[#137ee9]"
       >
         Continue
       </Button>
-      {isActive && <Booking onClose={() => setIsActive(false)} />}
+
+      {isActive && <Booking docId={docId} onClose={() => setIsActive(false)} />}
     </div>
   );
 };
