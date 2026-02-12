@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { SlCalender } from "react-icons/sl";
+import { api } from "@/lib/apiCall";
+import { useSession } from "next-auth/react";
 
 const cardData = [
   {
@@ -102,6 +104,22 @@ const cardData = [
 ];
 
 const MyAppointment = () => {
+  const {data:session, status}= useSession(null)
+  const getData= async()=>{
+    const res=await api.get("/patient/appointment",{
+      headers:{
+        Authorization:`Bearer ${session?.token}`
+      }
+    })
+    console.log("response",res)
+  }
+
+  useEffect(() => {
+      if (status === "authenticated") {
+        getData();
+      }
+    }, [status, getData]);
+
   return (
     <>
       <div className="max-h-[66vh] overflow-auto mt-10  modern-scroll px-5">
