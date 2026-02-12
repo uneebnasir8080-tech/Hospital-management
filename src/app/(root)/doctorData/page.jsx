@@ -25,11 +25,13 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
 import { api } from "@/lib/apiCall";
+import { useRouter } from "next/navigation";
 
 const DoctorData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { data, status } = useSession();
   const [preview, setPreview] = useState(null);
+  const router= useRouter()
   const formSchema = zScehma
     .pick({
       name: false,
@@ -93,6 +95,7 @@ const DoctorData = () => {
       });
 
       showToast("success", res.data.message);
+      router.push('/admin/dashboard')
       form.reset();
     } catch (error) {
       showToast("error", error.response?.data?.message || "Upload failed");
@@ -266,6 +269,7 @@ const DoctorData = () => {
                   )}
                 />
               </div>
+             
             </Form>
             <Button
               type="submit"

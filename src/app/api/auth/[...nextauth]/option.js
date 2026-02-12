@@ -15,7 +15,7 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           const { data } = await api.post("/login", credentials);
-          
+          console.log("data",data)
           if (data && data.token) {
             const { user, token } = data;
             return {  
@@ -24,12 +24,13 @@ export const authOptions = {
               name: user.name,
               role: user.role,
               token: token,
+              message: data.message
             };
           }
           throw new Error("Invalid email or password");
         } catch (error) {
-          if (axios.isAxiosError(error) && error.response?.data?.Message) {
-            throw new Error(error.response.data.Message);
+          if (axios.isAxiosError(error) && error.response?.data?.message) {
+            throw new Error(error.response.data.message);
           } else if (error instanceof Error) {
             throw error;
           } else {
@@ -47,6 +48,7 @@ export const authOptions = {
         token.email = user.email;
         token.role = user.role;
         token.token = user.token;
+        token.message= user.message
       }
       return token;
     },
@@ -56,6 +58,7 @@ export const authOptions = {
       session.email = token.email;
       session.role = token.role;
       session.token = token.token;
+      session.message=token.message
       return session;
     },
   },
