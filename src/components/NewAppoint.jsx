@@ -23,13 +23,13 @@ const NewAppoint = () => {
     try {
       setLoading(true);
 
-      const res = await api.get("/all-doctor", {
+      const res = await api.get("/all-doctors", {
         headers: {
           Authorization: `Bearer ${session.token}`,
         },
       });
-
-      const doctors = res?.data?.getDoc ?? [];
+      console.log("response",res?.data.getData)
+      const doctors = res?.data?.getData ?? [];
      
       if (!Array.isArray(doctors)) {
         throw new Error("Invalid doctor data format");

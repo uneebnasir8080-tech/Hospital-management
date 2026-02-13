@@ -5,7 +5,7 @@ export async function proxy(req) {
   const token = await getToken({ req });
   const url = req.nextUrl;
   if (token) {
-    if (url.pathname === "/auth/login") {
+    if (url.pathname === "/auth/login" || url.pathname === "/") {
       if(token.role==="admin" || token.role==="doctor"){
       return NextResponse.redirect(new URL("/admin/dashboard", req.url));
     }
@@ -19,6 +19,11 @@ export async function proxy(req) {
   if (url.pathname === "/auth/login") {
     return NextResponse.next();
   }
+  if(!token){
+    if (url.pathname === "/auth/register") {
+    return NextResponse.next();
+  }
+  }
   return NextResponse.redirect(new URL("/auth/login", req.url));
 }
 export const config = {
@@ -26,7 +31,7 @@ export const config = {
   //   "/((?!api|_next/static|_next/image|favicon.ico|auth/login|auth/register).*)",
   // ],
 matcher: [
-  "/((?!api|_next|favicon.ico|auth/login|auth/register|.*\\..*).*)",
+  "/((?!api|_next|favicon.ico|.*\\..*).*)",
 ],
   
 

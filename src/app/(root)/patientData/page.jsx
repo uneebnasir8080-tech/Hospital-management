@@ -27,10 +27,12 @@ import { useSession } from "next-auth/react";
 import ImageDropField from "@/components/ImageDropField";
 import { showToast } from "@/lib/showToastify";
 import { api } from "@/lib/apiCall";
+import { useRouter } from "next/navigation";
 const PatientData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { data, status } = useSession();
   const [preview, setPreview] = useState(null);
+  const router= useRouter()
   const formSchema = zScehma
     .pick({
       name: false,
@@ -93,6 +95,7 @@ const PatientData = () => {
       });
 
       showToast("success", res.data.message);
+      router.push('/user/home')
       form.reset();
     } catch (error) {
       showToast("error", error.response?.data?.message || "Upload failed");

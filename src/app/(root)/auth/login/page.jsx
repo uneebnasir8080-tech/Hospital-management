@@ -40,45 +40,8 @@ const LoginPage = () => {
       password: "",
     },
   });
-
-  // const { data: session, status } = useSession();
-  // const handleOnSubmit = async (values) => {
-  //   try {
-  //     setIsLoading(true);
-  //     const res = await signIn("credentials", {
-  //       redirect: false,
-  //       email: values.email,
-  //       password: values.password,
-  //     });
-  //     if (!res.ok) {
-  //       showToast("error", "Invalid Credentials");
-  //       return;
-  //     }
-  //     if (res?.error) {
-  //       showToast("error", "Something went wrong");
-  //       return;
-  //     }
-  //     if (res?.ok) {
-  //       showToast("success", "Login successful");
-  //       if (session?.role === "patient") {
-  //         router.push("/user/home");
-  //       }
-  //       if (session?.role === "admin" || session?.role === "doctor") {
-  //         router.push("/admin/dashboard");
-  //       }
-  //       form.reset();
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     showToast("error", error?.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const handleOnSubmit = async (values) => {
     try {
-      // console.log("first", values)
       setIsLoading(true);
 
       // Sign in with credentials
@@ -91,31 +54,43 @@ const LoginPage = () => {
         showToast("error", "Invalid Credentials");
         return;
       }
-      // if (res?.error || res?.error!=="undefined" ) {
-      //   showToast("error", "Something went wrong");
-      //   return;
-      // }
+      if (res?.error) {
+        showToast("error", res?.error || "Something went wrong");
+        return;
+      }
 
       // Fetch latest session after sign in
       const sessionData = await getSession();
-      // console.log("first",sessionData.name)
       if (!sessionData) {
         showToast("error", "Session not found");
         return;
       }
       setUser({
-        name:sessionData.name,
-        email:sessionData.email,
-        role:sessionData.role
-      })
-     
+        name: sessionData.name,
+        email: sessionData.email,
+        role: sessionData.role,
+      });
+
       // Role-based redirect
       if (sessionData?.role === "patient") {
+        if (sessionData?.message === "Profile inComplete") {
+          router.push("/patientData");
+          return
+        }
         router.push("/user/home");
-      } else if (
-        sessionData?.role === "admin" ||
-        sessionData?.role === "doctor"
-      ) {
+  
+
+      } else if (sessionData?.role === "admin") {
+        if (sessionData?.message === "Profile inComplete") {
+          router.push("/adminData");
+          return
+        }
+        router.push("/admin/dashboard");
+      } else if (sessionData?.role === "doctor") {
+        if (sessionData?.message === "Profile inComplete") {
+          router.push("/doctorData");
+          return
+        }
         router.push("/admin/dashboard");
       }
 
