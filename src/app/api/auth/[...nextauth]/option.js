@@ -4,7 +4,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
   providers: [
-    
     CredentialsProvider({
       id: "credentials",
       name: "credentials",
@@ -15,16 +14,15 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           const { data } = await api.post("/login", credentials);
-          console.log("data",data)
           if (data && data.token) {
             const { user, token } = data;
-            return {  
+            return {
               id: user.id,
               email: user.email,
               name: user.name,
               role: user.role,
               token: token,
-              message: data.message
+              message: data.message,
             };
           }
           throw new Error("Invalid email or password");
@@ -41,25 +39,36 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
         token.role = user.role;
         token.token = user.token;
-        token.message= user.message
+        token.message = user.message;
+      }
+      // VERY IMPORTANT → session update support
+      if (trigger === "update") {
+        return {
+          ...token,
+          ...session,
+        };
       }
       return token;
     },
     async session({ session, token }) {
-      session.id = token.id;
-      session.name = token.name;
-      session.email = token.email;
-      session.role = token.role;
-      session.token = token.token;
-      session.message=token.message
-      return session;
+      // session.id = token.id;
+      // session.name = token.name;
+      // session.email = token.email;
+      // session.role = token.role;
+      // session.token = token.token;
+      // session.message = token.message;
+      // return session;
+       return {
+      ...session,
+      ...token,
+    };
     },
   },
   pages: {

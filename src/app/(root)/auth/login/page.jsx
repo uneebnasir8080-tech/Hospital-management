@@ -40,45 +40,8 @@ const LoginPage = () => {
       password: "",
     },
   });
-
-  // const { data: session, status } = useSession();
-  // const handleOnSubmit = async (values) => {
-  //   try {
-  //     setIsLoading(true);
-  //     const res = await signIn("credentials", {
-  //       redirect: false,
-  //       email: values.email,
-  //       password: values.password,
-  //     });
-  //     if (!res.ok) {
-  //       showToast("error", "Invalid Credentials");
-  //       return;
-  //     }
-  //     if (res?.error) {
-  //       showToast("error", "Something went wrong");
-  //       return;
-  //     }
-  //     if (res?.ok) {
-  //       showToast("success", "Login successful");
-  //       if (session?.role === "patient") {
-  //         router.push("/user/home");
-  //       }
-  //       if (session?.role === "admin" || session?.role === "doctor") {
-  //         router.push("/admin/dashboard");
-  //       }
-  //       form.reset();
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     showToast("error", error?.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const handleOnSubmit = async (values) => {
     try {
-      // console.log("first", values)
       setIsLoading(true);
 
       // Sign in with credentials
@@ -98,8 +61,6 @@ const LoginPage = () => {
 
       // Fetch latest session after sign in
       const sessionData = await getSession();
-      console.log("first", sessionData?.message);
-      // console.log("first",sessionData.name)
       if (!sessionData) {
         showToast("error", "Session not found");
         return;
