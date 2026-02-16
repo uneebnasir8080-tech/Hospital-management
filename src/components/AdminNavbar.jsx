@@ -19,6 +19,9 @@ const AdminNavbar = () => {
   const getData = async () => {
     try {
       const res = await api.get("/user", {
+        params: {
+          userId: session?.id,
+        },
         headers: {
           Authorization: `Bearer ${session?.token}`,
         },

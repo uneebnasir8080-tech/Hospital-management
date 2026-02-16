@@ -8,6 +8,7 @@ import Booking from "./Booking";
 import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import { showToast } from "@/lib/showToastify";
 
 const NewAppoint = () => {
   const [docId, setDocId] = useState(null);
@@ -28,22 +29,20 @@ const NewAppoint = () => {
           Authorization: `Bearer ${session.token}`,
         },
       });
-      console.log("response",res?.data.getData)
+      // console.log("response", res?.data.getData[4]);
       const doctors = res?.data?.getData ?? [];
-     
       if (!Array.isArray(doctors)) {
         throw new Error("Invalid doctor data format");
       }
 
       setDoctor(doctors);
-
     } catch (error) {
       console.error("Doctor Fetch Error:", error);
 
       toast.error(
         error?.response?.data?.message ||
           error.message ||
-          "Failed to fetch doctors"
+          "Failed to fetch doctors",
       );
 
       setDoctor([]);
@@ -57,6 +56,28 @@ const NewAppoint = () => {
       getData();
     }
   }, [status, getData]);
+
+  const handleSubmit = async () => {
+    if (!Array.isArray(doctor) || !docId) return;
+
+    const selectedDoctor = doctor.find(
+      (doc) => doc.doctor._id.toString() === docId.toString(),
+    );
+
+    if (!selectedDoctor) {
+      showToast("error", "Doctor not found");
+      return;
+    }
+
+ 
+
+    if (selectedDoctor?.doctor?.schedule) {
+      setIsActive(true);
+      return;
+    }
+
+    showToast("error", "Doctor doesn't have Schedule");
+  };
 
   return (
     <div>
@@ -78,7 +99,7 @@ const NewAppoint = () => {
         {doctor.map((data, index) => (
           <Card
             key={data?.id || index}
-            onClick={() => setDocId(data?.id)}
+            onClick={() => setDocId(data?.doctor?.id)}
             className={`
               w-full md:w-[50%] justify-center
               ${index % 2 !== 0 ? "ml-auto" : "mr-auto"}
@@ -125,7 +146,7 @@ const NewAppoint = () => {
       {/* Continue Button */}
       <Button
         disabled={!docId}
-        onClick={() => setIsActive(true)}
+        onClick={handleSubmit}
         className="w-full text-white bg-[#3497F9] cursor-pointer hover:bg-[#137ee9]"
       >
         Continue

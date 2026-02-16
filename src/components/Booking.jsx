@@ -80,6 +80,7 @@ const Booking = ({ onClose, Loading, docId }) => {
         params: { docId },
         headers: { Authorization: `Bearer ${session.token}` },
       });
+      // console.log("response of booking", res)
       setDoctor(res.data.getDoctor);
     } catch (error) {
       console.error(error);
@@ -91,21 +92,21 @@ const Booking = ({ onClose, Loading, docId }) => {
   }, [session?.token, docId]);
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status !== "authenticated") return
       fetchDoctorSchedule();
-    }
+    
   }, [status, fetchDoctorSchedule]);
 
   // generate slots when date or schedule changes
   useEffect(() => {
-    if (!doctor?.doctor.schedule.startTime || !doctor?.doctor.schedule.endTime)
+    if (!doctor?.schedule.startTime || !doctor?.schedule.endTime)
       return;
 
     setSelectedSlot(null); // reset on date change
 
     const generated = generateTimeSlots(
-      doctor?.doctor.schedule.startTime,
-      doctor?.doctor.schedule.endTime,
+      doctor?.schedule.startTime,
+      doctor?.schedule.endTime,
     );
 
     setSlots(generated);
@@ -199,7 +200,7 @@ const Booking = ({ onClose, Loading, docId }) => {
                 <div>
                   <h3 className="font-semibold text-sm">Select Time</h3>
                   <div className="grid grid-cols-3 gap-3 mt-3 max-h-60 overflow-y-scroll modern-scroll">
-                    {slots.map((time) => {
+                    {slots?.map((time) => {
                       const active = selectedSlot === time;
                       return (
                         <button

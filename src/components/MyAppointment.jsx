@@ -3,6 +3,7 @@ import { Card, CardContent } from "./ui/card";
 import { SlCalender } from "react-icons/sl";
 import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
+import { showToast } from "@/lib/showToastify";
 
 const cardData = [
   {
@@ -105,7 +106,9 @@ const cardData = [
 
 const MyAppointment = () => {
   const {data:session, status}= useSession(null)
+
   const getData= async()=>{
+    if(session?.role !== "patient")return(showToast("error",`${session.role} has no appointment`))
     const res=await api.get("/patient/appointment",{
       headers:{
         Authorization:`Bearer ${session?.token}`
