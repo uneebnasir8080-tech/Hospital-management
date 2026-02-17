@@ -27,7 +27,7 @@ const Payment = ({ onClose, Loading, date, slot, docId, response }) => {
   /* ======================
      Safe Data Extraction
   ====================== */
-  const fees = Number(response?.doctor?.schedule?.fee) || 0;
+  const fees = Number(response?.schedule?.fee) || 0;
   const tax = Number(((fees * 5) / 100).toFixed(2));
   const total = Number((fees + tax).toFixed(2));
 
@@ -73,7 +73,7 @@ const Payment = ({ onClose, Loading, date, slot, docId, response }) => {
                     {/* FIXED IMAGE SIZE */}
                     <div className="relative w-22 h-22 rounded-lg overflow-hidden my-2 bg-gray-100 shrink-0">
                       <Image
-                        src={response?.doctor?.profile || "/doc1.png"}
+                        src={response?.profile || "/doc1.png"}
                         alt="doctor"
                         fill
                         className="object-cover"
@@ -82,10 +82,10 @@ const Payment = ({ onClose, Loading, date, slot, docId, response }) => {
 
                     <div>
                       <h1 className="font-semibold capitalize">
-                        Dr {response?.name}
+                        Dr {response?.userId?.name}
                       </h1>
                       <p className="text-sm text-gray-600 capitalize">
-                        {response?.doctor?.specialization}
+                        {response?.specialization}
                       </p>
                     </div>
                   </CardContent>

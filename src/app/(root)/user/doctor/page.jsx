@@ -22,7 +22,7 @@ const DoctorPage = () => {
                 : "text-[#3497F9] bg-transparent"
             }`}
           >
-            My Appointents
+            New Appointents
           </Button>
           <Button
             onClick={() => setIsActive("new")}
@@ -32,11 +32,11 @@ const DoctorPage = () => {
                 : "text-[#3497F9] bg-transparent"
             } `}
           >
-            New Appointent
+            My Appointent
           </Button>
         </div>
         {/* list  */}
-        <div>{isActive === "new" ? <NewAppoint /> : <MyAppointment />}</div>
+        <div>{isActive === "new" ?<MyAppointment /> :  <NewAppoint /> }</div>
       </div>
     </div>
   );
