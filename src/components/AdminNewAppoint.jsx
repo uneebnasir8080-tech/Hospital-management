@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import React, { useState } from "react";
 import { DatePicker } from "./ui/DatePicker";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { api } from "@/lib/apiCall";
 const data = [
   {
     id: 1,
@@ -51,8 +52,10 @@ const data = [
   },
 ];
 
-const AdminNewAppoint = () => {
+const AdminNewAppoint = ({response}) => {
   const [open, setOpen] = useState(false);
+  const filtered= response.filter((prev)=>prev.appointment.length !== 0)
+  // const [resData, setResData]=useState(filtered)
   return (
     <div className=" px-3 lg:px-5  ">
       {/* inputs  */}

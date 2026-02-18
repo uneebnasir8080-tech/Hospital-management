@@ -1,14 +1,35 @@
 "use client";
 import { BsArrowsAngleContract } from "react-icons/bs";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useStore } from "@/store/store";
 import AdminNewAppoint from "@/components/AdminNewAppoint";
 import AdminComplete from "@/components/AdminComplete";
+import { api } from "@/lib/apiCall";
+import { useSession } from "next-auth/react";
 
 const AppointmentPage = () => {
+  const {data:session, status}= useSession(null)
+  const [resData, setResData]=useState([])
   const appointment = useStore((state) => state.appointment);
   const newAppoint = useStore((state) => state.new);
   const complete = useStore((state) => state.complete);
+
+   const getData = async()=>{
+      const res= await api.get("/patient/all-appointment",{
+        headers:{
+          Authorization: `Bearer ${session?.token}`
+        }
+      })
+      console.log("response", res.data.getData)
+      const response= res?.data?.getData
+      setResData(response)
+    }
+    useEffect(() => {
+      if(status!=="authenticated") return
+      getData()
+    }, [status, getData])
+    
+
   return (
     <div className="bg-white  rounded-lg  ">
       <div className="">
@@ -47,7 +68,7 @@ const AppointmentPage = () => {
           </div>
         </div>
         {/* pages  */}
-        {appointment === "new" && <AdminNewAppoint />}
+        {appointment === "new" && <AdminNewAppoint response={resData}/>}
         {appointment === "complete" && <AdminComplete />}
       </div>
     </div>
