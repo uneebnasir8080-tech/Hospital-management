@@ -19,12 +19,12 @@ const ProfilePage = () => {
 
   // ---------------- FETCH USER ----------------
   const getData = useCallback(async () => {
-    if (!session?.token || !session?.user?.id) return;
+    if (!session?.token || !session?.id) return;
 
     try {
       const res = await api.get("/user", {
         params: {
-          userId: session.user.id,
+          userId: session?.id,
         },
         headers: {
           Authorization: `Bearer ${session.token}`,
@@ -96,7 +96,7 @@ const ProfilePage = () => {
 
         {/* Name & Phone */}
         <div className="text-center mt-6 space-y-1">
-          <p className="text-lg md:text-2xl font-semibold">
+          <p className="text-lg md:text-2xl font-semibold capitalize">
             {resData?.name || "John Paulliston"}
           </p>
 
@@ -122,7 +122,7 @@ const ProfilePage = () => {
         <p className="flex gap-3 text-sm md:text-xl">
           Age:
           <span className="text-black">
-            {calculateAge(resData?.patient?.dob) ?? "N/A"} years
+            {calculateAge(resData?.patient?.age) ?? "N/A"} years
           </span>
         </p>
 

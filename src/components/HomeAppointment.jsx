@@ -12,15 +12,21 @@ const HomeAppointment = () => {
   const { data: session, status } = useSession();
   const [resData, setResData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+console.log(session)
   useEffect(() => {
     if (status !== "authenticated") return;
 
     const getData = async () => {
       try {
-        if (session?.role !== "patient") return;
+        if (session?.role !== "patient") {
+          setLoading(false);
+          return;
+        }
 
         const res = await api.get("/patient/appointment", {
+          params:{
+            userId:session?.id
+          },
           headers: {
             Authorization: `Bearer ${session?.token}`,
           },
@@ -70,27 +76,42 @@ const HomeAppointment = () => {
             </Card>
           ))}
 
+        {/* 🔹 No Appointment Box */}
+        {!loading && resData.length === 0 && (
+          <div className="col-span-full flex justify-center">
+            <div className="bg-blue-100 border border-blue-300 rounded-lg px-6 py-5 text-center w-full max-w-md shadow-sm">
+              <h2 className="text-lg font-semibold text-blue-700">
+                No Appointments Yet
+              </h2>
+              <p className="text-sm text-gray-600 mt-2">
+                You have not booked any appointment. Once you book, it will appear here.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* 🔹 Real Data */}
         {!loading &&
-          resData?.map((data) => (
+          resData.length > 0 &&
+          resData.map((data) => (
             <Card key={data?._id} className="bg-blue-200 py-3 px-2">
               <CardContent className="flex items-center justify-between gap-6 p-4">
 
                 {/* Doctor Image */}
-                <div className="relative w-25 h-20 hidden sm:block">
+                <div className="relative w-20 h-20 hidden sm:block">
                   <Image
                     src={data?.doctorId?.profile || "/doc1.png"}
                     alt="doctor"
                     fill
                     sizes="80px"
-                    className="rounded-sm object-cover"
+                    className="rounded-md object-cover"
                   />
                 </div>
 
                 {/* Info */}
                 <div className="flex-1 space-y-1">
                   <h1 className="font-semibold text-lg capitalize">
-                   Dr {data?.doctorId?.userId?.name || "Unknown Doctor"}
+                    Dr {data?.doctorId?.userId?.name || "Unknown Doctor"}
                   </h1>
 
                   <p className="text-base">
@@ -105,7 +126,7 @@ const HomeAppointment = () => {
 
                 {/* Time Badge */}
                 <div>
-                  <p className="bg-blue-400 px-3 py-1 rounded-xl text-[13px]">
+                  <p className="bg-blue-400 px-3 py-1 rounded-xl text-[13px] text-white">
                     {data?.time}
                   </p>
                 </div>

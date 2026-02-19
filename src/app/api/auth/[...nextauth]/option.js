@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
   providers: [
+  
     CredentialsProvider({
       id: "credentials",
       name: "credentials",
@@ -14,8 +15,10 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           const { data } = await api.post("/login", credentials);
+          console.log("two",data)
           if (data && data.token) {
             const { user, token } = data;
+            console.log("user",user.detail)
             return {
               id: user.id,
               email: user.email,
@@ -23,6 +26,7 @@ export const authOptions = {
               role: user.role,
               token: token,
               message: data.message,
+              detail: user.detail
             };
           }
           throw new Error("Invalid email or password");
@@ -47,6 +51,7 @@ export const authOptions = {
         token.role = user.role;
         token.token = user.token;
         token.message = user.message;
+        token.detail= user.detail
       }
       // VERY IMPORTANT → session update support
       if (trigger === "update") {

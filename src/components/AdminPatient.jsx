@@ -143,11 +143,11 @@ const AdminPatient = () => {
                   key={index}
                   className="grid grid-cols-7 border-b text-gray-600 text-xs xl:text-[15px]"
                 >
-                  <p className="px-3 py-3">{items?.name}</p>
+                  <p className="px-3 py-3 capitalize">{items?.name}</p>
                   <p className="px-3 py-3 text-center">
                     {calculateAge(items?.patient?.age)}
                   </p>
-                  <p className="px-3 py-3 text-center">
+                  <p className="px-3 py-3 text-center capitalize">
                     {items?.patient?.gender}
                   </p>
                   <p className="px-3 py-3 text-center">

@@ -28,11 +28,11 @@ import ImageDropField from "@/components/ImageDropField";
 import { showToast } from "@/lib/showToastify";
 import { api } from "@/lib/apiCall";
 import { useRouter } from "next/navigation";
-const PatientData = () => {
+const RegData = ({onClose,ids}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { data, update} = useSession();
+  const { data, status } = useSession();
+  const [next, setNext]= useState(null)
   const [preview, setPreview] = useState(null);
-  const router= useRouter()
   const formSchema = zScehma
     .pick({
       name: false,
@@ -89,19 +89,19 @@ const PatientData = () => {
       formData.append("blood", values.blood);
       const res = await api.post("/patient", formData, {
         params:{
-          id:data?.id
+            id:ids
         },
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${data?.token}`,
         },
       });
-      // console.log("patient", )
+
       showToast("success", res.data.message);
-      await update({
-        detail: res?.data.patient
-      })
-      router.push('/user/home')
+      setNext(onClose)
+      if(next!==null){
+        next
+      }
       form.reset();
     } catch (error) {
       showToast("error", error.response?.data?.message || "Upload failed");
@@ -110,16 +110,15 @@ const PatientData = () => {
     }
   };
   return (
-    <div className="flex min-h-screen py-8 px-4 bg-gray-100 ">
-      <Card className=" flex  w-140 lg:w-160 h-full mx-auto p-0 overflow-hidden">
+    <div className="flex min-h-screen py-8 px-4 bg-transparent mx-auto">
+      <Card className=" flex  w-100 lg:w-120 h-full mx-auto p-0 overflow-hidden">
         <CardContent className="p-0">
           {/* bg-img  */}
 
           <div
-            className="h-65  bg-center relative bg-no-repeat bg-cover clip-zigzag "
-            style={{ backgroundImage: `url('/patient.png')` }}
+            className="h-25 relative bg-blue-300"
           >
-            <h1 className="absolute inset-0 flex items-center justify-center text-4xl font-semibold text-white">
+            <h1 className="absolute inset-0 flex items-center justify-center text-2xl font-semibold text-white">
               PATIENT DETAILS
             </h1>
           </div>
@@ -127,7 +126,7 @@ const PatientData = () => {
           {/* form  */}
 
           <form
-            className="space-y-6 px-7 my-5 w-full"
+            className="space-y-4 px-7 my-5 w-full"
             onSubmit={form.handleSubmit(handleOnSubmit)}
           >
             <Form {...form}>
@@ -147,7 +146,7 @@ const PatientData = () => {
                         onClick={() =>
                           document.getElementById("profileInput").click()
                         }
-                        className="w-28 h-28 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer overflow-hidden"
+                        className="w-24 h-24 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer overflow-hidden"
                       >
                         <input
                           id="profileInput"
@@ -173,45 +172,8 @@ const PatientData = () => {
                   )}
                 />
               </div>
-              <div className="">
-                <FormField
-                  control={form.control}
-                  name=""
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <input
-                          className="capitalize cursor-not-allowed pl-7 w-full py-2 border-b border-b-gray-400 outline-none placeholder:text-black/50"
-                          type="text"
-                          disabled
-                          placeholder={data?.name || "Name"}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="">
-                <FormField
-                  control={form.control}
-                  name="age"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <input
-                          className=" w-full pl-7 py-2 border-b border-b-gray-400 outline-none text-gray-700"
-                          type="date"
-                          placeholder="Date of Birth"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+    
+           
               <div className="relative">
                 <FormField
                   control={form.control}
@@ -232,6 +194,25 @@ const PatientData = () => {
                   )}
                 />
               </div>
+                 <div className="">
+                <FormField
+                  control={form.control}
+                  name="age"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <input
+                          className=" w-full pl-7 py-2 border-b border-b-gray-400 outline-none text-gray-700"
+                          type="date"
+                          placeholder="Date of Birth"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <div>
                 <FormField
                   control={form.control}
@@ -244,7 +225,7 @@ const PatientData = () => {
                           placeholder="Gender"
                         />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="z-200">
                         <SelectGroup>
                           <SelectItem value="male">Male</SelectItem>
                           <SelectItem value="female">Female</SelectItem>
@@ -266,7 +247,7 @@ const PatientData = () => {
                         <SelectValue placeholder="Blood Group" />
                       </SelectTrigger>
 
-                      <SelectContent>
+                      <SelectContent className="z-200"> 
                         {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
                           (group) => (
                             <SelectItem key={group} value={group}>
@@ -283,7 +264,7 @@ const PatientData = () => {
             <Button
               type="submit"
               disabled={isLoading}
-              className={`bg-[#3497F9] py-5 text-lg  hover:bg-[#106ecc] cursor-pointer w-full mt-12 mb-5`}
+              className={`bg-[#3497F9] py-5 text-lg  hover:bg-[#106ecc] cursor-pointer w-full mt-3 mb-5`}
             >
               {isLoading ? (
                 <FaSpinner className="animate-spin text-2xl text-white" />
@@ -298,4 +279,4 @@ const PatientData = () => {
   );
 };
 
-export default PatientData;
+export default RegData;

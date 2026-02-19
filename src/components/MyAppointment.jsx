@@ -25,6 +25,9 @@ const MyAppointment = () => {
       setLoading(true);
 
       const res = await api.get("/patient/appointment", {
+        params: {
+          userId: session?.id,
+        },
         headers: {
           Authorization: `Bearer ${session?.token}`,
         },
@@ -36,7 +39,7 @@ const MyAppointment = () => {
       console.error("Appointment Fetch Error:", error);
       showToast(
         "error",
-        error?.response?.data?.message || "Failed to fetch appointments"
+        error?.response?.data?.message || "Failed to fetch appointments",
       );
     } finally {
       setLoading(false);
@@ -66,7 +69,6 @@ const MyAppointment = () => {
 
       <div className="max-h-[66vh] overflow-auto mt-10 modern-scroll px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
           {/* 🔹 Skeleton Section */}
           {loading &&
             Array.from({ length: 4 }).map((_, index) => {
@@ -80,7 +82,6 @@ const MyAppointment = () => {
                   className={`${isCross ? "lg:bg-blue-300" : ""} p-4 animate-pulse`}
                 >
                   <CardContent className="flex items-center justify-between gap-5 p-0">
-                    
                     <div className="w-30 h-20 bg-gray-300 rounded-sm hidden sm:block" />
 
                     <div className="flex-1 space-y-3">
@@ -90,7 +91,6 @@ const MyAppointment = () => {
                     </div>
 
                     <div className="h-6 w-16 bg-gray-300 rounded-md" />
-
                   </CardContent>
                 </Card>
               );
@@ -109,7 +109,6 @@ const MyAppointment = () => {
                   className={`${isCross ? "lg:bg-blue-300" : ""} p-6`}
                 >
                   <CardContent className="flex items-center justify-between gap-5 p-0">
-
                     <div className="relative w-30 h-20 hidden sm:block">
                       <Image
                         src={data?.doctorId?.profile || "/doc1.png"}
@@ -141,12 +140,10 @@ const MyAppointment = () => {
                         {data?.time}
                       </p>
                     </div>
-
                   </CardContent>
                 </Card>
               );
             })}
-
         </div>
       </div>
     </>
