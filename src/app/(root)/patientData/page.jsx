@@ -30,7 +30,7 @@ import { api } from "@/lib/apiCall";
 import { useRouter } from "next/navigation";
 const PatientData = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { data, status } = useSession();
+  const { data, update} = useSession();
   const [preview, setPreview] = useState(null);
   const router= useRouter()
   const formSchema = zScehma
@@ -96,8 +96,11 @@ const PatientData = () => {
           Authorization: `Bearer ${data?.token}`,
         },
       });
-
+      // console.log("patient", )
       showToast("success", res.data.message);
+      await update({
+        detail: res?.data.patient
+      })
       router.push('/user/home')
       form.reset();
     } catch (error) {

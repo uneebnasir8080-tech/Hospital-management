@@ -12,7 +12,7 @@ const HomeAppointment = () => {
   const { data: session, status } = useSession();
   const [resData, setResData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+console.log(session)
   useEffect(() => {
     if (status !== "authenticated") return;
 
@@ -24,6 +24,9 @@ const HomeAppointment = () => {
         }
 
         const res = await api.get("/patient/appointment", {
+          params:{
+            userId:session?.id
+          },
           headers: {
             Authorization: `Bearer ${session?.token}`,
           },

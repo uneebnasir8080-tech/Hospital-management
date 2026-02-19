@@ -125,7 +125,7 @@ const Booking = ({ onClose, Loading, docId }) => {
 
       const payload = {
         doctorId: docId,
-        patientId: session?.id,
+        patientId: session?.detail.id,
         date,
         time: selectedSlot,
       };
