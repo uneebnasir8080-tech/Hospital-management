@@ -19,11 +19,11 @@ export async function proxy(req) {
   if (url.pathname === "/auth/login") {
     return NextResponse.next();
   }
-  if(!token){
+  
     if (url.pathname === "/auth/register") {
     return NextResponse.next();
   }
-  }
+  
   return NextResponse.redirect(new URL("/auth/login", req.url));
 }
 export const config = {

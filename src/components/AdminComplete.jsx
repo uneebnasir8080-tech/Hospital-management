@@ -4,7 +4,7 @@ import { DatePicker } from "./ui/DatePicker";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { calculateAge, formatDate } from "@/lib/utils";
 
-const AdminComplete = ({ response }) => {
+const AdminComplete = ({ response, loading }) => {
 
   // ✅ Safe fallback if response is undefined
   const safeResponse = Array.isArray(response) ? response : [];
@@ -57,6 +57,14 @@ const AdminComplete = ({ response }) => {
             </p>
           </div>
 
+            {/* Loading */}
+        {loading && (
+          <div className="p-5 text-center text-gray-500">
+            Loading appointments...
+          </div>
+        )}
+{!loading &&
+        <div>
           {/* ✅ Empty State */}
           {filtered.length === 0 && (
             <div className="text-center py-6 text-gray-500">
@@ -112,6 +120,7 @@ const AdminComplete = ({ response }) => {
               </p>
             </div>
           ))}
+          </div>}
         </div>
       </div>
 

@@ -64,12 +64,10 @@ const Payment = ({ onClose, Loading, date, slot, docId, response }) => {
             <hr />
 
             <div className="mb-5 mt-3 flex flex-2 gap-10">
-              
               {/* Doctor Card */}
               <div>
                 <Card className="p-0">
                   <CardContent className="flex items-center gap-4">
-                    
                     {/* FIXED IMAGE SIZE */}
                     <div className="relative w-22 h-22 rounded-lg overflow-hidden my-2 bg-gray-100 shrink-0">
                       <Image
@@ -128,11 +126,17 @@ const Payment = ({ onClose, Loading, date, slot, docId, response }) => {
 
             <hr />
 
-            <div className="w-full mt-3">
+            <div className="w-full mt-3 flex gap-3">
+              <Button
+                className="grow bg-black/80 cursor-pointer"
+                onClick={onClose}
+              >
+                Pay Later
+              </Button>
               <Button
                 onClick={() => setInClick("method")}
                 disabled={Loading}
-                className="bg-[#7ab3ec] w-full hover:bg-[#1fb2d3] cursor-pointer"
+                className="bg-[#7ab3ec] grow  hover:bg-[#1fb2d3] cursor-pointer"
               >
                 {Loading && (
                   <AiOutlineLoading3Quarters className="animate-spin mr-2 h-5 w-5" />

@@ -112,7 +112,7 @@ const AdminPatient = () => {
 
       {!loading && (
         <div className="w-full overflow-x-auto modern-scroll bg-white rounded-md">
-          <div className="min-w-[900px]">
+          <div className="min-w-225">
             <div className="grid grid-cols-7 border-b font-medium text-xs lg:text-[15px] text-gray-700">
               {[
                 "Patient Name",

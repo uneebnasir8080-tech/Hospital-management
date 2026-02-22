@@ -7,9 +7,12 @@ import AdminComplete from "@/components/AdminComplete";
 import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
+import AppointmentModal from "@/components/AppointmentModal";
+import PatientModal from "@/components/PatientModal";
 
 const AppointmentPage = () => {
   const { data: session, status } = useSession();
+  const [isClose, setIsClose]= useState(false)
   const [resData, setResData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,7 +79,7 @@ const AppointmentPage = () => {
           </div>
 
           <div className="flex items-center gap-10">
-            <button className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer text-xs px-2 rounded-sm text-white gap-1 flex items-center">
+            <button onClick={()=>setIsClose(!isClose)} className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer text-xs px-2 rounded-sm text-white gap-1 flex items-center">
               <span className="text-[16px] lg:text-xl pb-1">+</span>
               <span className="hidden md:block">New Appointment</span>
             </button>
@@ -87,22 +90,19 @@ const AppointmentPage = () => {
           </div>
         </div>
 
-        {/* Loading */}
-        {loading && (
-          <div className="p-5 text-center text-gray-500">
-            Loading appointments...
-          </div>
-        )}
+      
 
         {/* pages */}
-        {!loading && appointment === "new" && (
-          <AdminNewAppoint response={resData} />
+        { appointment === "new" && (
+          <AdminNewAppoint response={resData} loading={loading} token={session?.token}/>
         )}
 
-        {!loading && appointment === "complete" && (
-          <AdminComplete response={resData} />
+        { appointment === "complete" && (
+          <AdminComplete response={resData} loading={loading} />
         )}
       </div>
+      {isClose && <PatientModal  onClose={()=>setIsClose(!isClose)}/>}
+        
     </div>
   );
 };
