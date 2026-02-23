@@ -1,41 +1,43 @@
+"use client"
 import { MdOutlineArrowDropDown, MdPeopleAlt } from "react-icons/md";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiMedicineBottleFill } from "react-icons/ri";
 import { BiSolidReport } from "react-icons/bi";
+import { api } from "@/lib/apiCall";
+import { useSession } from "next-auth/react";
 
-const cards = [
-  {
-    id: 1,
-    icon: <IoDocumentTextOutline />,
-    total: "100",
-    desc: "Appointments",
-    bg: "bg-blue-200",
-  },
-  {
-    id: 2,
-    icon: <MdPeopleAlt />,
-    total: "50",
-    desc: "New Patients",
-    bg: "bg-blue-200",
-  },
-  {
-    id: 3,
-    icon: <RiMedicineBottleFill />,
-    total: "500",
-    desc: "Medeicine Sold",
-    bg: "bg-red-200",
-  },
-  {
-    id: 4,
-    icon: <BiSolidReport />,
-    total: "100",
-    desc: "Labs Test",
-    bg: "bg-gray-200",
-  },
-];
 
 const DashAppointment = () => {
+const {data:session, status}=useSession(null)
+const [appoint, setAppoint]= useState()
+const [patient, setPatient]= useState()
+console.log("session", session)
+
+const getData= async()=>{
+  const appointment= await api.get("/doctor/count-appoint", {
+    headers:{
+      Authorization:`Bearer ${session?.token}`
+    }
+  })
+  const patient= await api.get("/doctor/count-patient", {
+    headers:{
+      Authorization:`Bearer ${session?.token}`
+    }
+  })
+  const appointmentCounting= appointment?.data.totalAppoint
+  setAppoint(appointmentCounting)
+   const patientCounting= patient?.data?.totalPatient
+  setPatient(patientCounting)
+}
+
+useEffect(() => {
+  if(status==="authenticated"){
+    getData()
+  }
+}, [status])
+
+
   return (
     <div className="">
       {/* head */}
@@ -50,16 +52,42 @@ const DashAppointment = () => {
       </div>
       {/* cards  */}
       <div className="grid grid-cols-2 gap-3 px-2 xl:px-4 py-2 mt-3 xl:mt-5">
-        {cards.map((data, index) => (
-          <div
-            key={index}
-            className={`text-sm text-gray-700 flex flex-col py-1 xl:py-2 items-center rounded-lg ${data.bg}`}
-          >
-            <p className="text-xl xl:text-2xl py-1">{data.icon}</p>
-            <p className="text-[11px] xl:text-xs">{data.total}</p>
-            <p className="text-[11px] xl:text-xs">{data.desc}</p>
-          </div>
-        ))}
+        <div
+          className={`text-sm text-gray-700 flex flex-col py-1 xl:py-2 items-center rounded-lg bg-blue-200`}
+        >
+          <p className="text-xl xl:text-2xl py-1">
+            <IoDocumentTextOutline />
+          </p>
+          <p className="text-[11px] xl:text-xs">{appoint || 0}</p>
+          <p className="text-[11px] xl:text-xs">Appointments</p>
+        </div>
+        <div
+          className={`text-sm text-gray-700 flex flex-col py-1 xl:py-2 items-center rounded-lg bg-blue-200`}
+        >
+          <p className="text-xl xl:text-2xl py-1">
+            <MdPeopleAlt />
+          </p>
+          <p className="text-[11px] xl:text-xs">{patient || 0}</p>
+          <p className="text-[11px] xl:text-xs">New Patients</p>
+        </div>
+        <div
+          className={`text-sm text-gray-700 flex flex-col py-1 xl:py-2 items-center rounded-lg bg-red-200`}
+        >
+          <p className="text-xl xl:text-2xl py-1">
+            <RiMedicineBottleFill />
+          </p>
+          <p className="text-[11px] xl:text-xs">150</p>
+          <p className="text-[11px] xl:text-xs">Medeicine Sold</p>
+        </div>
+        <div
+          className={`text-sm text-gray-700 flex flex-col py-1 xl:py-2 items-center rounded-lg bg-gray-200`}
+        >
+          <p className="text-xl xl:text-2xl py-1">
+            <BiSolidReport />
+          </p>
+          <p className="text-[11px] xl:text-xs">49</p>
+          <p className="text-[11px] xl:text-xs">Labs Test</p>
+        </div>
       </div>
     </div>
   );
