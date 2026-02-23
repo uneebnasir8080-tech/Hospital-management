@@ -33,7 +33,7 @@ const AdminComplete = ({ response, loading }) => {
       <div className="overflow-x-scroll modern-scroll">
         <div className="min-w-180">
           {/* heading */}
-          <div className="grid grid-cols-7 justify-center border-b-2 pb-2 text-xs lg:text-[17px]">
+          <div className="grid grid-cols-7 justify-center border-b-2 pb-2 text-xs lg:text-[16px]">
             <p className="pl-2 font-medium flex items-center gap-1">
               Time <IoMdArrowDropdown size={20} />
             </p>
@@ -75,7 +75,7 @@ const AdminComplete = ({ response, loading }) => {
           {filtered.map((items, index) => (
             <div
               key={index}
-              className="grid text-gray-600 grid-cols-7 w-full border-b py-3 text-xs lg:text-[16px]"
+              className="grid text-gray-600 grid-cols-7 w-full border-b py-3 text-xs lg:text-[15px]"
             >
               <p className="pl-2">
                 {items?.time || "-"}

@@ -7,12 +7,11 @@ import AdminComplete from "@/components/AdminComplete";
 import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
-import AppointmentModal from "@/components/AppointmentModal";
 import PatientModal from "@/components/PatientModal";
 
 const AppointmentPage = () => {
   const { data: session, status } = useSession();
-  const [isClose, setIsClose]= useState(false)
+  const [isClose, setIsClose] = useState(false);
   const [resData, setResData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +35,7 @@ const AppointmentPage = () => {
       setResData(response);
     } catch (err) {
       console.error("API Error:", err);
-      showToast("Failed to fetch appointments", "error"); 
+      showToast("Failed to fetch appointments", "error");
       setResData([]);
     } finally {
       setLoading(false);
@@ -79,7 +78,10 @@ const AppointmentPage = () => {
           </div>
 
           <div className="flex items-center gap-10">
-            <button onClick={()=>setIsClose(!isClose)} className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer text-xs px-2 rounded-sm text-white gap-1 flex items-center">
+            <button
+              onClick={() => setIsClose(!isClose)}
+              className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer text-xs px-2 rounded-sm text-white gap-1 flex items-center"
+            >
               <span className="text-[16px] lg:text-xl pb-1">+</span>
               <span className="hidden md:block">New Appointment</span>
             </button>
@@ -90,19 +92,27 @@ const AppointmentPage = () => {
           </div>
         </div>
 
-      
-
         {/* pages */}
-        { appointment === "new" && (
-          <AdminNewAppoint response={resData} loading={loading} token={session?.token}/>
+        {appointment === "new" && (
+          <AdminNewAppoint
+            response={resData}
+            loading={loading}
+            token={session?.token}
+          />
         )}
 
-        { appointment === "complete" && (
+        {appointment === "complete" && (
           <AdminComplete response={resData} loading={loading} />
         )}
       </div>
-      {isClose && <PatientModal  onClose={()=>setIsClose(!isClose)}/>}
-        
+      {isClose && (
+        <PatientModal
+          onClose={() => {
+            setIsClose(!isClose);
+            getData();
+          }}
+        />
+      )}
     </div>
   );
 };

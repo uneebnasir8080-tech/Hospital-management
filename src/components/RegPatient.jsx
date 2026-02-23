@@ -71,8 +71,9 @@ const RegPatient = ({onClose}) => {
             className="h-40  bg-center relative bg-no-repeat bg-cover clip-zigzag "
             style={{ backgroundImage: `url('/BGRegister.png')` }}
           >
-            <h1 className="absolute inset-0 flex items-center justify-center text-4xl font-semibold text-white">
+            <h1 className="absolute inset-0 flex flex-col items-center justify-center text-4xl font-semibold text-white">
               Register
+              <span className="text-3xl">Patient</span>
             </h1>
           </div>
 
