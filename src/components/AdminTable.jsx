@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 import { TbArrowsDiagonalMinimize } from "react-icons/tb";
 
 const heading = [
@@ -81,23 +82,24 @@ const heading = [
   },
 ];
 const AdminTable = () => {
+  const [pages, setPages]= useState("new")
   return (
-    <div className="overflow-x-scroll">
+    <div className="overflow-x-scroll overflow-hidden">
     <div className="px-2 pt-1 min-w-100">
       {/* head  */}
       <div className="flex justify-between px-3 pt-2 text-[10px] lg:text-xs font-medium tracking-wide border-b ">
         <div className="flex gap-2 ">
-          <button className="cursor-pointer border-b-2 border-blue-500 pb-1">
+          <button onClick={()=>setPages("new")} className={`cursor-pointer ${pages==="new"?"border-b-2 border-blue-500":""} pb-1`}>
             New Appointments
           </button>
-          <button className="cursor-pointer focus:border-b-2 border-blue-500 pb-1">
+          <button onClick={()=>setPages("old")} className={`cursor-pointer ${pages==="old"?"border-b-2 border-blue-500":""} pb-1`}>
             Completed Appointments
           </button>
         </div>
         <TbArrowsDiagonalMinimize className="cursor-pointer"/>
       </div>
       {/* table  */}
-      <div className="max-h-47 xl:max-h-55 xl:min-h-55 overflow-y-scroll modern-scroll mt-2">
+    {pages==="new" &&  <div className="">
         {/* heading  */}
         <div className="flex flex-4">
           {["Time", "Date", "Patient Name", "Doctor"].map((data, index) => (
@@ -110,7 +112,7 @@ const AdminTable = () => {
           ))}
         </div>
         {/* table data  */}
-        <div className="flex flex-col flex-6 justify-center">
+        <div className="flex flex-col flex-6 justify-center max-h-47 xl:max-h-55 xl:min-h-55 overflow-y-scroll modern-scroll overflow-hidden">
           {heading.map((items, index) => (
             <div
               key={index}
@@ -123,7 +125,36 @@ const AdminTable = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div>}
+      {pages==="old" &&  <div className=" max-h-47 xl:max-h-55 xl:min-h-55">
+        {/* heading  */}
+        <div className="flex flex-4">
+          {["Time", "Date", "Patient Name", "Doctor", "Fee"].map((data, index) => (
+            <div
+              key={index}
+              className=" flex flex-1 justify-center text-xs lg:text-sm py-1 border-b"
+            >
+              <p>{data}</p>
+            </div>
+          ))}
+        </div>
+        {/* table data  */}
+        <div className="flex flex-col flex-6 justify-center overflow-y-scroll modern-scroll overflow-hidden">
+          {heading.map((items, index) => (
+            <div
+              key={index}
+              className="flex flex-6 space-y-2 border-b text-gray-500 mt-2 text-[10px] lg:text-xs"
+            >
+              <p className="flex-1 text-center ">{items.time}</p>
+              <p className="flex-1 text-center">{items.date}</p>
+              <p className="flex-1 text-center">{items.Patient}</p>
+              <p className="flex-1 text-center">{items.dr}</p>
+              <p className="flex-1 text-center">{items.dr}</p>
+
+            </div>
+          ))}
+        </div>
+      </div>}
     </div>
     </div>
   );
