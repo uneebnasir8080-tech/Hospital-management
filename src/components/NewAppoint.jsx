@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";

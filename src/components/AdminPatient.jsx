@@ -90,7 +90,7 @@ const AdminPatient = () => {
 
   return (
     <div className="px-3 xl:px-5 w-full">
-      <div className="flex gap-4 lg:gap-8 items-center flex-wrap mb-4">
+      <div className="flex gap-4 lg:gap-8 items-center flex-wrap mb-4 mt-2">
         <div className="flex items-center rounded-full shadow-sm px-4 py-2 text-sm xl:text-[16px] w-full sm:w-60 xl:w-72 bg-white">
           <FaSearch className="w-4 h-4 text-gray-400 mr-2" />
           <input
@@ -112,7 +112,7 @@ const AdminPatient = () => {
 
       {!loading && (
         <div className="w-full overflow-x-auto modern-scroll bg-white rounded-md">
-          <div className="min-w-[900px]">
+          <div className="min-w-225">
             <div className="grid grid-cols-7 border-b font-medium text-xs lg:text-[15px] text-gray-700">
               {[
                 "Patient Name",

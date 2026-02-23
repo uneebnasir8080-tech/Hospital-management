@@ -10,11 +10,12 @@ import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
 
-const Booking = ({ onClose, Loading, docId }) => {
+const Booking = ({ onClose, docId, Loading, patientId }) => {
   // states
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [date, setDate] = useState("");
   const [slots, setSlots] = useState([]);
+  const [saveId, setSaveId] = useState();
   const [doctor, setDoctor] = useState(null);
   const [payment, setPayment] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -78,7 +79,7 @@ const Booking = ({ onClose, Loading, docId }) => {
     try {
       const res = await api.get("/doctor/schedule", {
         params: { docId },
-        headers: { Authorization: `Bearer ${session.token}` },
+        headers: { Authorization: `Bearer ${session?.token}` },
       });
       // console.log("response of booking", res)
       setDoctor(res.data.getDoctor);
@@ -92,15 +93,13 @@ const Booking = ({ onClose, Loading, docId }) => {
   }, [session?.token, docId]);
 
   useEffect(() => {
-    if (status !== "authenticated") return
-      fetchDoctorSchedule();
-    
+    if (status !== "authenticated") return;
+    fetchDoctorSchedule();
   }, [status, fetchDoctorSchedule]);
 
   // generate slots when date or schedule changes
   useEffect(() => {
-    if (!doctor?.schedule.startTime || !doctor?.schedule.endTime)
-      return;
+    if (!doctor?.schedule.startTime || !doctor?.schedule.endTime) return;
 
     setSelectedSlot(null); // reset on date change
 
@@ -119,13 +118,22 @@ const Booking = ({ onClose, Loading, docId }) => {
       showToast("warning", "Please select date and time");
       return;
     }
-
+    let tempid = null;
+    if (session?.role === "patient") {
+      setSaveId(session?.detail.id);
+      tempid = session?.detail.id;
+    }
+    if (session?.role === "doctor" || session?.role === "admin") {
+      setSaveId(patientId);
+      tempid = patientId;
+    }
+    // console.log("ideed", saveId);
     try {
       setSubmitting(true);
 
       const payload = {
         doctorId: docId,
-        patientId: session?.detail.id,
+        patientId: tempid,
         date,
         time: selectedSlot,
       };

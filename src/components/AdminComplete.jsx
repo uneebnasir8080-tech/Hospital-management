@@ -4,7 +4,7 @@ import { DatePicker } from "./ui/DatePicker";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { calculateAge, formatDate } from "@/lib/utils";
 
-const AdminComplete = ({ response }) => {
+const AdminComplete = ({ response, loading }) => {
 
   // ✅ Safe fallback if response is undefined
   const safeResponse = Array.isArray(response) ? response : [];
@@ -33,7 +33,7 @@ const AdminComplete = ({ response }) => {
       <div className="overflow-x-scroll modern-scroll">
         <div className="min-w-180">
           {/* heading */}
-          <div className="grid grid-cols-7 justify-center border-b-2 pb-2 text-xs lg:text-[17px]">
+          <div className="grid grid-cols-7 justify-center border-b-2 pb-2 text-xs lg:text-[16px]">
             <p className="pl-2 font-medium flex items-center gap-1">
               Time <IoMdArrowDropdown size={20} />
             </p>
@@ -57,6 +57,14 @@ const AdminComplete = ({ response }) => {
             </p>
           </div>
 
+            {/* Loading */}
+        {loading && (
+          <div className="p-5 text-center text-gray-500">
+            Loading appointments...
+          </div>
+        )}
+{!loading &&
+        <div>
           {/* ✅ Empty State */}
           {filtered.length === 0 && (
             <div className="text-center py-6 text-gray-500">
@@ -67,7 +75,7 @@ const AdminComplete = ({ response }) => {
           {filtered.map((items, index) => (
             <div
               key={index}
-              className="grid text-gray-600 grid-cols-7 w-full border-b py-3 text-xs lg:text-[16px]"
+              className="grid text-gray-600 grid-cols-7 w-full border-b py-3 text-xs lg:text-[15px]"
             >
               <p className="pl-2">
                 {items?.time || "-"}
@@ -112,6 +120,7 @@ const AdminComplete = ({ response }) => {
               </p>
             </div>
           ))}
+          </div>}
         </div>
       </div>
 
