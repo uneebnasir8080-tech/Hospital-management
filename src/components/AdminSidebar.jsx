@@ -44,20 +44,15 @@ const logo = [
     link: "/admin/message",
     title: "Messages",
   },
+  
   {
     id: 6,
-    icon: <BiSolidSchool />,
-    link: "/admin/education",
-    title: "Education Content",
-  },
-  {
-    id: 7,
     icon: <MdOutlineInventory2 />,
     link: "/admin/inventory",
     title: "Medicine Inventory",
   },
   {
-    id: 8,
+    id: 7,
     icon: <IoMdSettings />,
     link: "/admin/setting",
     title: "Settings",

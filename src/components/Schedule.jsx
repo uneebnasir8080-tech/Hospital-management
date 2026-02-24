@@ -31,12 +31,12 @@ const formSchema = z.object({
 });
 
 const dayMap = {
-  Monday: "mon",
-  Tuesday: "tue",
-  Wednesday: "wed",
-  Thursday: "thr",
-  Friday: "fri",
-  Saturday: "sat",
+  Monday: "Monday",
+  Tuesday: "Tuesday",
+  Wednesday: "Wednesday",
+  Thursday: "Thursday",
+  Friday: "Friday",
+  Saturday: "Saturday",
 };
 
 const weekDays = [
