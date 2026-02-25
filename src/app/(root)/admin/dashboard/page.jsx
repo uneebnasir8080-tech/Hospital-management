@@ -20,15 +20,15 @@ const Dashboard = () => {
       </div>
       <div className="flex gap-5 flex-col lg:flex-row mt-10 lg:mt-0">
         {/* education content  */}
-        <div className=" bg-white min-h-50 mx-5 sm:mx-20 lg:mx-0 xl:min-h-65 max-h-50 xl:max-h-65 overflow-y-scroll modern-scroll flex-1 rounded-md">
+        <div className=" bg-white min-h-50 mx-5 sm:mx-20 lg:mx-0 xl:min-h-75 max-h-50 xl:max-h-65 overflow-y-scroll modern-scroll flex-1 rounded-md">
           <EducationContent />
         </div>
         {/* graph */}
-        <div className=" bg-white min-h-50 mx-5 sm:mx-20 lg:mx-0 xl:min-h-65 max-h-50 xl:max-h-65 flex-1 rounded-md">
+        <div className=" bg-white min-h-50 mx-5 sm:mx-20 lg:mx-0 xl:min-h-75 max-h-50 xl:max-h-65 flex-1 rounded-md">
           <Graph />
         </div>
         {/* fees  */}
-        <div className=" bg-white min-h-50 mx-5 sm:mx-20 lg:mx-0 xl:min-h-65 max-h-50 xl:max-h-65 overflow-y-scroll modern-scroll flex-1 rounded-md">
+        <div className=" bg-white min-h-50 mx-5 sm:mx-20 lg:mx-0 xl:min-h-75 max-h-50 xl:max-h-65 overflow-y-scroll modern-scroll flex-1 rounded-md">
           <PaymentFee />
         </div>
       </div>

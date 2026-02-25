@@ -5,6 +5,7 @@ import RegPatient from "@/components/RegPatient";
 
 const PatientPage = () => {
   const [active, setActive]= useState(false)
+  const [refresh, setRefresh] =useState(0)
   return (
     <div className="bg-white  rounded-lg ">
       <div className="">
@@ -25,8 +26,10 @@ const PatientPage = () => {
           </div>
         </div>
         {/* pages  */}
-        <AdminPatient />
-      {active && <RegPatient onClose={()=>setActive(!active)}/>}
+        <AdminPatient refresh={refresh}/>
+      {active && <RegPatient onClose={()=>{setActive(!active)
+        setRefresh(prev=>prev+1)
+       }}/>}
       </div>
     </div>
   );

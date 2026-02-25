@@ -12,7 +12,7 @@ const HomeAppointment = () => {
   const { data: session, status } = useSession();
   const [resData, setResData] = useState([]);
   const [loading, setLoading] = useState(true);
-console.log(session)
+
   useEffect(() => {
     if (status !== "authenticated") return;
 

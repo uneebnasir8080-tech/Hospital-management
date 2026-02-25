@@ -12,7 +12,6 @@ const DashAppointment = () => {
 const {data:session, status}=useSession(null)
 const [appoint, setAppoint]= useState()
 const [patient, setPatient]= useState()
-console.log("session", session)
 
 const getData= async()=>{
   const appointment= await api.get("/doctor/count-appoint", {

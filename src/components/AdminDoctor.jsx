@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
 import { calculateAge } from "@/lib/utils";
 
-const AdminPatient = ({refresh}) => {
+const AdminDoctor = () => {
   const [response, setResponse] = useState([]);
   const [loading, setLoading] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -29,11 +29,12 @@ const AdminPatient = ({refresh}) => {
     try {
       setLoading(true);
 
-      const res = await api.get("/all-patient", {
+      const res = await api.get("/all-doctors", {
         headers: {
           Authorization: `Bearer ${session.token}`,
         },
       });
+      console.log('checking', res?.data.getData)
       setResponse(res?.data?.getData || []);
     } catch (err) {
       console.error(err);
@@ -50,7 +51,7 @@ const AdminPatient = ({refresh}) => {
     if (status === "authenticated") {
       getPatient();
     }
-  }, [status, getPatient,refresh]);
+  }, [status, getPatient]);
 
   const deletePatient = async () => {
     if (!deleteId) return;
@@ -105,7 +106,7 @@ const AdminPatient = ({refresh}) => {
 
       {loading && (
         <p className="text-center py-4 text-sm text-gray-500">
-          Loading patients...
+          Loading Doctors...
         </p>
       )}
 
@@ -114,11 +115,11 @@ const AdminPatient = ({refresh}) => {
           <div className="min-w-225">
             <div className="grid grid-cols-7 border-b font-medium text-xs lg:text-[15px] text-gray-700">
               {[
-                "Patient Name",
+                "Doctor Name",
                 "Age",
                 "Gender",
-                "Blood Group",
-                "History",
+                "Specialization",
+                "Experience",
                 "Email",
                 "User Action",
               ].map((title, i) => (
@@ -134,7 +135,7 @@ const AdminPatient = ({refresh}) => {
 
             {response.length === 0 ? (
               <p className="text-center py-6 text-gray-500">
-                No patients found
+                No Doctor found
               </p>
             ) : (
               response.map((items, index) => (
@@ -144,16 +145,16 @@ const AdminPatient = ({refresh}) => {
                 >
                   <p className="px-3 py-3 capitalize">{items?.name}</p>
                   <p className="px-3 py-3 text-center">
-                    {calculateAge(items?.patient?.age)}
+                    {calculateAge(items?.doctor?.age)}
                   </p>
                   <p className="px-3 py-3 text-center capitalize">
-                    {items?.patient?.gender}
+                    {items?.doctor?.gender}
                   </p>
                   <p className="px-3 py-3 text-center">
-                    {items?.patient?.blood}
+                    {items?.doctor?.specialization}
                   </p>
                   <p className="px-3 py-3 text-center">
-                    {items?.patient?.history}
+                    {items?.doctor?.experience}
                   </p>
                   <p className="px-2 py-3 text-center break-all">
                     {items?.email}
@@ -230,4 +231,4 @@ const AdminPatient = ({refresh}) => {
   );
 };
 
-export default AdminPatient;
+export default AdminDoctor;

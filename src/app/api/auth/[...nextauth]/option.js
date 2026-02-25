@@ -15,10 +15,8 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           const { data } = await api.post("/login", credentials);
-          console.log("two",data)
           if (data && data.token) {
             const { user, token } = data;
-            console.log("user",user.detail)
             return {
               id: user.id,
               email: user.email,

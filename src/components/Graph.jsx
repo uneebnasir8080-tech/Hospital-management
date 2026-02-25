@@ -42,6 +42,7 @@ const Graph = () => {
         <PieChartInGrid />
         </div>
       </div>
+      <p className="text-center pr-2">Medicines Analytics</p>
     </div>
   );
 };
