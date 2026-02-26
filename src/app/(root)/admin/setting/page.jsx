@@ -4,14 +4,13 @@ import Image from "next/image";
 import React, { useEffect, useState, useCallback } from "react";
 import { FaPhoneVolume } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
-
 import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 import ProfileUpdate from "@/components/ProfileUpdate";
 
 const SettingPage = () => {
   const [resData, setResData] = useState(null);
-  const [isActive, setIsActive]=useState(true)
+  const [isActive, setIsActive]=useState(false)
 
   const { data: session, status } = useSession();
 
@@ -39,7 +38,7 @@ const SettingPage = () => {
     if (status === "authenticated") {
       getData();
     }
-  }, [status, getData]);
+  }, [status, getData, isActive]);
 
   // ---------------- AGE FUNCTION ----------------
   const calculateAge = (dob) => {
@@ -74,7 +73,7 @@ const SettingPage = () => {
         {/* Profile Image */}
         <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28">
           <Image
-            src={profileImage  || "doc1.png"}
+            src={profileImage}
             alt="Profile"
             fill
             sizes="112px"
@@ -99,7 +98,7 @@ const SettingPage = () => {
       </div>
 
       {/* ---------------- PERSONAL INFO ---------------- */}
-      <div className="text-md md:text-xl text-gray-600 space-y-5">
+      <div className="text-md md:text-xl text-gray-600 space-y-4">
         <h1 className="font-semibold">Personal Info</h1>
         <hr className="my-2" />
 
@@ -125,15 +124,21 @@ const SettingPage = () => {
         </p>
 
         <p className="flex gap-3 text-sm md:text-xl">
-          Blood Group:
+           Specialization:
           <span className="text-black">
-            {resData?.doctor?.blood || "A+"}
+            {resData?.doctor?.specialization || "Dent"}
+          </span>
+        </p>
+        <p className="flex gap-3 text-sm md:text-xl">
+           Experience:
+          <span className="text-black">
+            {resData?.doctor?.experience || "1+"}
           </span>
         </p>
       </div>
 
       <hr className="my-2" />
-      {isActive && <ProfileUpdate response={resData}/>}
+      {isActive && <ProfileUpdate response={resData} onClose={()=>setIsActive(!isActive)}/>}
     </div>
   );
 };

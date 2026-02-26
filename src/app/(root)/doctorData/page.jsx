@@ -88,7 +88,7 @@ const DoctorData = () => {
 
   const handleOnSubmit = async (values) => {
     setIsLoading(true);
-
+    console.log('image',values)
     try {
       if (!data?.token) {
         showToast("error", "Authentication failed");
@@ -114,7 +114,6 @@ const DoctorData = () => {
       await update({ ...data, detail: true });
 
       const refreshed = await update(); // fetch new session
-      console.log(refreshed);
       setIsStatus(true);
       form.reset();
       setPreview(null);

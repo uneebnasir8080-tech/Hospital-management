@@ -18,36 +18,40 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
 import { api } from "@/lib/apiCall";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
-const ProfileUpdate = ({ response }) => {
-  const { data, status } = useSession();
+const ProfileUpdate = ({ response, onClose }) => {
+  const { data } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null);
 
-  // Form schema using Zod
-  const formSchema = zScehma
-    .pick({ name: true })
-    .extend({
-      profileImage: z
-        .instanceof(File, { message: "Image is required" })
-        .refine((file) => file.size <= 5 * 1024 * 1024, {
-          message: "Max file size is 5MB",
-        })
-        .refine(
-          (file) =>
-            ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
-              file.type
-            ),
-          { message: "Only JPG, PNG, WEBP allowed" }
-        ),
-      age: z.string().min(1, "Age is required"),
-      gender: z.enum(["male", "female", "other"], {
-        errorMap: () => ({ message: "Please select a gender" }),
-      }),
-    });
+  const formSchema = zScehma.pick({ name: true }).extend({
+    profileImage: z
+      .instanceof(File)
+      .optional()
+      .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
+        message: "Max file size is 5MB",
+      })
+      .refine(
+        (file) =>
+          !file ||
+          ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+            file.type,
+          ),
+        { message: "Only JPG, PNG, WEBP allowed" },
+      ),
+    age: z.string().min(1, "Age is required"),
+    gender: z.enum(["male", "female", "other"]),
+    experience: z.string().min(1, "Experience is required"),
+    specialization: z.string().min(1, "Specialization is required"),
+  });
 
-  // Initialize form
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,26 +59,32 @@ const ProfileUpdate = ({ response }) => {
       name: "",
       age: "",
       gender: undefined,
+      experience: "",
+      specialization: "",
     },
   });
 
-  // Update form values whenever `response` changes
+  const [initialized, setInitialized] = useState(false);
+
   useEffect(() => {
-    if (response) {
+    if (response && !initialized) {
       form.reset({
         name: response.name || "",
         age: response.doctor?.age || "",
-        gender: response.doctor?.gender || undefined,
+        gender: response?.doctor?.gender || undefined,
+        experience: response.doctor?.experience || "",
+        specialization: response.doctor?.specialization || "",
         profileImage: undefined,
       });
 
+      // set old image preview
       if (response.doctor?.profile) {
         setPreview(response.doctor.profile);
       }
+      setInitialized(true);
     }
-  }, [response, form]);
+  }, [response, initialized, form]);
 
-  // Handle image upload & preview
   const handleFile = (file, field) => {
     if (!file) return;
     const imageUrl = URL.createObjectURL(file);
@@ -82,44 +92,86 @@ const ProfileUpdate = ({ response }) => {
     field.onChange(file);
   };
 
-  // Submit form
+  //   const handleOnSubmit = async (values) => {
+  //     try {
+  //       setIsLoading(true);
+  //       const formData = new FormData();
+  //       console.log(values)
+  //       if (values.profileImage) {
+  //         // new image selected
+  //         formData.append("profileImage", values.profileImage);
+  //       } else if (preview) {
+  //         // no new image, send old URL
+  //         formData.append("oldProfileImage", preview);
+  //       }
+
+  //       // append other fields
+  //       formData.append("name", values.name);
+  //       formData.append("age", values.age);
+  //       formData.append("gender", values.gender);
+  //       formData.append("experience", values.experience);
+  //       formData.append("specialization", values.specialization);
+
+  //       const res = await api.put("/update-user", formData, {
+  //         params: { id: data?.id },
+  //         headers: {
+  //           Authorization: `Bearer ${data?.token}`,
+  //         },
+  //       });
+
+  //       showToast("success", res.data.message);
+  //     } catch (error) {
+  //       showToast("error", error.response?.data?.message || "Update failed");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
   const handleOnSubmit = async (values) => {
     try {
+      // console.log(values)
       setIsLoading(true);
       const formData = new FormData();
-      if (values.profileImage) formData.append("profileImage", values.profileImage);
+
+      // If user uploaded a new image, send it; otherwise send old image URL
+      if (values.profileImage && values.profileImage !== undefined) {
+        formData.append("profileImage", values.profileImage);
+      }
       formData.append("name", values.name);
       formData.append("age", values.age);
       formData.append("gender", values.gender);
+      formData.append("experience", values.experience);
+      formData.append("specialization", values.specialization);
 
-      const res = await api.post("/patient", formData, {
+      const res = await api.put("/update-user", formData, {
+        params: { id: data?.id },
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${data?.token}`,
         },
       });
-
       showToast("success", res.data.message);
-      form.reset(values); // reset form with submitted values
+      onClose();
     } catch (error) {
       showToast("error", error.response?.data?.message || "Update failed");
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
     <div className="py-8 px-4 fixed inset-0 bg-black/20 z-50 flex items-center justify-center">
-      <Card className="w-full max-w-lg p-0 overflow-hidden">
+      <Card className="w-full max-w-lg overflow-hidden p-0">
         <CardContent className="p-0">
           {/* Header */}
-          <div className="h-24 relative bg-blue-400 flex items-center justify-center">
-            <h1 className="text-2xl font-semibold text-white">Profile</h1>
+          <div className="h-20 bg-blue-500 flex items-center justify-center">
+            <h1 className="text-2xl font-semibold text-white">
+              Update Profile
+            </h1>
           </div>
 
           {/* Form */}
           <form
-            className="space-y-6 px-6 py-6"
+            className="space-y-2 px-6 py-6"
             onSubmit={form.handleSubmit(handleOnSubmit)}
           >
             <Form {...form}>
@@ -128,36 +180,36 @@ const ProfileUpdate = ({ response }) => {
                 control={form.control}
                 name="profileImage"
                 render={({ field }) => (
-                  <div className="flex justify-center mb-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Profile Image
+                    </label>
                     <div
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        e.preventDefault();
-                        handleFile(e.dataTransfer.files[0], field);
-                      }}
-                      onClick={() => document.getElementById("profileInput").click()}
+                      onClick={() =>
+                        document.getElementById("profileInput").click()
+                      }
                       className="w-28 h-28 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer overflow-hidden"
                     >
                       <input
                         id="profileInput"
                         type="file"
-                        accept="image/*"
                         hidden
+                        accept="image/*"
                         onChange={(e) => handleFile(e.target.files[0], field)}
                       />
-
                       {preview ? (
                         <img
                           src={preview}
-                          alt="Profile Preview"
+                          alt="Profile"
                           className="w-full h-full object-cover"
                         />
                       ) : (
                         <span className="text-xs text-gray-500 text-center px-2">
-                          Upload Profile Picture
+                          Click to Upload
                         </span>
                       )}
                     </div>
+                    <FormMessage />
                   </div>
                 )}
               />
@@ -168,12 +220,15 @@ const ProfileUpdate = ({ response }) => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
+                    <label className="text-sm font-medium text-gray-700">
+                      Full Name
+                    </label>
                     <FormControl>
                       <input
                         {...field}
-                        className="w-full py-2 border-b px-2 border-gray-400 outline-none text-gray-900"
+                        className="w-full py-2 px-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400"
                         type="text"
-                        placeholder="Name"
+                        placeholder="Enter your name"
                       />
                     </FormControl>
                     <FormMessage />
@@ -187,12 +242,14 @@ const ProfileUpdate = ({ response }) => {
                 name="age"
                 render={({ field }) => (
                   <FormItem>
+                    <label className="text-sm font-medium text-gray-700">
+                      Date of Birth
+                    </label>
                     <FormControl>
                       <input
                         {...field}
                         type="date"
-                        className="w-full py-2 border-b border-gray-400 outline-none text-gray-900"
-                        placeholder="Date of Birth"
+                        className="w-full py-2 px-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400"
                       />
                     </FormControl>
                     <FormMessage />
@@ -205,33 +262,92 @@ const ProfileUpdate = ({ response }) => {
                 control={form.control}
                 name="gender"
                 render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className="w-full py-2 border-0 border-b border-gray-400 rounded-none text-gray-900">
-                      <SelectValue placeholder="Gender" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormItem>
+                    <label className="text-sm font-medium text-gray-700">
+                      Gender
+                    </label>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400">
+                        <SelectValue placeholder="Select Gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Experience */}
+              <FormField
+                control={form.control}
+                name="experience"
+                render={({ field }) => (
+                  <FormItem>
+                    <label className="text-sm font-medium text-gray-700">
+                      Experience
+                    </label>
+                    <FormControl>
+                      <input
+                        {...field}
+                        type="text"
+                        className="w-full py-2 px-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400"
+                        placeholder="e.g. 5 Years"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Specialization */}
+              <FormField
+                control={form.control}
+                name="specialization"
+                render={({ field }) => (
+                  <FormItem>
+                    <label className="text-sm font-medium text-gray-700">
+                      Specialization
+                    </label>
+                    <FormControl>
+                      <input
+                        {...field}
+                        type="text"
+                        className="w-full py-2 px-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400"
+                        placeholder="e.g. Cardiologist"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
             </Form>
-            <div className="flex gap-3">
-                <Button className="grow ">
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                onClick={onClose}
+                type="button"
+                variant="outline"
+                className="grow"
+              >
                 Close
-            </Button>
-                 <Button
-              type="submit"
-              disabled={isLoading}
-              className=" py-3 text-lg grow bg-blue-500 hover:bg-blue-600 text-white"
-            >
-              {isLoading ? <FaSpinner className="animate-spin mx-auto" /> : "Update"}
-            </Button>
-            
+              </Button>
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="grow bg-blue-400 hover:bg-blue-500 cursor-pointer text-white"
+              >
+                {isLoading ? (
+                  <FaSpinner className="animate-spin mx-auto" />
+                ) : (
+                  "Update Profile"
+                )}
+              </Button>
             </div>
-           
           </form>
         </CardContent>
       </Card>
