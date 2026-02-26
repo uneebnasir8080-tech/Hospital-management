@@ -54,7 +54,16 @@ const EducationContent = () => {
             className="text-sm flex justify-between px-2 items-center border-b py-2"
           >
             <div className="flex h-10 gap-3">
-              <Image src={data.img} height={10} width={40} alt="pic" />
+              <div className="relative h-10 w-10 sm:h-12 sm:w-12 rounded-full overflow-hidden">
+                <Image
+                  src={data.img}
+                  alt={"Patient"}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              {/* <Image src={data.img} height={10} width={40} alt="pic" /> */}
               <div className="text-[11px] xl:text-xs">
                 <p className="font-medium  tracking-tight">{data.title}</p>
                 <p className="text-gray-500"> {data.desc}</p>

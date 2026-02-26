@@ -1,10 +1,11 @@
 "use client";
 import { FaBell, FaBars } from "react-icons/fa";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { api } from "@/lib/apiCall";
 import Image from "next/image";
+
 
 const AdminNavbar = () => {
   const pathname = usePathname();
@@ -16,7 +17,7 @@ const AdminNavbar = () => {
 
   const pageName = pathname.split("/").filter(Boolean).pop();
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     try {
       const res = await api.get("/user", {
         params: {
@@ -38,13 +39,15 @@ const AdminNavbar = () => {
     } catch (err) {
       console.error("Navbar user fetch error:", err);
     }
-  };
+  },[session])
 
   useEffect(() => {
-    if (status !== "authenticated") return;
+    if (status === "authenticated") {
     getData();
+    }
   }, [status]);
 
+  
   return (
     <div className="flex justify-between px-10 items-center h-[12%]">
       {/* LEFT */}
@@ -64,7 +67,7 @@ const AdminNavbar = () => {
           <div className="bg-red-500 absolute p-0.5 rounded-full top-1/6 right-1/4"></div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-40 justify-center">
           {/* Profile Image */}
           <div className="h-10 w-10 sm:w-12 sm:h-12 relative rounded-full overflow-hidden">
             <Image
@@ -77,9 +80,9 @@ const AdminNavbar = () => {
           </div>
 
           {/* Name & Role */}
-          <div className="hidden md:block">
+          <div className="hidden md:block ">
             <p className="font-medium text-md lg:text-lg capitalize">
-              {name || "John Smith"}
+              {name || "Name"}
             </p>
             <p className="text-xs lg:text-sm text-gray-500 capitalize">
               {role || "Role"}

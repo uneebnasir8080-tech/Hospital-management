@@ -7,9 +7,11 @@ import { MdEdit } from "react-icons/md";
 
 import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
+import ProfileUpdate from "@/components/ProfileUpdate";
 
 const SettingPage = () => {
   const [resData, setResData] = useState(null);
+  const [isActive, setIsActive]=useState(true)
 
   const { data: session, status } = useSession();
 
@@ -81,7 +83,7 @@ const SettingPage = () => {
         </div>
 
         {/* Edit Icon */}
-        <MdEdit className="absolute top-4 right-4 cursor-pointer text-xl md:text-2xl text-gray-700 hover:text-black transition" />
+        <MdEdit onClick={()=>setIsActive(!isActive)} className="absolute top-4 right-4 cursor-pointer text-xl md:text-2xl text-gray-700 hover:text-black transition" />
 
         {/* Name & Phone */}
         <div className="text-center mt-6 space-y-1">
@@ -118,22 +120,20 @@ const SettingPage = () => {
         <p className="flex gap-3 text-sm md:text-xl">
           Gender:
           <span className="text-black capitalize">
-            {resData?.patient?.gender || "Male"}
+            {resData?.doctor?.gender || "Male"}
           </span>
         </p>
 
         <p className="flex gap-3 text-sm md:text-xl">
           Blood Group:
           <span className="text-black">
-            {resData?.patient?.blood || "A+"}
+            {resData?.doctor?.blood || "A+"}
           </span>
         </p>
       </div>
 
       <hr className="my-2" />
-
- 
-      
+      {isActive && <ProfileUpdate response={resData}/>}
     </div>
   );
 };
