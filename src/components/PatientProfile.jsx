@@ -27,12 +27,12 @@ import {
 } from "./ui/select";
 import { useRouter } from "next/navigation";
 
-const ProfileUpdate = ({ response, onClose }) => {
+const PatientProfile = ({ response, onClose }) => {
   const { data } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null);
+  const router = useRouter();
 
-  const router=useRouter()
   const formSchema = zScehma.pick({ name: true }).extend({
     profileImage: z
       .instanceof(File)
@@ -50,8 +50,8 @@ const ProfileUpdate = ({ response, onClose }) => {
       ),
     age: z.string().min(1, "Age is required"),
     gender: z.enum(["male", "female", "other"]),
-    experience: z.string().min(1, "Experience is required"),
-    specialization: z.string().min(1, "Specialization is required"),
+    blood: z.string().min(1, "Blood is required"),
+    history: z.string().min(1, "History is required"),
   });
 
   const form = useForm({
@@ -60,29 +60,32 @@ const ProfileUpdate = ({ response, onClose }) => {
       profileImage: undefined,
       name: "",
       age: "",
-      gender: undefined,
-      experience: "",
-      specialization: "",
+      gender: "",
+      blood: "",
+      history: "",
     },
   });
 
   const [initialized, setInitialized] = useState(false);
 
+  // ✅ FIXED RESET (handles lowercase + trim)
   useEffect(() => {
     if (response && !initialized) {
       form.reset({
         name: response.name || "",
-        age: response.doctor?.age || "",
-        gender: response?.doctor?.gender || undefined,
-        experience: response.doctor?.experience || "",
-        specialization: response.doctor?.specialization || "",
+        age: response.patient?.age || "",
+        gender: response?.patient?.gender
+          ? response.patient.gender.toLowerCase()
+          : "",
+        blood: response.patient?.blood ? response.patient.blood.trim() : "",
+        history: response.patient?.history || "",
         profileImage: undefined,
       });
 
-      // set old image preview
-      if (response.doctor?.profile) {
-        setPreview(response.doctor.profile);
+      if (response.patient?.profile) {
+        setPreview(response.patient.profile);
       }
+
       setInitialized(true);
     }
   }, [response, initialized, form]);
@@ -94,56 +97,20 @@ const ProfileUpdate = ({ response, onClose }) => {
     field.onChange(file);
   };
 
-  //   const handleOnSubmit = async (values) => {
-  //     try {
-  //       setIsLoading(true);
-  //       const formData = new FormData();
-  //       console.log(values)
-  //       if (values.profileImage) {
-  //         // new image selected
-  //         formData.append("profileImage", values.profileImage);
-  //       } else if (preview) {
-  //         // no new image, send old URL
-  //         formData.append("oldProfileImage", preview);
-  //       }
-
-  //       // append other fields
-  //       formData.append("name", values.name);
-  //       formData.append("age", values.age);
-  //       formData.append("gender", values.gender);
-  //       formData.append("experience", values.experience);
-  //       formData.append("specialization", values.specialization);
-
-  //       const res = await api.put("/update-user", formData, {
-  //         params: { id: data?.id },
-  //         headers: {
-  //           Authorization: `Bearer ${data?.token}`,
-  //         },
-  //       });
-
-  //       showToast("success", res.data.message);
-  //     } catch (error) {
-  //       showToast("error", error.response?.data?.message || "Update failed");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
   const handleOnSubmit = async (values) => {
     try {
-      // console.log(values)
       setIsLoading(true);
       const formData = new FormData();
 
-      // If user uploaded a new image, send it; otherwise send old image URL
-      if (values.profileImage && values.profileImage !== undefined) {
+      if (values.profileImage) {
         formData.append("profileImage", values.profileImage);
       }
+
       formData.append("name", values.name);
       formData.append("age", values.age);
       formData.append("gender", values.gender);
-      formData.append("experience", values.experience);
-      formData.append("specialization", values.specialization);
+      formData.append("history", values.history);
+      formData.append("blood", values.blood);
 
       const res = await api.put("/update-user", formData, {
         params: { id: data?.id },
@@ -152,8 +119,9 @@ const ProfileUpdate = ({ response, onClose }) => {
           Authorization: `Bearer ${data?.token}`,
         },
       });
+
       showToast("success", res.data.message);
-       router.refresh();
+      router.refresh();
       onClose();
     } catch (error) {
       showToast("error", error.response?.data?.message || "Update failed");
@@ -161,20 +129,19 @@ const ProfileUpdate = ({ response, onClose }) => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="py-8 px-4 fixed inset-0 bg-black/20 z-50 flex items-center justify-center">
       <Card className="w-full max-w-lg overflow-hidden p-0">
         <CardContent className="p-0">
-          {/* Header */}
           <div className="h-20 bg-blue-500 flex items-center justify-center">
             <h1 className="text-2xl font-semibold text-white">
               Update Profile
             </h1>
           </div>
 
-          {/* Form */}
           <form
-            className="space-y-2 px-6 py-6"
+            className="space-y-1 px-6 py-6"
             onSubmit={form.handleSubmit(handleOnSubmit)}
           >
             <Form {...form}>
@@ -187,19 +154,21 @@ const ProfileUpdate = ({ response, onClose }) => {
                     <label className="text-sm font-medium text-gray-700">
                       Profile Image
                     </label>
+
                     <div
                       onClick={() =>
                         document.getElementById("profileInput").click()
                       }
-                      className="w-28 h-28 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer overflow-hidden"
+                      className="w-25 h-25 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer overflow-hidden"
                     >
                       <input
                         id="profileInput"
                         type="file"
                         hidden
                         accept="image/*"
-                        onChange={(e) => handleFile(e.target.files[0], field)}
+                        onChange={(e) => handleFile(e.target.files?.[0], field)}
                       />
+
                       {preview ? (
                         <img
                           src={preview}
@@ -207,11 +176,12 @@ const ProfileUpdate = ({ response, onClose }) => {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <span className="text-xs text-gray-500 text-center px-2">
+                        <span className="text-xs text-gray-500">
                           Click to Upload
                         </span>
                       )}
                     </div>
+
                     <FormMessage />
                   </div>
                 )}
@@ -229,7 +199,7 @@ const ProfileUpdate = ({ response, onClose }) => {
                     <FormControl>
                       <input
                         {...field}
-                        className="w-full py-2 px-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400"
+                        className="w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
                         type="text"
                         placeholder="Enter your name"
                       />
@@ -239,7 +209,7 @@ const ProfileUpdate = ({ response, onClose }) => {
                 )}
               />
 
-              {/* Age */}
+              {/* Date of Birth */}
               <FormField
                 control={form.control}
                 name="age"
@@ -252,7 +222,7 @@ const ProfileUpdate = ({ response, onClose }) => {
                       <input
                         {...field}
                         type="date"
-                        className="w-full py-2 px-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400"
+                        className="w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
                       />
                     </FormControl>
                     <FormMessage />
@@ -284,21 +254,21 @@ const ProfileUpdate = ({ response, onClose }) => {
                 )}
               />
 
-              {/* Experience */}
+              {/* History */}
               <FormField
                 control={form.control}
-                name="experience"
+                name="history"
                 render={({ field }) => (
                   <FormItem>
                     <label className="text-sm font-medium text-gray-700">
-                      Experience
+                      History
                     </label>
                     <FormControl>
                       <input
                         {...field}
                         type="text"
-                        className="w-full py-2 px-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400"
-                        placeholder="e.g. 5 Years"
+                        className="w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+                        placeholder="e.g. Fever, Flu"
                       />
                     </FormControl>
                     <FormMessage />
@@ -306,30 +276,36 @@ const ProfileUpdate = ({ response, onClose }) => {
                 )}
               />
 
-              {/* Specialization */}
+              {/* Blood Group */}
               <FormField
                 control={form.control}
-                name="specialization"
+                name="blood"
                 render={({ field }) => (
                   <FormItem>
                     <label className="text-sm font-medium text-gray-700">
-                      Specialization
+                      Blood Group
                     </label>
-                    <FormControl>
-                      <input
-                        {...field}
-                        type="text"
-                        className="w-full py-2 px-2 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-400"
-                        placeholder="e.g. Cardiologist"
-                      />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400">
+                        <SelectValue placeholder="Blood Group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
+                          (group) => (
+                            <SelectItem key={group} value={group}>
+                              {group}
+                            </SelectItem>
+                          ),
+                        )}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </Form>
 
-            <div className="flex gap-3 pt-2">
+            <div className="flex gap-3 pt-5">
               <Button
                 onClick={onClose}
                 type="button"
@@ -342,7 +318,7 @@ const ProfileUpdate = ({ response, onClose }) => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="grow bg-blue-400 hover:bg-blue-500 cursor-pointer text-white"
+                className="grow bg-blue-500 hover:bg-blue-600 text-white"
               >
                 {isLoading ? (
                   <FaSpinner className="animate-spin mx-auto" />
@@ -358,4 +334,4 @@ const ProfileUpdate = ({ response, onClose }) => {
   );
 };
 
-export default ProfileUpdate;
+export default PatientProfile;

@@ -1,146 +1,37 @@
-"use client";
 
-import Image from "next/image";
-import React, { useEffect, useState, useCallback } from "react";
-import { FaPhoneVolume } from "react-icons/fa6";
-import { MdEdit } from "react-icons/md";
+
+import { getServerSession } from "next-auth";
 import { api } from "@/lib/apiCall";
-import { useSession } from "next-auth/react";
-import ProfileUpdate from "@/components/ProfileUpdate";
+import SettingsClient from "@/components/SettingsClient";
+import { authOptions } from "@/app/api/auth/[...nextauth]/option";
 
-const SettingPage = () => {
-  const [resData, setResData] = useState(null);
-  const [isActive, setIsActive]=useState(false)
+export default async function SettingPage() {
+  const session = await getServerSession(authOptions);
 
-  const { data: session, status } = useSession();
+  if (!session?.token || !session?.id) {
+    return <div>Unauthorized</div>;
+  }
 
-  // ---------------- FETCH USER ----------------
-  const getData = useCallback(async () => {
-    if (!session?.token || !session?.id) return;
+  let resData = null;
 
-    try {
-      const res = await api.get("/user", {
-        params: {
-          userId: session?.id,
+  try {
+    const res = await api.get(
+      `/user`,
+      {
+        params:{
+          userId:session?.id
         },
         headers: {
           Authorization: `Bearer ${session.token}`,
         },
-      });
+      }
+    );
 
-      setResData(res?.data?.data || null);
-    } catch (error) {
-      console.error("Profile Fetch Error:", error);
-    }
-  }, [session]);
+    // const data = await res.json();
+    resData = res.data.data || null;
+  } catch (error) {
+    console.error("Profile Fetch Error:", error);
+  }
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      getData();
-    }
-  }, [status, getData, isActive]);
-
-  // ---------------- AGE FUNCTION ----------------
-  const calculateAge = (dob) => {
-    if (!dob) return null;
-
-    const birthDate = new Date(dob);
-    const today = new Date();
-
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-
-    return age;
-  };
-
-  const profileImage =
-    resData?.doctor?.profile?.trim() || "/doc1.png";
-
-  return (
-    <div className="px-6 py-2" >
-      
-
-      {/* ---------------- PROFILE BOX ---------------- */}
-      <div className="relative bg-blue-300 rounded-2xl w-[90%] md:w-[55%] mx-auto my-20 pt-16 pb-6 px-4 shadow-md">
-
-        {/* Profile Image */}
-        <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28">
-          <Image
-            src={profileImage}
-            alt="Profile"
-            fill
-            sizes="112px"
-            className="rounded-md object-cover  shadow-lg"
-          />
-        </div>
-
-        {/* Edit Icon */}
-        <MdEdit onClick={()=>setIsActive(!isActive)} className="absolute top-4 right-4 cursor-pointer text-xl md:text-2xl text-gray-700 hover:text-black transition" />
-
-        {/* Name & Phone */}
-        <div className="text-center mt-6 space-y-1">
-          <p className="text-lg md:text-2xl font-semibold capitalize">
-            {resData?.name || "John Paulliston"}
-          </p>
-
-          <p className="flex justify-center items-center gap-2 text-xs md:text-lg text-gray-700">
-            <FaPhoneVolume />
-            {resData?.phone || "+92 333 7192432"}
-          </p>
-        </div>
-      </div>
-
-      {/* ---------------- PERSONAL INFO ---------------- */}
-      <div className="text-md md:text-xl text-gray-600 space-y-4">
-        <h1 className="font-semibold">Personal Info</h1>
-        <hr className="my-2" />
-
-        <p className="flex gap-3 text-sm md:text-xl">
-          Email ID:
-          <span className="text-black ">
-            {resData?.email || "example@gmail.com"}
-          </span>
-        </p>
-
-        <p className="flex gap-3 text-sm md:text-xl">
-          Age:
-          <span className="text-black">
-            {calculateAge(resData?.doctor?.age) ?? "N/A"} years
-          </span>
-        </p>
-
-        <p className="flex gap-3 text-sm md:text-xl">
-          Gender:
-          <span className="text-black capitalize">
-            {resData?.doctor?.gender || "Male"}
-          </span>
-        </p>
-
-        <p className="flex gap-3 text-sm md:text-xl">
-           Specialization:
-          <span className="text-black">
-            {resData?.doctor?.specialization || "Dent"}
-          </span>
-        </p>
-        <p className="flex gap-3 text-sm md:text-xl">
-           Experience:
-          <span className="text-black">
-            {resData?.doctor?.experience || "1+"}
-          </span>
-        </p>
-      </div>
-
-      <hr className="my-2" />
-      {isActive && <ProfileUpdate response={resData} onClose={()=>setIsActive(!isActive)}/>}
-    </div>
-  );
-};
-
-export default SettingPage;
+  return <SettingsClient resData={resData} />;
+}
