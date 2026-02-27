@@ -25,12 +25,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useRouter } from "next/navigation";
 
 const ProfileUpdate = ({ response, onClose }) => {
   const { data } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null);
 
+  const router=useRouter()
   const formSchema = zScehma.pick({ name: true }).extend({
     profileImage: z
       .instanceof(File)
@@ -151,6 +153,7 @@ const ProfileUpdate = ({ response, onClose }) => {
         },
       });
       showToast("success", res.data.message);
+       router.refresh();
       onClose();
     } catch (error) {
       showToast("error", error.response?.data?.message || "Update failed");
