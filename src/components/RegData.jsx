@@ -22,12 +22,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
-import ImageDropField from "@/components/ImageDropField";
 import { showToast } from "@/lib/showToastify";
-import { api } from "@/lib/apiCall";
-import { useRouter } from "next/navigation";
+import  api  from "@/lib/apiCall";
+
+
 const RegData = ({onClose,ids}) => {
   const [isLoading, setIsLoading] = useState(false);
   const { data, status } = useSession();
@@ -93,7 +92,7 @@ const RegData = ({onClose,ids}) => {
         },
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${data?.token}`,
+          // Authorization: `Bearer ${data?.token}`,
         },
       });
 

@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { IoPersonOutline } from "react-icons/io5";
 import { TfiEmail } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
-import { api } from "@/lib/apiCall";
+import  api  from "@/lib/apiCall";
 import { showToast } from "@/lib/showToastify";
 import { useRouter } from "next/navigation";
 import RegData from "./RegData";

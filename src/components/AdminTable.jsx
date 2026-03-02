@@ -1,5 +1,5 @@
 "use client";
-import { api } from "@/lib/apiCall";
+import  api  from "@/lib/apiCall";
 import { showToast } from "@/lib/showToastify";
 import { formatDate } from "@/lib/utils";
 import { useSession } from "next-auth/react";
@@ -21,11 +21,7 @@ const AdminTable = () => {
       setLoading(true);
       setError(null);
 
-      const res = await api.get("/patient/all-appointment", {
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      });
+      const res = await api.get("/patient/all-appointment");
 
       const resp = res?.data?.getData ?? [];
       setResponse(resp);

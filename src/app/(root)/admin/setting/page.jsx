@@ -1,13 +1,13 @@
 
 
 import { getServerSession } from "next-auth";
-import { api } from "@/lib/apiCall";
+import  api  from "@/lib/apiCall";
 import SettingsClient from "@/components/SettingsClient";
 import { authOptions } from "@/app/api/auth/[...nextauth]/option";
 
 export default async function SettingPage() {
   const session = await getServerSession(authOptions);
-
+  
   if (!session?.token || !session?.id) {
     return <div>Unauthorized</div>;
   }
@@ -22,7 +22,7 @@ export default async function SettingPage() {
           userId:session?.id
         },
         headers: {
-          Authorization: `Bearer ${session.token}`,
+          Authorization: `Bearer ${session?.token}`,
         },
       }
     );
