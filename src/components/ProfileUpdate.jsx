@@ -17,7 +17,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
-import  api  from "@/lib/apiCall";
+import  {api}  from "@/lib/apiCall";
 import {
   Select,
   SelectContent,
@@ -114,7 +114,7 @@ const ProfileUpdate = ({ response, onClose }) => {
         params: { id: data?.id },
         headers: {
           "Content-Type": "multipart/form-data",
-          // Authorization: `Bearer ${data?.token}`,
+          Authorization: `Bearer ${data?.token}`,
         },
       });
       showToast("success", res.data.message);

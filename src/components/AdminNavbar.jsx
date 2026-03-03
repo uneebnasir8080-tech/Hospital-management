@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaBell, FaBars } from "react-icons/fa";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/option";
-import  api  from "@/lib/apiCall";
+import  {api}  from "@/lib/apiCall";
 import PathProvider from "./PathProvider";
 
 const AdminNavbar = async () => {
