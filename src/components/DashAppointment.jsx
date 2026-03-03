@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiMedicineBottleFill } from "react-icons/ri";
 import { BiSolidReport } from "react-icons/bi";
-import { api } from "@/lib/apiCall";
+import  api  from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 
 
@@ -14,16 +14,8 @@ const [appoint, setAppoint]= useState()
 const [patient, setPatient]= useState()
 
 const getData= async()=>{
-  const appointment= await api.get("/doctor/count-appoint", {
-    headers:{
-      Authorization:`Bearer ${session?.token}`
-    }
-  })
-  const patient= await api.get("/doctor/count-patient", {
-    headers:{
-      Authorization:`Bearer ${session?.token}`
-    }
-  })
+  const appointment= await api.get("/doctor/count-appoint")
+  const patient= await api.get("/doctor/count-patient")
   const appointmentCounting= appointment?.data.totalAppoint
   setAppoint(appointmentCounting)
    const patientCounting= patient?.data?.totalPatient

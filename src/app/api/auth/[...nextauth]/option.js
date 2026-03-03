@@ -1,4 +1,4 @@
-import { api } from "@/lib/apiCall";
+import api from "@/lib/apiCall";
 import axios from "axios";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -61,17 +61,17 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      // session.id = token.id;
-      // session.name = token.name;
-      // session.email = token.email;
-      // session.role = token.role;
-      // session.token = token.token;
-      // session.message = token.message;
-      // return session;
-       return {
-      ...session,
-      ...token,
-    };
+      session.id = token.id;
+      session.name = token.name;
+      session.email = token.email;
+      session.role = token.role;
+      session.token = token.token;
+      session.message = token.message;
+      return session;
+    //    return {
+    //   ...session,
+    //   ...token,
+    // };
     },
   },
   pages: {

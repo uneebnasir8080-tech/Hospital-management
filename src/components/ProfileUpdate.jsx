@@ -17,7 +17,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
-import { api } from "@/lib/apiCall";
+import  api  from "@/lib/apiCall";
 import {
   Select,
   SelectContent,
@@ -94,41 +94,6 @@ const ProfileUpdate = ({ response, onClose }) => {
     field.onChange(file);
   };
 
-  //   const handleOnSubmit = async (values) => {
-  //     try {
-  //       setIsLoading(true);
-  //       const formData = new FormData();
-  //       console.log(values)
-  //       if (values.profileImage) {
-  //         // new image selected
-  //         formData.append("profileImage", values.profileImage);
-  //       } else if (preview) {
-  //         // no new image, send old URL
-  //         formData.append("oldProfileImage", preview);
-  //       }
-
-  //       // append other fields
-  //       formData.append("name", values.name);
-  //       formData.append("age", values.age);
-  //       formData.append("gender", values.gender);
-  //       formData.append("experience", values.experience);
-  //       formData.append("specialization", values.specialization);
-
-  //       const res = await api.put("/update-user", formData, {
-  //         params: { id: data?.id },
-  //         headers: {
-  //           Authorization: `Bearer ${data?.token}`,
-  //         },
-  //       });
-
-  //       showToast("success", res.data.message);
-  //     } catch (error) {
-  //       showToast("error", error.response?.data?.message || "Update failed");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
   const handleOnSubmit = async (values) => {
     try {
       // console.log(values)
@@ -149,7 +114,7 @@ const ProfileUpdate = ({ response, onClose }) => {
         params: { id: data?.id },
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${data?.token}`,
+          // Authorization: `Bearer ${data?.token}`,
         },
       });
       showToast("success", res.data.message);
