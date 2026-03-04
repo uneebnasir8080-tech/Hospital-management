@@ -38,6 +38,7 @@ export const useStore = create(
     }),
     {
       name: "user-storage", // key in localStorage
+      partialize: (state) => ({ user: state.user }),
     },
   ),
 );

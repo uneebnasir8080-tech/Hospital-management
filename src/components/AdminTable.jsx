@@ -46,7 +46,7 @@ const AdminTable = () => {
   }, [status, getData]);
 
   return (
-    <div className="w-full h-65 bg-white rounded-lg flex flex-col shadow-sm">
+    <div className="w-full h-67 bg-white rounded-lg flex flex-col shadow-sm">
       
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-3 border-b text-sm font-medium">

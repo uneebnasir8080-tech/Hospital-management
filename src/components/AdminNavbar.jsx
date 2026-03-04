@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaBell, FaBars } from "react-icons/fa";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/option";
-import  {api}  from "@/lib/apiCall";
+import { api } from "@/lib/apiCall";
 import PathProvider from "./PathProvider";
 
 const AdminNavbar = async () => {
@@ -34,14 +34,14 @@ const AdminNavbar = async () => {
   const role = user?.role || "Role";
 
   return (
-    <div className="flex justify-between px-10 items-center h-[12%]">
+    <div className="flex justify-between px-4 md:px-10 items-center h-16 md:h-20">
       {/* LEFT */}
       <div className="flex gap-4 items-center">
         <button className="md:hidden cursor-pointer">
           <FaBars />
         </button>
         <p className="font-semibold text-[#374858] text-md sm:text-lg lg:text-2xl capitalize">
-          <PathProvider/>
+          <PathProvider />
         </p>
       </div>
 

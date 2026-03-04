@@ -53,7 +53,7 @@ const PaymentFee = async () => {
                     alt={patient?.userId?.name || "Patient"}
                     fill
                     className="object-cover"
-                    
+
                   />
                 </div>
 

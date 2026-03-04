@@ -1,7 +1,7 @@
 
 
 import { getServerSession } from "next-auth";
-import  {api}  from "@/lib/apiCall";
+import { api } from "@/lib/apiCall";
 import SettingsClient from "@/components/SettingsClient";
 import { authOptions } from "@/app/api/auth/[...nextauth]/option";
 
@@ -17,8 +17,8 @@ export default async function SettingPage() {
     const res = await api.get(
       `/user`,
       {
-        params:{
-          userId:session?.id
+        params: {
+          userId: session?.id
         },
         headers: {
           Authorization: `Bearer ${session?.token}`,
