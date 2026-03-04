@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { TbArrowsDiagonalMinimize } from "react-icons/tb";
-import  api  from "@/lib/apiCall";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/option";
+import { api } from "@/lib/apiCall";
 
 const PaymentFee = async () => {
   // Get session
@@ -53,7 +53,7 @@ const PaymentFee = async () => {
                     alt={patient?.userId?.name || "Patient"}
                     fill
                     className="object-cover"
-                    
+
                   />
                 </div>
 

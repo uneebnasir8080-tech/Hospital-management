@@ -1,4 +1,4 @@
-const { default: z } = require("zod");
+import { z } from "zod";
 
 
 export const zScehma= z.object({

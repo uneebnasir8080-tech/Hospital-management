@@ -1,10 +1,10 @@
-import api from "@/lib/apiCall";
+import { api } from "@/lib/apiCall";
 import axios from "axios";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
   providers: [
-  
+
     CredentialsProvider({
       id: "credentials",
       name: "credentials",
@@ -49,7 +49,7 @@ export const authOptions = {
         token.role = user.role;
         token.token = user.token;
         token.message = user.message;
-        token.detail= user.detail
+        token.detail = user.detail
       }
       // VERY IMPORTANT → session update support
       if (trigger === "update") {
@@ -58,20 +58,22 @@ export const authOptions = {
           ...session,
         };
       }
+
+      // console.log('token in options -->>>>', token)
       return token;
     },
     async session({ session, token }) {
-      session.id = token.id;
-      session.name = token.name;
-      session.email = token.email;
-      session.role = token.role;
-      session.token = token.token;
-      session.message = token.message;
-      return session;
-    //    return {
-    //   ...session,
-    //   ...token,
-    // };
+      // session.id = token.id;
+      // session.name = token.name;
+      // session.email = token.email;
+      // session.role = token.role;
+      // session.token = token.token;
+      // session.message = token.message;
+      // return session;
+      return {
+        ...session,
+        ...token,
+      };
     },
   },
   pages: {

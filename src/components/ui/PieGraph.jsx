@@ -29,7 +29,7 @@ const renderLabel = ({
 
   return (
     <text
-    className="text-[9px] xl:text-xs"
+      className="text-[9px] xl:text-xs"
       x={x}
       y={y}
       fill="#fff" // white text to show on colored slice
@@ -45,17 +45,17 @@ const renderLabel = ({
 
 const SinglePieChart = () => {
   return (
-    <div className="w-full h-40 bg-white rounded-lg">
+    <div className="w-full h-full bg-white rounded-lg">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={data}
             dataKey="value"
             nameKey="name"
-            cx="40%"
-            cy="40%"
+            cx="50%"
+            cy="50%"
             innerRadius={35}
-            outerRadius={65 }
+            outerRadius={65}
             paddingAngle={2}
             label={renderLabel} // <-- show percentage inside slice
             labelLine={false} // no lines

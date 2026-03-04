@@ -19,8 +19,8 @@ export default async function ProfilePage() {
     const res = await api.get(
       `/user`,
       {
-        params:{
-          userId:session?.id
+        params: {
+          userId: session?.id
         },
         headers: {
           Authorization: `Bearer ${session.token}`,

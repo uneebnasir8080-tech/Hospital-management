@@ -7,7 +7,7 @@ import { TiInfoLarge } from "react-icons/ti";
 import { BiSolidMessageRounded } from "react-icons/bi";
 import { X } from "lucide-react";
 import { DatePicker } from "./ui/DatePicker";
-import api  from "@/lib/apiCall";
+import {api}  from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
 import { calculateAge } from "@/lib/utils";

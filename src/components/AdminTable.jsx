@@ -1,5 +1,5 @@
 "use client";
-import  api  from "@/lib/apiCall";
+import  {api}  from "@/lib/apiCall";
 import { showToast } from "@/lib/showToastify";
 import { formatDate } from "@/lib/utils";
 import { useSession } from "next-auth/react";
@@ -21,7 +21,11 @@ const AdminTable = () => {
       setLoading(true);
       setError(null);
 
-      const res = await api.get("/patient/all-appointment");
+      const res = await api.get("/patient/all-appointment",{
+        headers:{
+          Authorization:`Bearer ${session?.token}`
+        }
+      });
 
       const resp = res?.data?.getData ?? [];
       setResponse(resp);
@@ -42,7 +46,7 @@ const AdminTable = () => {
   }, [status, getData]);
 
   return (
-    <div className="w-full h-65 bg-white rounded-lg flex flex-col shadow-sm">
+    <div className="w-full h-67 bg-white rounded-lg flex flex-col shadow-sm">
       
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-3 border-b text-sm font-medium">
