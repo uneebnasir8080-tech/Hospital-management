@@ -40,8 +40,8 @@ const PatientModal = ({ onClose }) => {
 
       toast.error(
         error?.response?.data?.message ||
-          error.message ||
-          "Failed to fetch Patient",
+        error.message ||
+        "Failed to fetch Patient",
       );
 
       setPatient([]);
@@ -58,11 +58,9 @@ const PatientModal = ({ onClose }) => {
 
   const handleSubmit = async () => {
     if (!Array.isArray(patient) || !patientId) return;
-
     const selectedPatient = patient.find(
-      (doc) => doc.patient._id.toString() === patientId.toString(),
+      (doc) => doc.patient?.id.toString() === patientId.toString(),
     );
-    console.log("oatkenfk", patientId)
     if (!selectedPatient) {
       showToast("error", "Pateint not found");
       return;
@@ -119,11 +117,10 @@ const PatientModal = ({ onClose }) => {
                 ${index % 2 !== 0 ? "ml-auto" : "mr-auto"}
                 cursor-pointer 
                 transition-all duration-200
-                ${
-                  patientId === data?.patient?.id
+                ${patientId === data?.patient?.id
                     ? "bg-[#7ab3ec] border-2 border-blue-500"
                     : "hover:shadow-lg"
-                }
+                  }
                 py-2 min-h-30
               `}
               >
@@ -172,7 +169,7 @@ const PatientModal = ({ onClose }) => {
           </Button>
         </div>
       </div>
-      {isActive && <AppointmentModal patientId={patientId} onClose={onClose}/>}
+      {isActive && <AppointmentModal patientId={patientId} onClose={onClose} />}
     </div>
   );
 };

@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
+import { MdArrowForward } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -32,6 +32,7 @@ import Schedule from "@/components/Schedule";
 const DoctorData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isStatus, setIsStatus] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [preview, setPreview] = useState(null);
 
   const { data, update } = useSession();
@@ -88,7 +89,6 @@ const DoctorData = () => {
 
   const handleOnSubmit = async (values) => {
     setIsLoading(true);
-    console.log('image',values)
     try {
       if (!data?.token) {
         showToast("error", "Authentication failed");
@@ -113,10 +113,13 @@ const DoctorData = () => {
       showToast("success", res?.data?.message || "Details added");
       await update({ ...data, detail: true });
 
-      const refreshed = await update(); // fetch new session
-      setIsStatus(true);
-      form.reset();
-      setPreview(null);
+      setIsSubmitted(true);
+      setTimeout(async () => {
+        const refreshed = await update(); // fetch new session
+        setIsStatus(true);
+        form.reset();
+        setPreview(null);
+      }, 500);
     } catch (error) {
       console.error(error);
 
@@ -132,179 +135,192 @@ const DoctorData = () => {
   return (
     <>
       {!isStatus && (
-        <div className="flex min-h-screen py-8 px-4 bg-gray-100 ">
-          <Card className="flex w-140 lg:w-160 h-full mx-auto p-0 overflow-hidden">
-            <CardContent className="p-0">
-              <div
-                className="h-65 bg-center relative bg-no-repeat bg-cover clip-zigzag "
-                style={{ backgroundImage: `url('/BGLogin.png')` }}
+        <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 sm:p-8">
+          <AnimatePresence>
+            {!isSubmitted && (
+              <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -30, scale: 0.95 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl bg-white"
               >
-                <h1 className="absolute inset-0 flex items-center justify-center text-4xl font-semibold text-white">
-                  DOCTOR DETAILS
-                </h1>
-              </div>
+                {/* Header */}
+                <div className="text-center pt-10 pb-4 px-6">
+                  <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                    Doctor Details
+                  </h1>
+                  <p className="text-gray-500">Complete your profile to get started.</p>
+                </div>
 
-              <form
-                className="space-y-6 px-7 my-5 w-full"
-                onSubmit={form.handleSubmit(handleOnSubmit)}
-              >
-                <Form {...form}>
-                  {/* Image Upload */}
-                  <FormField
-                    control={form.control}
-                    name="profileImage"
-                    render={({ field }) => (
-                      <div className="flex justify-center">
-                        <div
-                          onDragOver={(e) => e.preventDefault()}
-                          onDrop={(e) => {
-                            e.preventDefault();
-                            handleFile(e.dataTransfer.files?.[0], field);
-                          }}
-                          onClick={() =>
-                            document.getElementById("profileInput")?.click()
-                          }
-                          className="w-28 h-28 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer overflow-hidden"
-                        >
-                          <input
-                            id="profileInput"
-                            type="file"
-                            accept="image/*"
-                            hidden
-                            onChange={(e) =>
-                              handleFile(e.target.files?.[0], field)
-                            }
-                          />
+                <div className="px-6 sm:px-10 pb-10">
+                  <form
+                    className="space-y-5"
+                    onSubmit={form.handleSubmit(handleOnSubmit)}
+                  >
+                    <Form {...form}>
+                      {/* Image Upload */}
+                      <FormField
+                        control={form.control}
+                        name="profileImage"
+                        render={({ field }) => (
+                          <div className="flex justify-center py-2">
+                            <div
+                              onDragOver={(e) => e.preventDefault()}
+                              onDrop={(e) => {
+                                e.preventDefault();
+                                handleFile(e.dataTransfer.files?.[0], field);
+                              }}
+                              onClick={() =>
+                                document.getElementById("profileInput")?.click()
+                              }
+                              className="w-24 h-24 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer overflow-hidden hover:border-gray-400 transition-colors bg-gray-50"
+                            >
+                              <input
+                                id="profileInput"
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                onChange={(e) =>
+                                  handleFile(e.target.files?.[0], field)
+                                }
+                              />
 
-                          {preview ? (
-                            <img
-                              src={preview}
-                              alt="Profile Preview"
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <span className="text-xs text-gray-500 text-center px-2">
-                              Upload Profile Picture
-                            </span>
+                              {preview ? (
+                                <img
+                                  src={preview}
+                                  alt="Profile Preview"
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-[10px] text-gray-400 text-center px-2">
+                                  Upload Profile Picture
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      />
+
+                      {/* Name (disabled) */}
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <input
+                                className="capitalize cursor-not-allowed w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-full outline-none text-gray-400 text-sm"
+                                type="text"
+                                disabled
+                                placeholder={data?.name || "Name"}
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* DOB & Specialization — side by side */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="age"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <input
+                                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-full outline-none text-gray-700 text-sm focus:border-gray-400 transition-colors"
+                                  type="date"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
                           )}
-                        </div>
+                        />
+                        <FormField
+                          control={form.control}
+                          name="specialization"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <input
+                                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-full outline-none text-gray-700 text-sm placeholder-gray-400 focus:border-gray-400 transition-colors"
+                                  type="text"
+                                  placeholder="Specialization"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
-                    )}
-                  />
 
-                  {/* Name */}
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <input
-                            className="capitalize cursor-not-allowed pl-7 w-full py-2 border-b border-b-gray-400 outline-none"
-                            type="text"
-                            disabled
-                            placeholder={data?.name || "Name"}
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                      {/* Gender & Experience — side by side */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="gender"
+                          render={({ field }) => (
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-full outline-none text-sm h-auto">
+                                <SelectValue placeholder="Gender" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectItem value="male">Male</SelectItem>
+                                  <SelectItem value="female">Female</SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="experience"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <input
+                                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-full outline-none text-gray-700 text-sm placeholder-gray-400 focus:border-gray-400 transition-colors"
+                                  type="text"
+                                  placeholder="Experience"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </Form>
 
-                  {/* DOB */}
-                  <FormField
-                    control={form.control}
-                    name="age"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <input
-                            className="w-full pl-7 py-2 border-b border-b-gray-400 outline-none"
-                            type="date"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Specialization */}
-                  <FormField
-                    control={form.control}
-                    name="specialization"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <input
-                            className="pl-7 w-full py-2 border-b border-b-gray-400 outline-none"
-                            type="text"
-                            placeholder="Specialization"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Gender */}
-                  <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-full pl-7 py-2 border-0 border-b border-b-gray-400 rounded-none">
-                          <SelectValue placeholder="Gender" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-
-                  {/* Experience */}
-                  <FormField
-                    control={form.control}
-                    name="experience"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <input
-                            className="pl-7 w-full py-2 border-b border-b-gray-400 outline-none"
-                            type="text"
-                            placeholder="Experience"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </Form>
-
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="bg-[#3497F9] py-5 text-lg hover:bg-[#106ecc] w-full mt-12 mb-5"
-                >
-                  {isLoading ? (
-                    <FaSpinner className="animate-spin text-2xl text-white" />
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                    {/* Submit button */}
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full py-3.5 bg-gray-900 hover:bg-gray-800 text-white rounded-full font-semibold text-base flex items-center justify-center gap-2 cursor-pointer transition-colors disabled:opacity-60 disabled:cursor-not-allowed mt-4"
+                    >
+                      {isLoading ? (
+                        <FaSpinner className="animate-spin text-xl text-white" />
+                      ) : (
+                        <>
+                          Submit
+                          <MdArrowForward className="text-lg" />
+                        </>
+                      )}
+                    </button>
+                  </form>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
       {isStatus && <Schedule docName={data?.name} />}
