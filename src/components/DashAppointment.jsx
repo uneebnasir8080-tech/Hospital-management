@@ -1,40 +1,56 @@
 "use client"
 import { MdOutlineArrowDropDown, MdPeopleAlt } from "react-icons/md";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiMedicineBottleFill } from "react-icons/ri";
 import { BiSolidReport } from "react-icons/bi";
-import  {api}  from "@/lib/apiCall";
+import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 
 
 const DashAppointment = () => {
-const {data:session, status}=useSession(null)
-const [appoint, setAppoint]= useState()
-const [patient, setPatient]= useState()
+  const { data: session, status } = useSession(null)
+  const [appoint, setAppoint] = useState()
+  const [patient, setPatient] = useState()
+  const [selectedPeriod, setSelectedPeriod] = useState("Weekly")
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
 
-const getData= async()=>{
-  const appointment= await api.get("/doctor/count-appoint",{
-    headers:{
-      Authorization:`Bearer ${session?.token}`
-    }
-  })
-  const patient= await api.get("/doctor/count-patient",{
-    headers:{
-      Authorization:`Bearer ${session?.token}`
-    }
-  })
-  const appointmentCounting= appointment?.data.totalAppoint
-  setAppoint(appointmentCounting)
-   const patientCounting= patient?.data?.totalPatient
-  setPatient(patientCounting)
-}
+  const periods = ["Daily", "Weekly", "Monthly", "Yearly"]
 
-useEffect(() => {
-  if(status==="authenticated"){
-    getData()
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  const getData = async () => {
+    const appointment = await api.get("/doctor/count-appoint", {
+      headers: {
+        Authorization: `Bearer ${session?.token}`
+      }
+    })
+    const patient = await api.get("/doctor/count-patient", {
+      headers: {
+        Authorization: `Bearer ${session?.token}`
+      }
+    })
+    const appointmentCounting = appointment?.data.totalAppoint
+    setAppoint(appointmentCounting)
+    const patientCounting = patient?.data?.totalPatient
+    setPatient(patientCounting)
   }
-}, [status])
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      getData()
+    }
+  }, [status])
 
 
   return (
@@ -44,9 +60,32 @@ useEffect(() => {
         <div>
           <p className="">Activity Overview</p>
         </div>
-        <div className="flex gap-2 items-center">
-          <p>Weekly</p>
-          <MdOutlineArrowDropDown />
+        <div className="relative" ref={dropdownRef}>
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="flex gap-1 items-center cursor-pointer hover:text-gray-900 transition-colors"
+          >
+            <p>{selectedPeriod}</p>
+            <MdOutlineArrowDropDown className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+          </button>
+
+          {dropdownOpen && (
+            <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[120px] py-1">
+              {periods.map((period) => (
+                <button
+                  key={period}
+                  onClick={() => {
+                    setSelectedPeriod(period)
+                    setDropdownOpen(false)
+                  }}
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-blue-50 transition-colors cursor-pointer ${selectedPeriod === period ? "text-blue-00 font-medium bg-blue-100" : "text-gray-700"
+                    }`}
+                >
+                  {period}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       {/* cards  */}

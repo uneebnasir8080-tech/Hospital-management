@@ -20,6 +20,7 @@ import  {api}  from "@/lib/apiCall";
 import { showToast } from "@/lib/showToastify";
 import { useRouter } from "next/navigation";
 import RegData from "./RegData";
+import { motion } from "framer-motion";
 
 const RegPatient = ({onClose}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -64,135 +65,144 @@ const RegPatient = ({onClose}) => {
   return (
     <div className="fixed inset-0 bg-black/20 z-150 flex items-center">
 
-      {!next && <Card className=" flex  w-90 lg:w-120 mx-auto p-0 overflow-hidden">
-        <CardContent className="p-0">
-          {/* bg-img  */}
-          <div
-            className="h-40  bg-center relative bg-no-repeat bg-cover clip-zigzag "
-            style={{ backgroundImage: `url('/BGRegister.png')` }}
-          >
-            <h1 className="absolute inset-0 flex flex-col items-center justify-center text-4xl font-semibold text-white">
-              Register
-              <span className="text-3xl">Patient</span>
-            </h1>
-          </div>
+      {!next && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="mx-auto"
+        >
+          <Card className=" flex  w-90 lg:w-120 mx-auto p-0 overflow-hidden">
+            <CardContent className="p-0">
+              {/* bg-img  */}
+              <div
+                className="h-40  bg-center relative bg-no-repeat bg-cover clip-zigzag "
+                style={{ backgroundImage: `url('/BGRegister.png')` }}
+              >
+                <h1 className="absolute inset-0 flex flex-col items-center justify-center text-4xl font-semibold text-white">
+                  Register
+                  <span className="text-3xl">Patient</span>
+                </h1>
+              </div>
 
-          {/* form  */}
+              {/* form  */}
 
-          <form
-            className="space-y-3 px-7 my-5 w-full"
-            onSubmit={form.handleSubmit(handleOnSubmit)}
-          >
-            <Form {...form}>
-              <div className="">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="relative">
-                          <input
-                            className="pl-7 w-full py-2 border-b border-b-gray-400 outline-none text-gray-700"
-                            type="text"
-                            placeholder="Name"
-                            {...field}
-                          />
-                          <IoPersonOutline className="absolute top-1/4  text-lg text-gray-700" />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="relative">
-                          <input
-                            className=" w-full pl-7 py-2 border-b border-b-gray-400 outline-none text-gray-700"
-                            type="email"
-                            placeholder="example@gmaail.com"
-                            {...field}
-                          />
-                          <TfiEmail className="absolute top-1/4  text-lg text-gray-700" />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="relative">
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="relative">
-                          <input
-                            className="pl-7 w-full py-2 border-b border-b-gray-400 outline-none text-gray-00"
-                            type="password"
-                            placeholder="Password"
-                            {...field}
-                          />
-                          <CiLock className="absolute top-1/4  text-xl text-black" />
-                        </div>
-                      </FormControl>
+              <form
+                className="space-y-3 px-7 my-5 w-full"
+                onSubmit={form.handleSubmit(handleOnSubmit)}
+              >
+                <Form {...form}>
+                  <div className="">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="relative">
+                              <input
+                                className="pl-7 w-full py-2 border-b border-b-gray-400 outline-none text-gray-700"
+                                type="text"
+                                placeholder="Name"
+                                {...field}
+                              />
+                              <IoPersonOutline className="absolute top-1/4  text-lg text-gray-700" />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="relative">
+                              <input
+                                className=" w-full pl-7 py-2 border-b border-b-gray-400 outline-none text-gray-700"
+                                type="email"
+                                placeholder="example@gmaail.com"
+                                {...field}
+                              />
+                              <TfiEmail className="absolute top-1/4  text-lg text-gray-700" />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="relative">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="relative">
+                              <input
+                                className="pl-7 w-full py-2 border-b border-b-gray-400 outline-none text-gray-00"
+                                type="password"
+                                placeholder="Password"
+                                {...field}
+                              />
+                              <CiLock className="absolute top-1/4  text-xl text-black" />
+                            </div>
+                          </FormControl>
 
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div>
-                <FormField
-                  control={form.control}
-                  name="role"
-                  defaultValue="patient"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="relative">
-                          <select
-                            {...field}
-                            className="w-full pl-3 py-2 border-b border-b-gray-400 outline-none cursor-pointer text-gray-500 bg-transparent"
-                          >
-                            <option value="patient">Patient</option>
-                            
-                          </select>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </Form>
-            <div className="flex justify-between mt-2">
-                <Button onClick={onClose} className="w-50 cursor-pointer">Close</Button>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className={`bg-[#3497F9] py-5 text-lg w-50 hover:bg-[#106ecc] cursor-pointer`}
-            >
-              {isLoading ? (
-                <FaSpinner className="animate-spin text-2xl text-white" />
-              ) : (
-                "Next"
-              )}
-            </Button>
-            
-            </div>
-          </form>
-        </CardContent>
-      </Card>}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="role"
+                      defaultValue="patient"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="relative">
+                              <select
+                                {...field}
+                                className="w-full pl-3 py-2 border-b border-b-gray-400 outline-none cursor-pointer text-gray-500 bg-transparent"
+                              >
+                                <option value="patient">Patient</option>
+                              </select>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </Form>
+                <div className="flex justify-between mt-2">
+                  <Button onClick={onClose} className="w-50 cursor-pointer">
+                    Close
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className={`bg-[#3497F9] py-5 text-lg w-50 hover:bg-[#106ecc] cursor-pointer`}
+                  >
+                    {isLoading ? (
+                      <FaSpinner className="animate-spin text-2xl text-white" />
+                    ) : (
+                      "Next"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
       {next && <RegData onClose={onClose} ids={storeId}/>}
     </div>
   );
