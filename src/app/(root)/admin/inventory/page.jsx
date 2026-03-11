@@ -1,7 +1,19 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import MedicineInventory from "@/components/MedicineInventory";
+import AddMedicineModal from "@/components/AddMedicineModal";
 
 const InventoryPage = () => {
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleAddMedicine = (newMedicine) => {
+    // In a real app, we'd refetch from API.
+    // Here we'll trigger a refresh in the child component if needed,
+    // but the child will handle its own local state for now as per plan.
+    setRefreshKey((prev) => prev + 1);
+  };
+
   return (
     <div className="bg-white  rounded-lg ">
       <div className="">
@@ -15,15 +27,25 @@ const InventoryPage = () => {
             </button>
           </div>
           <div className=" ">
-            <button className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer text-xs px-2 rounded-sm text-white gap-1 flex items-center">
-              <span className="text-[16px] lg:text-xl pb-1">+</span>{" "}
-              <span className="hidden md:block">Add Product</span>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="bg-[#3497F9] hover:bg-[#2086e9] cursor-pointer text-xs px-4 py-1 rounded-lg text-white gap-2 flex items-center transition-all shadow-md shadow-blue-100"
+            >
+              <span className="text-[16px] lg:text-xl font-bold">+</span>{" "}
+              <span className="hidden md:block font-medium">Add Product</span>
             </button>
           </div>
         </div>
         {/* pages  */}
-        <MedicineInventory />
+        <MedicineInventory refreshKey={refreshKey} />
       </div>
+
+      {showAddModal && (
+        <AddMedicineModal
+          onClose={() => setShowAddModal(false)}
+          onAdd={handleAddMedicine}
+        />
+      )}
     </div>
   );
 };

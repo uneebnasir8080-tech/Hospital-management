@@ -13,8 +13,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePicker() {
-  const [date, setDate] = React.useState();
+export function DatePicker({ selected, onSelect }) {
+  const [internalDate, setInternalDate] = React.useState();
+
+  const date = selected !== undefined ? selected : internalDate;
+  const setDate = onSelect || setInternalDate;
 
   return (
     <Popover>
@@ -23,7 +26,8 @@ export function DatePicker() {
           variant="outline"
           className={cn(
             "w-45 justify-between rounded-full border-blue-500 text-gray-500",
-            !date && "text-muted-foreground hover:bg-transparent cursor-pointer"
+            !date &&
+              "text-muted-foreground hover:bg-transparent cursor-pointer",
           )}
         >
           {date ? format(date, "PPP") : "Filter by Date"}

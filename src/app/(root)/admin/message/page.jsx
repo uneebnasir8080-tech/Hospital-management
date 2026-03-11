@@ -4,11 +4,11 @@ import React from "react";
 
 const MessagePage = () => {
   return (
-    <div className="flex flex-5 gap-3 h-full">
-      <div className="lg:flex-1"> 
+    <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-140px)] min-h-[600px] mb-6">
+      <div className="lg:w-[380px] h-full"> 
         <Message/>
       </div>
-      <div className="flex-2 bg-white rounded-t-xl">
+      <div className="flex-1 h-full">
         <ChatScreen/>
       </div>
     </div>

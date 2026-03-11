@@ -10,43 +10,12 @@ import { showToast } from "@/lib/showToastify";
 import PatientModal from "@/components/PatientModal";
 
 const AppointmentPage = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [isClose, setIsClose] = useState(false);
-  const [resData, setResData] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const appointment = useStore((state) => state.appointment);
   const newAppoint = useStore((state) => state.new);
   const complete = useStore((state) => state.complete);
-
-  const getData = useCallback(async () => {
-    try {
-      if (!session?.token) return;
-
-      setLoading(true);
-
-      const res = await api.get("/patient/all-appointment", {
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      });
-
-      const response = res?.data?.getData || [];
-      setResData(response);
-    } catch (err) {
-      console.error("API Error:", err);
-      showToast("Failed to fetch appointments", "error");
-      setResData([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.token]);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      getData();
-    }
-  }, [status, getData]);
 
   return (
     <div className="bg-white rounded-lg">
@@ -93,23 +62,16 @@ const AppointmentPage = () => {
         </div>
 
         {/* pages */}
-        {appointment === "new" && (
-          <AdminNewAppoint
-            response={resData}
-            loading={loading}
-            token={session?.token}
-          />
-        )}
+        {appointment === "new" && <AdminNewAppoint />}
 
-        {appointment === "complete" && (
-          <AdminComplete response={resData} loading={loading} />
-        )}
+        {appointment === "complete" && <AdminComplete />}
       </div>
       {isClose && (
         <PatientModal
           onClose={() => {
             setIsClose(!isClose);
-            getData();
+            // We might need a way to refresh child components,
+            // but for now, the user can switch tabs or wait for poll
           }}
         />
       )}

@@ -148,7 +148,7 @@ const LoginPage = () => {
               className="text-4xl xl:text-5xl font-bold text-white mb-3"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.1 }}
             >
               <span className="text-teal-400">JHC</span> Clinic
             </motion.h1>
@@ -156,7 +156,7 @@ const LoginPage = () => {
               className="text-gray-400 text-lg mb-12"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
+              transition={{ duration: 0.1 }}
             >
               Welcome back. Your health, our priority.
             </motion.p>
@@ -166,7 +166,7 @@ const LoginPage = () => {
               className="bg-gray-800/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/50 shadow-2xl max-w-sm mx-auto cursor-pointer"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.15 }}
+              transition={{ duration: 0.1 }}
               whileHover={{ scale: 1.04, boxShadow: "0 25px 60px rgba(0,0,0,0.4)" }}
             >
               <div className="relative w-48 h-48 mx-auto mb-6 overflow-hidden rounded-xl">
@@ -298,21 +298,21 @@ const LoginPage = () => {
                 href="#"
                 className="flex items-center gap-2 px-6 py-2.5 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
               >
-                <img src="/Google.png" alt="Google" className="h-5 w-5 object-contain" />
+                <img src="/Google.png" alt="Google" className="h-7 w-7 object-contain" />
                 <span className="text-sm text-gray-600 hidden sm:inline">Google</span>
               </a>
               <a
                 href="#"
-                className="flex items-center gap-2 px-6 py-2.5 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px- py-2.5 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
               >
-                <img src="/Apple.png" alt="Apple" className="h-5 w-5 object-contain" />
+                <img src="/Apple.png" alt="Apple" className="h-7 w-7 object-contain" />
                 <span className="text-sm text-gray-600 hidden sm:inline">Apple</span>
               </a>
               <a
                 href="#"
                 className="flex items-center gap-2 px-6 py-2.5 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
               >
-                <img src="/Facebook.png" alt="Facebook" className="h-5 w-5 object-contain" />
+                <img src="/Facebook.png" alt="Facebook" className="h-7 w-7 object-contain" />
                 <span className="text-sm text-gray-600 hidden sm:inline">Facebook</span>
               </a>
             </div>

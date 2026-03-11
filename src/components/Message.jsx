@@ -1,205 +1,188 @@
 "use client";
-import { useStore } from "@/store/store";
-import Image from "next/image";
 import React, { useState } from "react";
-import { IoSearch } from "react-icons/io5";
-import { MdOutlineArrowCircleDown } from "react-icons/md";
+import { useStore } from "@/store/store";
+import { Search, ChevronDown, CheckCheck, Circle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const data = [
   {
     id: 1,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
+    img: "/doc1.png",
+    title: "Dr. John Paulliston",
+    desc: "I've reviewed the lab results.",
+    time: "9:00 AM",
+    online: true,
+    unread: 2,
   },
   {
     id: 2,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
+    img: "/doc2.png",
+    title: "Sarah Mitchell",
+    desc: "Sent attachment: report.pdf",
+    time: "Yesterday",
+    online: false,
+    unread: 0,
   },
   {
     id: 3,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
+    img: "/doc3.png",
+    title: "David Chen",
+    desc: "Can we reschedule?",
+    time: "Monday",
+    online: true,
+    unread: 0,
   },
+  // ... adding more for scrolling test
   {
     id: 4,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
+    img: "/doc1.png",
+    title: "Dr. Elena Rodriguez",
+    desc: "The prescription is ready.",
+    time: "10:30 AM",
+    online: true,
+    unread: 1,
   },
   {
     id: 5,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
+    img: "/doc1.png",
+    title: "Dr. Elena Rodriguez",
+    desc: "The prescription is ready.",
+    time: "10:30 AM",
+    online: true,
+    unread: 1,
   },
   {
     id: 6,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
+    img: "/doc1.png",
+    title: "Dr. Elena Rodriguez",
+    desc: "The prescription is ready.",
+    time: "10:30 AM",
+    online: true,
+    unread: 1,
   },
   {
-    id: 2,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
-  },
-  {
-    id: 3,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
-  },
-  {
-    id: 4,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
-  },
-  {
-    id: 5,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
-  },
-  {
-    id: 6,
-    img: "/plus.png",
-    title: "Dr John Paulliston",
-    desc: "Sent attachment",
-    time: "9:00am",
+    id: 7,
+    img: "/doc1.png",
+    title: "Dr. Elena Rodriguez",
+    desc: "The prescription is ready.",
+    time: "10:30 AM",
+    online: true,
+    unread: 1,
   },
 ];
 
 const Message = () => {
-  const [click, setClick] = useState();
-  const open= useStore((state)=>state.msgScreen)
-  const close = useStore((state)=>state.openScreen)
+  const [click, setClick] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const open = useStore((state) => state.msgScreen);
+  const close = useStore((state) => state.openScreen);
+
+  const filteredData = data.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
-    <>
-      {/* screen  */}
-      <div className=" h-full bg-white rounded-t-xl  hidden lg:block">
-        {/* search bar  */}
-        <div className="h-[13%] flex items-center border-b-2 pt-2">
-          <div className="relative mx-auto ">
-            <IoSearch
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
-              size={18}
-            />
-            <input
-              type="text"
-              placeholder="Search"
-              className=" w-50 lg:w-full text-sm lg:text-[16px] bg-gray-200 rounded-2xl pl-10 pr-4 py-1 text-gray-600 outline-none transition-colors duration-200"
-            />
-          </div>
-        </div>
-        {/* list  */}
-        <div className="overflow-y-scroll modern-scroll ">
-          <div className="mt-4 max-h-[70vh]">
-            {data.map((items, index) => (
-              <div
-                onClick={() => setClick(items.id)}
-                key={index}
-                className={`flex justify-between rounded-md px-2 py-2 border-b cursor-pointer ${
-                  click === items.id ? "bg-blue-200" : ""
-                }`}
-              >
-                <div className="flex gap-2 ">
-                  <Image src={items.img} height={5} width={35} alt="pic" />
-                  <div className="space-y-1">
-                    <p className="font-medium text-xs lg:text-sm">
-                      {items.title}
-                    </p>
-                    <p className="text-[9px] tracking-wide lg:text-xs text-gray-600">
-                      {items.desc}
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-[9px] lg:text-xs text-gray-600 pt-2">
-                    {items.time}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+    <div className="h-full bg-white rounded-3xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
+      {/* Search Header */}
+      <div className="p-6 border-b border-gray-50 bg-gray-50/30">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Messages</h2>
+        <div className="relative group">
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors"
+            size={18}
+          />
+          <input
+            type="text"
+            placeholder="Search conversations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-white border border-gray-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-gray-700 outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all shadow-sm"
+          />
         </div>
       </div>
 
-      {/* mobile  */}
-     {open && <div className={`
-    bg-white rounded-t-xl lg:hidden absolute
-    min-w-55 sm:min-w-65 md:min-w-70
-    ${open ? "animate-slideUp" : "animate-slideDown"}
-  `}>
-        {/* search bar  */}
-        <div className="h-13 flex items-center border-b-2 pt-2 px-2">
-          
-          <div className="relative mx-auto group">
-            {/* Search Icon */}
-            <IoSearch
-              className="
-        absolute left-3 top-1/2 -translate-y-1/2
-        text-gray-500 cursor-pointer z-10
-      "
-              size={18}
-            />
-
-            {/* Search Input */}
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-9 group-hover:w-40 lg:group-hover:w-64 text-sm lg:text-[16px]  bg-gray-200 rounded-2xl pl-10 pr-1 py-1  text-gray-600 outline-none  transition-all duration-300 ease-in-out cursor-pointer"/>
-          </div>
-          <MdOutlineArrowCircleDown  size={25} className="cursor-pointer" onClick={close}/>
-        </div>
-        {/* list  */}
-        <div className="overflow-y-scroll modern-scroll ">
-          <div className="mt-5 max-h-[70vh]">
-            {data.map((items, index) => (
-              <div
-                onClick={() => setClick(items.id)}
-                key={index}
-                className={`flex justify-between rounded-md px-2 py-3 border-b cursor-pointer ${
-                  click === items.id ? "bg-blue-200" : ""
+      {/* List */}
+      <div className="flex-1 overflow-y-auto modern-scroll p-4">
+        <div className="space-y-2">
+          <AnimatePresence mode="popLayout">
+            {filteredData.map((item, index) => (
+              <motion.div
+                layout
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                key={item.id}
+                onClick={() => setClick(item.id)}
+                className={`relative flex items-center gap-4 p-4 rounded-[1.5rem] cursor-pointer transition-all ${
+                  click === item.id
+                    ? "bg-blue-600 shadow-xl shadow-blue-500/20"
+                    : "hover:bg-gray-50 active:scale-[0.98]"
                 }`}
               >
-                <div className="flex gap-2 ">
-                  <Image src={items.img} height={5} width={35} alt="pic" />
-                  <div className="space-y-1">
-                    <p className="font-medium text-xs lg:text-sm">
-                      {items.title}
+                {/* Avatar with Status */}
+                <div className="relative flex-shrink-0">
+                  <div
+                    className={`w-12 h-12 rounded-2xl overflow-hidden shadow-sm border-2 ${click === item.id ? "border-blue-400" : "border-white"}`}
+                  >
+                    <Image
+                      src={item.img}
+                      fill
+                      className="object-cover"
+                      alt={item.title}
+                    />
+                  </div>
+                  {item.online && (
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-baseline mb-1">
+                    <h3
+                      className={`font-bold text-sm truncate ${click === item.id ? "text-white" : "text-gray-800"}`}
+                    >
+                      {item.title}
+                    </h3>
+                    <span
+                      className={`text-[10px] font-medium ${click === item.id ? "text-blue-100" : "text-gray-400"}`}
+                    >
+                      {item.time}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center group">
+                    <p
+                      className={`text-xs truncate max-w-[140px] ${click === item.id ? "text-blue-50" : "text-gray-500"}`}
+                    >
+                      {item.desc}
                     </p>
-                    <p className="text-[9px] tracking-wide lg:text-xs text-gray-600">
-                      {items.desc}
-                    </p>
+                    {item.unread > 0 && click !== item.id ? (
+                      <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg h-5 min-w-[20px] flex items-center justify-center">
+                        {item.unread}
+                      </span>
+                    ) : (
+                      <CheckCheck
+                        size={14}
+                        className={`${click === item.id ? "text-blue-200" : "text-gray-300"}`}
+                      />
+                    )}
                   </div>
                 </div>
-                <div>
-                  <p className="text-[9px] lg:text-xs text-gray-600 pt-2 ">
-                    {items.time}
-                  </p>
-                </div>
-              </div>
+
+                {/* Active Indicator */}
+                {click === item.id && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="absolute left-1 w-1.5 h-8 bg-white rounded-full"
+                  />
+                )}
+              </motion.div>
             ))}
-          </div>
+          </AnimatePresence>
         </div>
-      </div>}
-    </>
+      </div>
+    </div>
   );
 };
 
