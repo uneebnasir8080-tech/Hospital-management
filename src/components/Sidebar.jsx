@@ -1,86 +1,159 @@
 "use client";
+
 import React from "react";
-import { TbHomeFilled } from "react-icons/tb";
-import { LuStethoscope } from "react-icons/lu";
-import { IoChatbubbleOutline } from "react-icons/io5";
-import { LuGraduationCap } from "react-icons/lu";
+import { 
+  Home, 
+  Stethoscope, 
+  MessageCircle, 
+  UserCircle, 
+  LogOut,
+  ChevronRight,
+  X
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useStore } from "@/store/store";
+
+const SidebarContent = ({ openSideBar, pathName, menuItems, handleLogout }) => (
+  <div className="bg-slate-50 w-64 lg:w-72 h-screen border-r border-slate-200/60 p-4 md:p-6 flex flex-col relative z-50">
+    {/* Mobile Close Button */}
+    <button 
+      onClick={openSideBar}
+      className="md:hidden absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-800 transition-colors"
+    >
+      <X size={20} />
+    </button>
+
+    {/* Logo Section */}
+    <div className="mb-10 px-2 pt-2">
+      <motion.a 
+        href="/user/home"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="flex items-center gap-3"
+      >
+        <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-500/30">
+          <img src="/logo.png" alt="logo" className="h-6 w-6 invert brightness-0" />
+        </div>
+        <span className="font-black text-xl tracking-tighter text-slate-800">
+          MED<span className="text-blue-600">CORE</span>
+        </span>
+      </motion.a>
+    </div>
+
+    {/* Navigation Section */}
+    <nav className="flex-1 space-y-2">
+      {menuItems.map((item, index) => {
+        const Icon = item.icon;
+        const isActive = pathName.startsWith(item.path);
+        
+        return (
+          <motion.a
+            key={item.path}
+            href={item.path}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className={`
+              relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group
+              ${isActive 
+                ? "bg-blue-600 text-white shadow-xl shadow-blue-500/25" 
+                : "text-slate-500 hover:bg-white hover:text-blue-600 hover:shadow-md"}
+            `}
+          >
+            <Icon size={22} className={`${isActive ? "text-white" : "group-hover:scale-110 transition-transform"}`} />
+            <span className="font-bold tracking-wide">{item.title}</span>
+            
+            {isActive && (
+              <motion.div 
+                layoutId="activeIndicator"
+                className="absolute right-2"
+              >
+                <ChevronRight size={16} className="text-white/70" />
+              </motion.div>
+            )}
+          </motion.a>
+        );
+      })}
+    </nav>
+
+    {/* Footer Section */}
+    <div className="pt-6 border-t border-slate-200/60">
+      <motion.button
+        onClick={handleLogout}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="flex items-center gap-4 w-full px-4 py-3 rounded-2xl text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all group"
+      >
+        <LogOut size={22} className="group-hover:translate-x-1 transition-transform" />
+        <span className="font-bold tracking-wide">Logout</span>
+      </motion.button>
+    </div>
+  </div>
+);
 
 const Sidebar = () => {
   const pathName = usePathname(); 
-   const router = useRouter();
+  const router = useRouter();
+  const sideBar = useStore((state) => state.sideBar);
+  const openSideBar = useStore((state) => state.openSideBar);
 
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.replace("/auth/login");
+  };
 
-const handleLogout = async () => {
-await signOut({ redirect: false });
-router.replace("/auth/login"); // ✅ correct
-};
+  const menuItems = [
+    { title: "Home", icon: Home, path: "/user/home" },
+    { title: "Doctors", icon: Stethoscope, path: "/user/doctor" },
+    { title: "Chat", icon: MessageCircle, path: "/user/chat" },
+    { title: "Profile", icon: UserCircle, path: "/user/profile" },
+  ];
 
-return (
-    <div className="bg-blue-100 w-15 md:w-45 lg:w-50 xl:w-60 shrink-0 min-h-screen ">
-      <div className="flex flex-col sticky top-6">
-        {/* logo */}
-        <a href="/user/home" className=" hidden md:block pl-1">
-          <img src="/logo.png" alt="logo" className="h-10 md:h-12" />
-        </a>
-        <div className="block md:hidden pl-1">
-          <img src="/loho1.avif" alt="logo" className="h-10 md:h-12" />
-        </div>
-        <div className=" space-y-6 pt-9 ">
-          <div className="">
-            <a
-              href="/user/home"
-              className={`flex items-center gap-3 text-2xl  px-4 py-3 rounded-l-4xl  ${
-                pathName.startsWith("/user/home")
-                  ? "bg-white text-blue-400"
-                  : "text-black/50 hover:bg-gray-200"
-              } `}
-            >
-              <TbHomeFilled />
-              <p className="hidden md:block">Home</p>
-            </a>
-          </div>
-          <a
-            href="/user/doctor"
-            className={`flex items-center gap-3 text-2xl  px-4 py-3 rounded-l-4xl ${
-              pathName.startsWith("/user/doctor")
-                ? "bg-white text-blue-400"
-                : "text-black/50 hover:bg-gray-200"
-            }`}
-          >
-            <LuStethoscope />
-            <p className="hidden md:flex">Doctors</p>
-          </a>
-          <a
-            href="/user/chat"
-            className={`flex items-center gap-3 text-2xl px-4 py-3 rounded-l-4xl ${
-              pathName.startsWith("/user/chat")
-                ? "bg-white text-blue-400"
-                : "text-black/50 hover:bg-gray-200"
-            }`}
-          >
-            <IoChatbubbleOutline />
-            <p className="hidden md:flex">Chat</p>
-          </a>
-          <a
-            href="/user/profile"
-            className={`flex items-center gap-3 text-2xl px-4 py-3 rounded-l-4xl  ${
-              pathName.startsWith("/user/profile")
-                ? "bg-white text-blue-400"
-                : "text-black/50 hover:bg-gray-200"
-            }`}
-          >
-            <LuGraduationCap />
-            <p className="hidden md:flex">Profile</p>
-          </a>
-        <div className="flex justify-center text-xl font-medium ">
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-        </div>
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block shrink-0">
+        <SidebarContent 
+          openSideBar={openSideBar} 
+          pathName={pathName} 
+          menuItems={menuItems} 
+          handleLogout={handleLogout} 
+        />
       </div>
-    </div>
+
+      {/* Mobile Sidebar with AnimatePresence */}
+      <AnimatePresence>
+        {sideBar && (
+          <div className="fixed inset-0 z-[100] md:hidden">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={openSideBar}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative"
+            >
+              <SidebarContent 
+                openSideBar={openSideBar} 
+                pathName={pathName} 
+                menuItems={menuItems} 
+                handleLogout={handleLogout} 
+              />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
 export default Sidebar;
+

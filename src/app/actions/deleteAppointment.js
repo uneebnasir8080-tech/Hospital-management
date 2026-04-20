@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 export async function deleteAppointment(formData) {
   try {
     const id = formData.get("id");
+    // console.log('id from delete:',id)
   const token = formData.get("token");
     await api.delete(`/doctor/appointment`, {
         params:{

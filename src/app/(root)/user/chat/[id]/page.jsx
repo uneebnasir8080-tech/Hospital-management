@@ -1,127 +1,151 @@
+"use client";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { IoSend } from "react-icons/io5";
-import React from "react";
-import { IoVideocam } from "react-icons/io5";
+import { Send, Camera, Paperclip, MoreHorizontal, Phone, Video, Smile, Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const chat = [
-  {
-    id: 1,
-    msg: "Hello",
-    time: "11:12",
-  },
-  {
-    id: 2,
-    msg: "hey",
-    time: "11:13",
-  },
-  {
-    id: 3,
-    msg: "how are you",
-    time: "11:14",
-  },
-  {
-    id: 4,
-    msg: "Hello",
-    time: "11:15",
-  },
-  {
-    id: 5,
-    msg: "dsdf",
-    time: "11:16",
-  },
-  {
-    id: 6,
-    msg: "Hello",
-    time: "11:17",
-  },
-  {
-    id: 3,
-    msg: "how are you",
-    time: "11:14",
-  },
-  {
-    id: 4,
-    msg: "Hello",
-    time: "11:15",
-  },
-  {
-    id: 5,
-    msg: "dsdf",
-    time: "11:16",
-  },
-  {
-    id: 6,
-    msg: "Hello",
-    time: "11:17",
-  },
+const mockedMessages = [
+  { id: 1, sender: "doctor", msg: "Hello! How can I help you today?", time: "10:30 AM" },
+  { id: 2, sender: "user", msg: "Hi Doctor, I've been feeling a bit dizzy lately.", time: "10:32 AM" },
+  { id: 3, sender: "doctor", msg: "I see. Have you noticed any other symptoms like headache or nausea?", time: "10:35 AM" },
+  { id: 4, sender: "user", msg: "Yes, a slight headache in the mornings.", time: "10:36 AM" },
+  { id: 5, sender: "doctor", msg: "Let's schedule a quick check-up. Are you available tomorrow?", time: "10:40 AM" },
 ];
 
-const ChatId = async ({ params }) => {
-  const param = await params;
-  return (
-    <div className="flex flex-col  h-[calc(97vh-64px)]">
-      {/* navbar */}
-      <div className="flex items-center justify-between px-6 bg-blue-300 shrink-0">
-        <div className="flex gap-4 items-center">
-          <div className="h-16">
-            <Image
-              src="/doc1.png"
-              height={20}
-              width={60}
-              alt="doctor"
-              className="rounded-full"
-            />
-          </div>
+const ChatId = () => {
+  const [messages, setMessages] = useState(mockedMessages);
+  const [newMessage, setNewMessage] = useState("");
+  const scrollRef = useRef(null);
 
-          <div>
-            <p className="font-medium">Dr Joel Paulliston</p>
-            <p className="text-xs">Online</p>
+  const handleSend = () => {
+    if (!newMessage.trim()) return;
+    const msg = {
+      id: Date.now(),
+      sender: "user",
+      msg: newMessage,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    setMessages([...messages, msg]);
+    setNewMessage("");
+  };
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  return (
+    <div className="flex flex-col h-[calc(100vh-100px)] bg-slate-50/50 relative overflow-hidden">
+      {/* Immersive Header */}
+      <div className="bg-white/80 backdrop-blur-md border-b border-slate-100 p-4 md:p-6 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <div className="w-12 h-12 rounded-2xl overflow-hidden bg-blue-50 border-2 border-white shadow-md">
+              <Image src="/doc1.png" fill className="object-cover" alt="Doctor" />
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full shadow-sm" />
           </div>
-        </div>
-        <div>
-          <IoVideocam size={30} className="cursor-pointer" />
-        </div>
-      </div>
-      {/* main  */}
-      <div className="flex-1 overflow-y-scroll px-4 py-2 flex flex-col-reverse gap-3">
-        {chat.map((data, index) => (
-          <div
-            className={`flex ${data.id % 2 === 0 ? "flex-row-reverse" : ""}`}
-            key={index}
-          >
-            <div className=" flex flex-col ">
-              <p
-                className={`${
-                  data.id % 2 === 0 ? "bg-gray-200" : "bg-blue-200"
-                } py-3 px-7 font-medium rounded-xl`}
-              >
-                {data.msg}
-              </p>
-              <p className="text-xs ml-auto">{data.time} pm</p>
+          <div>
+            <h3 className="font-black text-slate-800 text-sm md:text-base uppercase tracking-tight">Dr. John Paulliston</h3>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+              <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest leading-none">Online now</p>
             </div>
           </div>
-        ))}
+        </div>
 
-        {/* <div className=" flex ">
-          <div className="flex flex-col">
-            <p className=" py-3 px-7 font-medium rounded-xl">Hey</p>
-            <p className="text-xs ml-auto">11:10 pm</p>
-          </div>
-        </div> */}
+        <div className="flex items-center gap-2 md:gap-4">
+          <button className="hidden sm:flex p-2.5 bg-slate-50 hover:bg-white hover:text-blue-600 text-slate-400 rounded-xl transition-all shadow-sm">
+            <Phone size={18} />
+          </button>
+          <button className="hidden sm:flex p-2.5 bg-slate-50 hover:bg-white hover:text-blue-600 text-slate-400 rounded-xl transition-all shadow-sm">
+            <Video size={18} />
+          </button>
+          <div className="w-px h-6 bg-slate-200 mx-1 hidden sm:block" />
+          <button className="p-2.5 bg-slate-50 hover:bg-white hover:text-blue-600 text-slate-400 rounded-xl transition-all shadow-sm">
+            <Search size={18} />
+          </button>
+          <button className="p-2.5 bg-slate-50 hover:bg-white hover:text-blue-600 text-slate-400 rounded-xl transition-all shadow-sm">
+            <MoreHorizontal size={18} />
+          </button>
+        </div>
       </div>
-      {/* text area  */}
-      <div className="flex w-full items-center gap-2 px-2">
-        <input
-          type="text"
-          className=" grow py-2 rounded-2xl px-2 text-black/80 bg-gray-300"
-          placeholder="Type a meesage"
-        />
-        <div className="bg-blue-400 px-2 py-2  rounded-full cursor-pointer ">
-          <IoSend size={25} className="  text-white" />
+
+      {/* Message Area */}
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-6 flex flex-col pt-8"
+      >
+        <AnimatePresence initial={false}>
+          {messages.map((m, i) => (
+            <motion.div
+              key={m.id}
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className={`flex w-full ${m.sender === "user" ? "justify-end" : "justify-start"}`}
+            >
+              <div className={`flex flex-col max-w-[80%] md:max-w-[65%] ${m.sender === "user" ? "items-end" : "items-start"}`}>
+                <div className={`
+                  p-4 md:p-5 rounded-[2rem] text-sm font-bold leading-relaxed shadow-sm
+                  ${m.sender === "user" 
+                    ? "bg-slate-900 text-white rounded-tr-none shadow-slate-200" 
+                    : "bg-white text-slate-700 rounded-tl-none border border-slate-100"}
+                `}>
+                  {m.msg}
+                </div>
+                <div className="mt-2 flex items-center gap-2 px-2">
+                  <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">{m.time}</span>
+                  {m.sender === "user" && <CheckCheck size={12} className="text-blue-400" />}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* Input Area */}
+      <div className="p-6 bg-transparent sticky bottom-0 z-10">
+        <div className="max-w-4xl mx-auto flex items-center gap-3 bg-white border border-slate-100 p-2.5 rounded-[2.5rem] shadow-2xl shadow-slate-200/60 focus-within:ring-4 focus-within:ring-blue-500/5 transition-all">
+          <button className="p-3 hover:bg-slate-50 text-slate-400 hover:text-blue-600 rounded-full transition-all shrink-0">
+            <Paperclip size={20} />
+          </button>
+          
+          <input 
+            type="text" 
+            placeholder="Type your message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            className="flex-1 bg-transparent border-none outline-none text-sm font-bold text-slate-700 placeholder:text-slate-300 px-2"
+          />
+
+          <div className="flex items-center gap-1 shrink-0">
+            <button className="hidden sm:flex p-3 hover:bg-slate-50 text-slate-400 hover:text-blue-600 rounded-full transition-all">
+              <Smile size={20} />
+            </button>
+            <button className="hidden sm:flex p-3 hover:bg-slate-50 text-slate-400 hover:text-blue-600 rounded-full transition-all">
+              <Camera size={20} />
+            </button>
+            <button 
+              onClick={handleSend}
+              className="p-3.5 bg-blue-600 hover:bg-slate-900 text-white rounded-full transition-all shadow-lg active:scale-95 group"
+            >
+              <Send size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
+const CheckCheck = ({ size, className }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M18 6 7 17l-5-5" />
+    <path d="m22 10-7.5 7.5L13 16" />
+  </svg>
+);
+
 export default ChatId;
+

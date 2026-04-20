@@ -2,27 +2,29 @@
 
 import React, { useState } from "react";
 import { Edit3 } from "lucide-react";
-import ProfileUpdate from "@/components/ProfileUpdate";
+import PatientProfile from "./PatientProfile";
+import { AnimatePresence } from "framer-motion";
 
 const EditProfileButton = ({ resData }) => {
   const [isActive, setIsActive] = useState(false);
 
   return (
     <>
-      <button
+      <button 
         onClick={() => setIsActive(true)}
-        className="absolute top-6 right-6 p-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white transition-all border border-white/20 shadow-lg group"
-        title="Edit Profile"
+        className="absolute top-6 right-6 p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl text-white transition-all active:scale-95 z-10"
       >
-        <Edit3 size={20} className="group-hover:scale-110 transition-transform" />
+        <Edit3 size={24} />
       </button>
 
-      {isActive && (
-        <ProfileUpdate
-          response={resData}
-          onClose={() => setIsActive(false)}
-        />
-      )}
+      <AnimatePresence>
+        {isActive && (
+          <PatientProfile
+            onClose={() => setIsActive(false)}
+            response={resData}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };

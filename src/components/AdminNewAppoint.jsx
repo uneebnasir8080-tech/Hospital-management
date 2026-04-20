@@ -34,6 +34,7 @@ const AdminNewAppoint = ({ refresh }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deleteId, setDeleteId]= useState()
 
   const { data: session, status } = useSession();
   const [page, setPage] = useState(1);
@@ -79,12 +80,11 @@ const AdminNewAppoint = ({ refresh }) => {
     }
   }, [session, page, limit]);
 
-  useEffect(() => {
+    useEffect(() => {
     if (status === "authenticated") {
       getAppointments();
     }
   }, [status, getAppointments, refresh, page]);
-
   /* ========================
       DELETE FUNCTION
   ======================== */
@@ -112,8 +112,11 @@ const AdminNewAppoint = ({ refresh }) => {
       setDeleting(false);
       setShowModal(false);
       setDeleteId(null);
+      getAppointments();
     }
   };
+
+
 
   return (
     <div className="px-3 lg:px-5">

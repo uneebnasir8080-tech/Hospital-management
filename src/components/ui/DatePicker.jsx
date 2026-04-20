@@ -20,7 +20,7 @@ export function DatePicker({ selected, onSelect }) {
   const setDate = onSelect || setInternalDate;
 
   return (
-    <Popover>
+    <Popover >
       <PopoverTrigger asChild>
         <Button
           variant="outline"

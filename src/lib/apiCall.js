@@ -40,7 +40,7 @@ api.interceptors.response.use(
 
       try {
         // Clear the session first (don't let NextAuth handle the redirect)
-        await signOut({ redirect: false });
+        await signOut({ redirect: true });
       } catch (e) {
         // signOut may fail if session is already gone, that's fine
       } finally {
