@@ -40,14 +40,16 @@ const EducationContent = () => {
   return (
     <div>
       {/* head  */}
-      <div className="flex justify-between h-10  items-center px-2 text-sm text-gray-700">
+    
+      <div className="flex justify-between h-10 items-center px-2 text-sm text-gray-700">
         <p>Education Content</p>
         <p>
           <TbArrowsDiagonalMinimize />
         </p>
       </div>
+      
       {/* list  */}
-      <div>
+      <div className="max-h-64 overflow-y-auto modern-scroll">
         {list.map((data, index) => (
           <div
             key={index}

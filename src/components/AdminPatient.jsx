@@ -118,6 +118,7 @@ const AdminPatient = ({ refresh }) => {
       );
     } finally {
       setIsDeleting(false);
+      getPatient();
     }
   };
 

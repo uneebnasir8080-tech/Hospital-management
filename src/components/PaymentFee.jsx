@@ -27,7 +27,7 @@ const PaymentFee = async () => {
   const filtered = appointments.filter((a) => a.status === "pending");
 
   return (
-    <div className="space-y-4">
+    <div>
       {/* Header */}
       <div className="flex justify-between h-10 items-center px-2 text-sm text-gray-700">
         <p className="font-semibold">Patient Fee</p>
@@ -35,7 +35,7 @@ const PaymentFee = async () => {
       </div>
 
       {/* List */}
-      <div className="space-y-2">
+      <div className="space-y-2 max-h-64 overflow-y-auto">
         {filtered.map((data, index) => {
           const patient = data?.patientId;
           const profile = patient?.profile || "/doc1.png"; // fallback

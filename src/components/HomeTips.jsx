@@ -1,44 +1,91 @@
+"use client";
+
 import React from 'react'
-import { Card, CardContent } from './ui/card'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { Heart, ArrowRight, Zap } from 'lucide-react'
 
 const tips = [
-  { id: 1, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
-  { id: 2, img: "/tip2.png", title: "Healthy Diet for Everyone" },
-  { id: 3, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
-  { id: 4, img: "/tip2.png", title: "Healthy Diet for Everyone" },
-  { id: 5, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
-  { id: 6, img: "/tip2.png", title: "Healthy Diet for Everyone" },
-  { id: 7, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
-  { id: 8, img: "/tip2.png", title: "Healthy Diet for Everyone" },
-  { id: 9, img: "/tip1.png", title: "6 Healthy Exercises for Everyone" },
+  { id: 1, img: "/tip1.png", title: "6 Powerful Exercises for Heart Health", category: "Fitness", read: "5 min" },
+  { id: 2, img: "/tip2.png", title: "Superfoods for Mental Clarity & Energy", category: "Nutrition", read: "3 min" },
+  { id: 3, img: "/tip1.png", title: "Sleep Hygiene: The Ultimate Recovery Guide", category: "Wellness", read: "10 min" },
+  { id: 4, img: "/tip2.png", title: "The Anti-Inflammatory Diet Protocol", category: "Diet", read: "7 min" },
+  { id: 5, img: "/tip1.png", title: "Micro-Workouts for Busy Professionals", category: "Fitness", read: "4 min" },
+  { id: 6, img: "/tip2.png", title: "Hydration Hacks for Peak Performance", category: "Wellness", read: "2 min" },
 ]
 
 const HomeTips = () => {
   return (
-    <section className=" my-10 overflow-x-hidden modern-scroll">
-    
-
-      {/* Horizontal scroll ONLY inside this div */}
-      <div className="flex gap-4 overflow-auto pb-2">
-        {tips.map((data) => (
-          <div
+    <section className="py-8">
+      <div className="flex gap-6 overflow-x-auto pb-8 snap-x no-scrollbar">
+        {tips.map((data, index) => (
+          <motion.div
             key={data.id}
-            className=" shrink-0 rounded-lg overflow-hidden"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+            viewport={{ once: true }}
+            className="flex-none w-72 snap-start group"
           >
-            <Image
-              src={data.img}
-              alt={data.title}
-              width={220}
-              height={140}
-              className="object-cover"
-            />
-            <div>
-              <p className='text-sm py-2 text-gray-600'>{data.title}</p>
+            {/* Main Card */}
+            <div className="relative aspect-[4/5] rounded-[2.5rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 overflow-hidden">
+              {/* Image Header */}
+              <div className="relative h-[65%] overflow-hidden">
+                <Image
+                  src={data.img}
+                  alt={data.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-60" />
+                
+                {/* Float Category */}
+                <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 bg-white/40 backdrop-blur-md rounded-xl border border-white/20 text-[10px] font-black uppercase tracking-widest text-slate-800">
+                  <Zap size={10} className="text-amber-500 fill-amber-500" />
+                  {data.category}
+                </div>
+              </div>
+
+              {/* Content Box */}
+              <div className="absolute bottom-0 inset-x-0 p-6 pt-0">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="flex items-center gap-1 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                    <Heart size={10} className="text-red-500" />
+                    Medically Reviewed
+                  </span>
+                </div>
+                <h4 className="font-black text-slate-800 text-base leading-snug tracking-tight uppercase group-hover:text-blue-600 transition-colors">
+                  {data.title}
+                </h4>
+                
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">{data.read} read</span>
+                  <button className="flex items-center gap-1.5 text-[11px] font-black text-blue-600 uppercase tracking-tighter group-active:translate-x-2 transition-transform">
+                    Explore <ArrowRight size={14} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Action Hover */}
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="p-2 bg-blue-600 text-white rounded-xl shadow-lg ring-4 ring-blue-500/10">
+                  <Heart size={14} />
+                </div>
+              </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
+
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   )
 }

@@ -71,6 +71,7 @@ const AdminDoctor = () => {
         },
       });
       setResponse(res?.data?.getData || []);
+      console.log('doctor error is in:',res?.data?.getData)
       setCount(res?.data?.pagination?.totalPage || "");
     } catch (err) {
       console.error(err);
@@ -100,7 +101,7 @@ const AdminDoctor = () => {
     try {
       setIsDeleting(true);
 
-      const res = await api.delete(`/doctor-delete/${deleteId}`, {
+      const res = await api.delete(`/doctor/delDoctor/${deleteId}`, {
         headers: {
           Authorization: `Bearer ${session.token}`,
         },
@@ -118,6 +119,7 @@ const AdminDoctor = () => {
       );
     } finally {
       setIsDeleting(false);
+      getDoctor();
     }
   };
 
@@ -218,7 +220,7 @@ const AdminDoctor = () => {
                         </span>
 
                         <button
-                          onClick={() => setDeleteId(items._id)}
+                          onClick={() => setDeleteId(items.id)}
                           className="p-2 text-gray-400 text-red-500 bg-red-50 cursor-pointer rounded-lg transition-all"
                         >
                           <X size={18} />

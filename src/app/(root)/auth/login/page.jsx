@@ -6,7 +6,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { getSession, signIn, useSession } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { zScehma } from "@/lib/zodSchema";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";

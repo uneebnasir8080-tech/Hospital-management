@@ -1,59 +1,63 @@
 "use client";
-import Image from "next/image";
 import React from "react";
-import { IoSpeedometer } from "react-icons/io5";
-import { BsFillPeopleFill } from "react-icons/bs";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { IoPersonSharp } from "react-icons/io5";
-import { LuMessageSquareMore } from "react-icons/lu";
-import { BiSolidSchool } from "react-icons/bi";
-import { MdOutlineInventory2 } from "react-icons/md";
-import { IoIosLogOut, IoMdSettings } from "react-icons/io";
+import Image from "next/image";
+import {
+  LayoutDashboard,
+  Users,
+  CalendarCheck,
+  UserRound,
+  MessageSquare,
+  Package,
+  Settings,
+  LogOut,
+  X,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useStore } from "@/store/store";
 import { signOut } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const logo = [
   {
     id: 1,
-    icon: <IoSpeedometer />,
+    icon: <LayoutDashboard size={20} />,
     link: "/admin/dashboard",
     title: "Dashboard",
   },
   {
     id: 2,
-    icon: <BsFillPeopleFill />,
+    icon: <Users size={20} />,
     link: "/admin/patient",
     title: "Patients",
   },
   {
     id: 3,
-    icon: <IoDocumentTextOutline />,
+    icon: <CalendarCheck size={20} />,
     link: "/admin/appointment",
     title: "Appointments",
   },
   {
     id: 4,
-    icon: <IoPersonSharp />,
+    icon: <UserRound size={20} />,
     link: "/admin/doctors",
-    title: "Doctors",
+    title: "Doctors ",
   },
   {
     id: 5,
-    icon: <LuMessageSquareMore />,
+    icon: <MessageSquare size={20} />,
     link: "/admin/message",
-    title: "Messages",
+    title: "Communication",
   },
-  
   {
     id: 6,
-    icon: <MdOutlineInventory2 />,
+    icon: <Package size={20} />,
     link: "/admin/inventory",
-    title: "Medicine Inventory",
+    title: "Pharmacy",
   },
   {
     id: 7,
-    icon: <IoMdSettings />,
+    icon: <Settings size={20} />,
     link: "/admin/setting",
     title: "Settings",
   },
@@ -63,87 +67,147 @@ const AdminSidebar = () => {
   const pathname = usePathname();
   const sideBar = useStore((state) => state.sideBar);
   const open = useStore((state) => state.openSideBar);
+
   const handleLogout = async () => {
     await signOut({
       redirect: true,
       callbackUrl: "/auth/login",
     });
   };
+
   return (
     <>
-      {sideBar && (
-        <div
-          className={`min-h-screen  min-w-45 fixed bg-white  transform transition-transform duration-300 ease-in-out
-          ${sideBar ? "translate-x-0" : "-translate-x-full"}`}
-        >
-          <p
-            className="text-end px-4 py-1 font-bold cursor-pointer"
-            onClick={open}
-          >
-            X
+      <AnimatePresence>
+        {sideBar && (
+          <div className="fixed inset-0 z-[60] lg:hidden">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={open}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            />
+
+            {/* Mobile Drawer */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="absolute left-0 top-0 bottom-0 w-[280px] bg-white shadow-2xl overflow-hidden flex flex-col"
+            >
+              <div className="p-6 flex items-center justify-between border-b border-gray-50">
+                <Image
+                  src="jhc.svg"
+                  height={32}
+                  width={120}
+                  alt="logo"
+                  className="object-contain"
+                />
+                <button
+                  onClick={open}
+                  className="p-2 hover:bg-gray-100 rounded-xl transition-all"
+                >
+                  <X size={20} className="text-gray-500" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4 space-y-2 py-6">
+                {logo.map((data) => {
+                  const isActive = pathname.startsWith(data.link);
+                  return (
+                    <a
+                      key={data.id}
+                      href={data.link}
+                      className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold transition-all ${
+                        isActive
+                          ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                          : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
+                    >
+                      {data.icon}
+                      <span className="text-sm tracking-tight">
+                        {data.title}
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+
+              <div className="p-6 border-t border-gray-50">
+                <button
+                  onClick={handleLogout}
+                  className="flex w-full items-center gap-4 px-4 py-3.5 rounded-2xl text-red-500 font-bold hover:bg-red-50 transition-all"
+                >
+                  <LogOut size={20} />
+                  <span className="text-sm tracking-tight">
+                    System Sign Out
+                  </span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Persistent Sidebar */}
+      <div className="hidden md:flex flex-col w-[260px] lg:w-[300px] h-screen bg-white border-r border-gray-100/80 sticky top-0 shadow-[4px_0_24px_-4px_rgba(0,0,0,0.02)]">
+        {/* Header */}
+        <Link href='/admin/dashboard'>
+        <div className="h-27 flex items-center py-3 px-1">
+          <Image
+            src="/jhc.svg"
+            height={100}
+            width={250}
+            alt="logo"
+            className="object-cover"
+          />
+        </div>
+        </Link>
+        {/* Navigation */}
+        <div className="flex-1 overflow-y-auto px-6 space-y-2 py-4 modern-scroll">
+          <p className="px-4 text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.2em] mb-4">
+            Main Management
           </p>
-          {/* img  */}
-          <div className="h-10 flex items-center pl-1">
-            <div className="h-10">
-              <Image src="/logo.png" height={20} width={150} alt="logo" />
-            </div>
-          </div>
-          {/* icons  */}
-          <div className="space-y-4 lg:space-y-3 mt-5">
-            {logo.map((data, index) => {
-              const isActive = pathname.startsWith(data.link);
-              return (
-                <div key={index}>
-                  <a
-                    href={data.link}
-                    className={`text-sm lg:text-[16px] py-2 px-3 ${
-                      isActive
-                        ? "text-[#3497F9] bg-blue-100 border-l-4 border-blue-500"
-                        : "text-gray-500 hover:bg-gray-300"
-                    }  flex items-center gap-3 font-medium cursor-pointer`}
-                  >
-                    <p className="text-lg">{data.icon}</p>
-                    <p>{data.title}</p>
-                  </a>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* screen  */}
-
-      <div className="min-h-screen hidden md:min-w-45 lg:min-w-50 xl:min-w-66 md:flex justify-between flex-col">
-        {/* img  */}
-        <div className="h-20 flex items-center pl-2">
-          <div className="h-10">
-            <Image src="/logo.png" height={20} width={150} alt="logo" />
-          </div>
-        </div>
-        {/* icons  */}
-        <div className="space-y-4 lg:space-y-3 mt-5 flex-1">
-          {logo.map((data, index) => {
+          {logo.map((data) => {
             const isActive = pathname.startsWith(data.link);
             return (
-              <div key={index}>
-                <a
-                  href={data.link}
-                  className={`text-sm lg:text-[16px] py-2 px-3 ${
-                    isActive
-                      ? "text-[#3497F9] bg-blue-100 border-l-6 rounded-l-xl border-blue-600"
-                      : "text-gray-500 hover:bg-gray-300"
-                  }  flex items-center gap-3 font-medium cursor-pointer`}
+              <a
+                key={data.id}
+                href={data.link}
+                className={`relative flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all group ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-xl shadow-blue-500/25"
+                    : "text-gray-500 hover:bg-blue-50/50 hover:text-blue-600"
+                }`}
+              >
+                {/* Active Glow */}
+                {isActive && (
+                  <div className="absolute -left-6 w-1 rounded-r-full h-8 bg-blue-600" />
+                )}
+                <div
+                  className={`transition-transform group-hover:scale-110 duration-300 ${isActive ? "text-white" : "text-gray-400 group-hover:text-blue-500"}`}
                 >
-                  <p className="text-lg">{data.icon}</p>
-                  <p>{data.title}</p>
-                </a>
-              </div>
+                  {data.icon}
+                </div>
+                <span className="text-[15px] tracking-tight">{data.title}</span>
+              </a>
             );
           })}
         </div>
-        <div className="h-20 pl-3">
-          <button className="flex gap-2 items-center text-xl text-gray-600 cursor-pointer" onClick={handleLogout}><IoIosLogOut /> Logout</button>
+
+        {/* Footer */}
+        <div className="p-6 border-t border-gray-50/80">
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 font-bold hover:text-red-500 hover:bg-red-50/50 transition-all group"
+          >
+            <div className="transition-transform group-hover:-translate-x-1 duration-300">
+              <LogOut size={22} />
+            </div>
+            <span className="text-[15px] tracking-tight">Logout</span>
+          </button>
         </div>
       </div>
     </>

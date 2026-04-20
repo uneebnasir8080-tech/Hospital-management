@@ -1,0 +1,55 @@
+<svg width="100%" viewBox="0 0 680 220" role="img" xmlns="http://www.w3.org/2000/svg" style="">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">JHC Hospital Management System Horizontal Logo</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Horizontal logo for JHC Hospital Management System with shield emblem on the left and text on the right</desc>
+
+  <defs>
+    <linearGradient id="shieldGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#185FA5"/>
+      <stop offset="100%" stop-color="#042C53"/>
+    </linearGradient>
+    <linearGradient id="crossGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5DCAA5"/>
+      <stop offset="100%" stop-color="#1D9E75"/>
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#378ADD"/>
+      <stop offset="100%" stop-color="#0F6E56"/>
+    </linearGradient>
+  </defs>
+
+  <!-- === LEFT: Emblem === -->
+  <!-- Outer ring -->
+  <circle cx="110" cy="110" r="95" fill="none" stroke="url(#ringGrad)" stroke-width="2.5" opacity="0.35" style="fill:none;color:rgb(255, 255, 255);stroke-width:2.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.35;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <circle cx="110" cy="110" r="86" fill="none" stroke="url(#ringGrad)" stroke-width="1" opacity="0.2" style="fill:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.2;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Shield -->
+  <path d="M110 30 L175 58 L175 118 Q175 163 110 192 Q45 163 45 118 L45 58 Z" fill="url(#shieldGrad)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Shield inner border -->
+  <path d="M110 41 L166 66 L166 118 Q166 157 110 182 Q54 157 54 118 L54 66 Z" fill="none" stroke="#5DCAA5" stroke-width="1.5" opacity="0.45" style="fill:none;stroke:rgb(93, 202, 165);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.45;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Medical Cross - vertical -->
+  <rect x="98" y="72" width="24" height="72" rx="3.5" fill="url(#crossGrad)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <!-- Medical Cross - horizontal -->
+  <rect x="74" y="96" width="72" height="24" rx="3.5" fill="url(#crossGrad)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Pulse line -->
+  <polyline points="56,152 64,152 70,143 77,161 83,148 90,152 130,152 136,143 143,161 149,148 156,152 164,152" fill="none" stroke="#5DCAA5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.8" style="fill:none;stroke:rgb(93, 202, 165);color:rgb(255, 255, 255);stroke-width:1.8px;stroke-linecap:round;stroke-linejoin:round;opacity:0.8;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- === DIVIDER === -->
+  <rect x="222" y="38" width="1.5" height="144" rx="1" fill="#378ADD" opacity="0.35" style="fill:rgb(55, 138, 221);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.35;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- === RIGHT: Text block === -->
+  <!-- JHC -->
+  <text x="248" y="96" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="700" letter-spacing="8" fill="#042C53" style="fill:rgb(4, 44, 83);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Georgia, &quot;Times New Roman&quot;, serif;font-size:62px;font-weight:700;text-anchor:start;dominant-baseline:auto">JHC</text>
+
+  <!-- Thin rule under JHC -->
+  <rect x="248" y="108" width="400" height="1.2" rx="1" fill="#378ADD" opacity="0.4" style="fill:rgb(55, 138, 221);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.4;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Hospital Management System -->
+  <text x="250" y="133" font-family="Georgia, 'Times New Roman', serif" font-size="17" font-weight="400" letter-spacing="4" fill="#185FA5" style="fill:rgb(24, 95, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Georgia, &quot;Times New Roman&quot;, serif;font-size:17px;font-weight:400;text-anchor:start;dominant-baseline:auto">HOSPITAL MANAGEMENT SYSTEM</text>
+
+  <!-- Tagline -->
+  <text x="251" y="160" font-family="Georgia, 'Times New Roman', serif" font-size="11.5" font-weight="400" letter-spacing="1.5" fill="#1D9E75" font-style="italic" opacity="0.9" style="fill:rgb(29, 158, 117);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.9;font-family:Georgia, &quot;Times New Roman&quot;, serif;font-size:11.5px;font-weight:400;font-style:italic;text-anchor:start;dominant-baseline:auto">Caring with Excellence · Powered by Technology</text>
+
+</svg>
