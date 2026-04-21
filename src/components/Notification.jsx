@@ -25,6 +25,7 @@ const Notification = ({ onClose }) => {
         },
       });
 
+
       const response = res?.data?.getData?.appointment || [];
 
       // ✅ Filter pending
@@ -36,6 +37,7 @@ const Notification = ({ onClose }) => {
       const sorted = filtered.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
+
 
       setResData(sorted);
     } catch (err) {
@@ -61,7 +63,7 @@ const Notification = ({ onClose }) => {
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 bg-black/90 z-150 flex items-center"
+      className="fixed inset-0 bg-black/40 z-150 h-screen flex items-center"
     >
       <Card
         className="flex sm:mx-auto w-130 mx-5"

@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { Card, CardContent } from "./ui/card";
 import { Settings, Activity, History, CreditCard, ChevronRight, X, Shield, Bell } from "lucide-react";
 import PaymentHistory from "./PaymentHistory";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,14 +16,15 @@ const ProfileModal = ({ onClose }) => {
   ];
 
   return (
-    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-150 h-screen flex items-center justify-center bg-slate-900/20 ">
+      
       {/* Backdrop */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
+        className="absolute inset-0 backdrop-blur-md"
       />
 
       <AnimatePresence mode="wait">
@@ -34,14 +34,18 @@ const ProfileModal = ({ onClose }) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl border border-white/20 overflow-hidden"
+            transition={{ duration: 0.25 }}
             onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl border border-white/20"
           >
             <div className="p-8">
+              
               {/* Header */}
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-black text-slate-800 tracking-tighter uppercase">Menu</h2>
-                <button 
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-2xl font-black text-slate-800 tracking-tighter uppercase">
+                  Menu
+                </h2>
+                <button
                   onClick={onClose}
                   className="p-2 hover:bg-slate-100 rounded-xl text-slate-400 transition-colors"
                 >
@@ -50,7 +54,7 @@ const ProfileModal = ({ onClose }) => {
               </div>
 
               {/* Menu Items */}
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {menuItems.map((item, idx) => (
                   <button
                     key={idx}
@@ -61,9 +65,11 @@ const ProfileModal = ({ onClose }) => {
                       <div className={`p-3 ${item.bg} ${item.color} rounded-xl transition-transform group-hover:scale-110`}>
                         {item.icon}
                       </div>
-                      <span className="font-bold text-slate-700 uppercase tracking-widest text-xs">{item.label}</span>
+                      <span className="font-bold text-slate-700 uppercase tracking-widest text-xs">
+                        {item.label}
+                      </span>
                     </div>
-                    
+
                     <div className="flex items-center gap-3 relative z-10">
                       {item.count && (
                         <span className="bg-slate-900 text-white text-[10px] font-black px-2 py-0.5 rounded-md">
@@ -73,29 +79,38 @@ const ProfileModal = ({ onClose }) => {
                       <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-600 transform group-hover:translate-x-1 transition-all" />
                     </div>
 
-                    {/* Hover Effect Background */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 ))}
               </div>
 
               {/* Footer */}
-              <div className="mt-10 pt-8 border-t border-slate-100 flex items-center justify-between">
+              <div className="pt-8 mt-6 border-t border-slate-100 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
                     <CreditCard size={18} />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Subscription</p>
-                    <p className="text-xs font-black text-slate-800 uppercase">Premium Member</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                      Subscription
+                    </p>
+                    <p className="text-xs font-black text-slate-800 uppercase">
+                      Premium Member
+                    </p>
                   </div>
                 </div>
-                <button className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] hover:text-slate-900 transition-colors">Manage Plan</button>
+                <button className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] hover:text-slate-900 transition-colors">
+                  Manage Plan
+                </button>
               </div>
             </div>
           </motion.div>
         ) : (
-          <PaymentHistory key="history" onOpen={() => setCurrentView("menu")} onClose={onClose} />
+          <PaymentHistory
+            key="history"
+            onOpen={() => setCurrentView("menu")}
+            onClose={onClose}
+          />
         )}
       </AnimatePresence>
     </div>
@@ -103,4 +118,3 @@ const ProfileModal = ({ onClose }) => {
 };
 
 export default ProfileModal;
-

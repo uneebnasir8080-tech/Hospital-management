@@ -129,7 +129,7 @@ const ProfileUpdate = ({ response, onClose }) => {
     }
   };
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-9999 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -155,7 +155,7 @@ const ProfileUpdate = ({ response, onClose }) => {
             <p className="text-sm text-gray-500 mt-1">Refine your professional appearance and details.</p>
           </div>
 
-          <div className="overflow-y-auto px-8 py-4 modern-scroll flex-grow">
+          <div className="overflow-y-auto px-8 py-4 modern-scroll grow">
             <form
               className="space-y-8"
               onSubmit={form.handleSubmit(handleOnSubmit)}
@@ -265,10 +265,10 @@ const ProfileUpdate = ({ response, onClose }) => {
                           Gender
                         </label>
                         <Select onValueChange={field.onChange} value={field.value}>
-                          <SelectTrigger className="w-full h-[54px] px-4 bg-gray-50/50 border border-gray-200 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all text-gray-700 font-medium">
+                          <SelectTrigger className="w-full h-13.5 px-4 bg-gray-50/50 border border-gray-200 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all text-gray-700 font-medium">
                             <SelectValue placeholder="Select Gender" />
                           </SelectTrigger>
-                          <SelectContent className="rounded-2xl border-gray-100 shadow-xl z-[10000]">
+                          <SelectContent className="rounded-2xl border-gray-100 shadow-xl z-10000">
                             <SelectItem value="male">Male</SelectItem>
                             <SelectItem value="female">Female</SelectItem>
                             <SelectItem value="other">Other</SelectItem>

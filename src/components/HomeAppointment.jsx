@@ -115,7 +115,7 @@ const HomeAppointment = () => {
               transition={{ delay: index * 0.1 }}
             >
               <Card className="group relative border-none bg-white hover:bg-slate-50 transition-all duration-300 rounded-[2rem] shadow-sm hover:shadow-xl hover:shadow-blue-500/5 ring-1 ring-slate-100 overflow-hidden">
-                <CardContent className="flex items-center gap-6 p-5">
+                <CardContent className="flex items-center gap-6 py-1 px-4">
                   {/* Doctor Image */}
                   <div className="relative w-20 h-20 shrink-0">
                     <div className="absolute inset-0 bg-blue-600/10 rounded-2xl group-hover:scale-95 transition-transform" />

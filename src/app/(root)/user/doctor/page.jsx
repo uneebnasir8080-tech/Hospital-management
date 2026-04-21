@@ -23,13 +23,13 @@ const DoctorPage = () => {
               <Sparkles size={18} className="animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-[0.3em]">Specialized Care</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-800 tracking-tighter uppercase leading-none">
+            <h1 className="text-3xl md:text-4xl font-black text-slate-800 tracking-tighter uppercase leading-none">
               Doctor <span className="text-blue-600">Registry</span>
             </h1>
           </div>
 
           {/* Tab Switcher */}
-          <div className="flex bg-slate-100 p-1.5 rounded-[1.5rem] self-start md:self-auto">
+          <div className="flex bg-slate-100 p-1 rounded-[1.5rem] self-start md:self-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isSelected = isActive === tab.id;
@@ -38,7 +38,7 @@ const DoctorPage = () => {
                   key={tab.id}
                   onClick={() => setIsActive(tab.id)}
                   className={`
-                    flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all relative
+                    flex items-center gap-2 px-6 py-2 rounded-2xl text-xs font-black uppercase tracking-widest transition-all relative
                     ${isSelected ? "text-white" : "text-slate-400 hover:text-slate-600"}
                   `}
                 >

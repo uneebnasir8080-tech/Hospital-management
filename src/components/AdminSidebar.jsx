@@ -99,7 +99,7 @@ const AdminSidebar = () => {
             >
               <div className="p-6 flex items-center justify-between border-b border-gray-50">
                 <Image
-                  src="jhc.svg"
+                  src="/jhc.svg"
                   height={32}
                   width={120}
                   alt="logo"

@@ -14,9 +14,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useStore } from "@/store/store";
+import Image from "next/image";
 
 const SidebarContent = ({ openSideBar, pathName, menuItems, handleLogout }) => (
-  <div className="bg-slate-50 w-64 lg:w-72 h-screen border-r border-slate-200/60 p-4 md:p-6 flex flex-col relative z-50">
+  <div className="bg-slate-50 h-screen border-r border-slate-200/60  flex flex-col relative z-50">
     {/* Mobile Close Button */}
     <button 
       onClick={openSideBar}
@@ -33,17 +34,21 @@ const SidebarContent = ({ openSideBar, pathName, menuItems, handleLogout }) => (
         animate={{ opacity: 1, x: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-500/30">
-          <img src="/logo.png" alt="logo" className="h-6 w-6 invert brightness-0" />
-        </div>
-        <span className="font-black text-xl tracking-tighter text-slate-800">
-          MED<span className="text-blue-600">CORE</span>
-        </span>
+       <div className="h-20 flex items-center py-1 px-1">
+                 <Image
+                   src="/jhc.svg"
+                   height={100}
+                   width={250}
+                   alt="logo"
+                   className="object-cover"
+                 />
+               </div>
+       
       </motion.a>
     </div>
 
     {/* Navigation Section */}
-    <nav className="flex-1 space-y-2">
+    <nav className="flex-1 space-y-8 px-2 ">
       {menuItems.map((item, index) => {
         const Icon = item.icon;
         const isActive = pathName.startsWith(item.path);
@@ -93,6 +98,10 @@ const SidebarContent = ({ openSideBar, pathName, menuItems, handleLogout }) => (
   </div>
 );
 
+
+
+// desktop 
+
 const Sidebar = () => {
   const pathName = usePathname(); 
   const router = useRouter();
@@ -112,7 +121,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <>
+    <div className="">
       {/* Desktop Sidebar */}
       <div className="hidden md:block shrink-0">
         <SidebarContent 
@@ -151,7 +160,7 @@ const Sidebar = () => {
           </div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 };
 
