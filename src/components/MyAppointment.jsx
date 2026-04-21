@@ -45,7 +45,7 @@ const MyAppointment = () => {
     } finally {
       setLoading(false);
     }
-  }, [session]);
+  }, [session?.token]);
 
   useEffect(() => {
     if (status === "authenticated") {
