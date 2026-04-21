@@ -139,8 +139,8 @@ const AdminPatient = ({ refresh }) => {
           <DatePicker />
         </div>
       </div>
-
-      <div className="w-full overflow-x-auto modern-scroll bg-white rounded-md shadow-sm border border-gray-100 max-h-[60vh] overflow-y-auto">
+{/* max-h-[60vh]. deleted  */}
+      <div className="w-full overflow-x-auto modern-scroll bg-white rounded-md shadow-sm border border-gray-100  overflow-y-auto">
         <div className="min-w-225">
           {/* Table Header */}
           <div className="grid grid-cols-7 border-b font-medium text-xs lg:text-[15px] text-gray-700">
