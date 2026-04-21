@@ -78,7 +78,7 @@ const AdminNewAppoint = ({ refresh }) => {
     } finally {
       setLoading(false);
     }
-  }, [session, page, limit]);
+  }, [session?.token, page, limit]);
 
     useEffect(() => {
     if (status === "authenticated") {
