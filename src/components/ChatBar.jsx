@@ -56,7 +56,7 @@ const ChatBar = () => {
       {/* Header */}
       <div className="p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-black text-slate-800 tracking-tighter uppercase">Messages</h2>
+          <h2 className="text-xl font-black text-slate-800 tracking-tighter uppercase">Messages</h2>
           <button className="p-2 hover:bg-slate-100 rounded-xl text-slate-400 transition-colors">
             <MoreVertical size={20} />
           </button>
@@ -91,11 +91,11 @@ const ChatBar = () => {
               >
                 {/* Avatar Wrapper */}
                 <div className="relative shrink-0">
-                  <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 border-2 border-white shadow-sm">
+                  <div className="w-12 h-12 rounded-2xl overflow-hidden bg-slate-100 border-2 border-white shadow-sm">
                     <Image
                       src={user.img}
-                      width={56}
-                      height={56}
+                      width={50}
+                      height={50}
                       alt={user.title}
                       className="object-cover transition-transform group-hover:scale-110"
                     />
@@ -108,20 +108,20 @@ const ChatBar = () => {
                 {/* Info */}
                 <div className="flex-1 min-w-0 py-1">
                   <div className="flex justify-between items-start mb-1">
-                    <h3 className="font-black text-slate-800 text-sm truncate uppercase tracking-tight group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-black text-slate-800 text-xs truncate uppercase tracking-tight group-hover:text-blue-600 transition-colors">
                       {user.title}
                     </h3>
-                    <span className="text-[10px] font-bold text-slate-300 uppercase shrink-0">
+                    <span className="text-[9px] font-bold text-slate-300 uppercase shrink-0">
                       {user.time}
                     </span>
                   </div>
                   
                   <div className="flex justify-between items-center">
-                    <p className={`text-xs font-medium truncate ${user.unread > 0 ? "text-slate-900 font-bold" : "text-slate-400"}`}>
+                    <p className={`text-[10px] font-medium truncate ${user.unread > 0 ? "text-slate-900 font-bold" : "text-slate-400"}`}>
                       {user.lastMsg}
                     </p>
                     {user.unread > 0 ? (
-                      <span className="bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md min-w-[18px] text-center">
+                      <span className="bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md min-w-4.5 text-center">
                         {user.unread}
                       </span>
                     ) : (

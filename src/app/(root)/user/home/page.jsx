@@ -6,28 +6,28 @@ import { ArrowRight, Activity, Calendar, ShieldCheck } from "lucide-react";
 
 const HomePage = () => {
   return (
-    <div className="p-6 md:p-10 space-y-12">
+    <div className="p-4 md:p-6 space-y-12 ">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-[3rem] bg-gradient-to-r from-blue-600 to-indigo-700 p-8 md:p-12 text-white shadow-2xl shadow-blue-500/20">
+      <section className="relative overflow-hidden rounded-[3rem] bg-linear-to-r from-blue-500 to-indigo-700 p-6 md:p-8 text-white shadow-2xl shadow-blue-500/20">
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4">
             <ShieldCheck size={14} className="text-blue-200" />
             Empowering Your Health
           </div>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.9] mb-6 uppercase">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-[0.9] mb-4 uppercase">
             Your Premium <br />
             <span className="text-blue-200">Wellness HUB</span>
           </h1>
-          <p className="text-blue-100/80 font-bold text-base md:text-lg mb-8 max-w-md leading-relaxed">
+          <p className="text-blue-100/80 font-bold text-base md:text-sm mb-6 max-w-md leading-relaxed">
             Manage appointments, track medications, and explore expert health tips—all in one futuristic interface.
           </p>
           <div className="flex flex-wrap gap-4">
-            <a href="/user/doctor" className="px-8 py-4 bg-white text-blue-600 font-black text-xs uppercase tracking-widest rounded-2xl shadow-xl hover:bg-blue-50 transition-all flex items-center gap-2">
+            <a href="/user/doctor" className="px-6 py-3 bg-white text-blue-600 font-black text-[11px] uppercase tracking-widest rounded-2xl shadow-xl hover:bg-blue-50 transition-all flex items-center gap-2">
               Book Appointment <ArrowRight size={16} />
             </a>
             <div className="flex -space-x-3 items-center pl-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-blue-500 bg-blue-400 overflow-hidden ring-4 ring-blue-600/20">
+                <div key={i} className="w-9 h-9 rounded-full border-2 border-blue-500 bg-blue-400 overflow-hidden ring-4 ring-blue-600/20">
                   <img src={`/doc${i}.png`} alt="" className="w-full h-full object-cover" />
                 </div>
               ))}

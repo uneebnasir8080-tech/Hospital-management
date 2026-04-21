@@ -5,6 +5,7 @@ import React from "react";
 import { Bell, User, Search, Menu, X } from "lucide-react";
 import Notification from "./Notification";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const Navbar = () => {
   const isOpen = useStore((state) => state.isOpen);
@@ -13,13 +14,15 @@ const Navbar = () => {
   const sideBar = useStore((state) => state.sideBar);
   const openSideBar = useStore((state) => state.openSideBar);
 
+  
+
   return (
     <motion.div 
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       className="sticky top-0 z-30 w-full bg-slate-50/80 backdrop-blur-xl border-b border-slate-200/60 h-20 px-6 md:px-10"
     >
-      <div className="flex justify-between items-center h-full max-w-[1600px] mx-auto">
+      <div className="flex justify-between items-center h-full max-w-400 mx-auto">
         {/* Mobile Menu Toggle */}
         <button 
           onClick={openSideBar}
@@ -56,6 +59,7 @@ const Navbar = () => {
             href="/user/profile"
             className="flex items-center gap-3 p-1.5 pr-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-all active:scale-95"
           >
+          
             <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
               <User size={20} />
             </div>

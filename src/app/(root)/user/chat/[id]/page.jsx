@@ -38,19 +38,19 @@ const ChatId = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] bg-slate-50/50 relative overflow-hidden">
       {/* Immersive Header */}
-      <div className="bg-white/80 backdrop-blur-md border-b border-slate-100 p-4 md:p-6 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+      <div className="bg-white/80 backdrop-blur-md border-b border-slate-100 p-4 md:p-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="w-12 h-12 rounded-2xl overflow-hidden bg-blue-50 border-2 border-white shadow-md">
+            <div className="w-10 h-10 rounded-2xl overflow-hidden bg-blue-50 border-2 border-white shadow-md">
               <Image src="/doc1.png" fill className="object-cover" alt="Doctor" />
             </div>
             <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full shadow-sm" />
           </div>
           <div>
-            <h3 className="font-black text-slate-800 text-sm md:text-base uppercase tracking-tight">Dr. John Paulliston</h3>
+            <h3 className="font-black text-slate-800 text-sm md:text-sm uppercase tracking-tight">Dr. John Paulliston</h3>
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-              <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest leading-none">Online now</p>
+              <p className="text-[9px] font-black text-emerald-600 uppercase tracking-widest leading-none">Online now</p>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ const ChatId = () => {
             >
               <div className={`flex flex-col max-w-[80%] md:max-w-[65%] ${m.sender === "user" ? "items-end" : "items-start"}`}>
                 <div className={`
-                  p-4 md:p-5 rounded-[2rem] text-sm font-bold leading-relaxed shadow-sm
+                 p-3 rounded-[2rem] text-[12px] font-bold leading-relaxed shadow-sm
                   ${m.sender === "user" 
                     ? "bg-slate-900 text-white rounded-tr-none shadow-slate-200" 
                     : "bg-white text-slate-700 rounded-tl-none border border-slate-100"}
@@ -105,9 +105,9 @@ const ChatId = () => {
       </div>
 
       {/* Input Area */}
-      <div className="p-6 bg-transparent sticky bottom-0 z-10">
-        <div className="max-w-4xl mx-auto flex items-center gap-3 bg-white border border-slate-100 p-2.5 rounded-[2.5rem] shadow-2xl shadow-slate-200/60 focus-within:ring-4 focus-within:ring-blue-500/5 transition-all">
-          <button className="p-3 hover:bg-slate-50 text-slate-400 hover:text-blue-600 rounded-full transition-all shrink-0">
+      <div className="p-2 bg-transparent sticky bottom-0 z-10">
+        <div className="max-w-4xl mx-auto flex items-center gap-3 bg-white border border-slate-100 p-1.5 rounded-[2.5rem] shadow-2xl shadow-slate-200/60 focus-within:ring-4 focus-within:ring-blue-500/5 transition-all">
+          <button className="p-2 hover:bg-slate-50 text-slate-400 hover:text-blue-600 rounded-full transition-all shrink-0">
             <Paperclip size={20} />
           </button>
           
@@ -129,7 +129,7 @@ const ChatId = () => {
             </button>
             <button 
               onClick={handleSend}
-              className="p-3.5 bg-blue-600 hover:bg-slate-900 text-white rounded-full transition-all shadow-lg active:scale-95 group"
+              className="p-2.5 bg-blue-600 hover:bg-slate-900 text-white rounded-full transition-all shadow-lg active:scale-95 group"
             >
               <Send size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>

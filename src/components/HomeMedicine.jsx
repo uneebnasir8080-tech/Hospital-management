@@ -8,7 +8,7 @@ const medicine = [
   {
     id: 1,
     img: "/med1.png",
-    title: "Prescription Drugs",
+    title: "Prescription",
     subtitle: "Verified pharmacy stock",
     icon: ShoppingBag,
     color: "from-blue-500 to-indigo-600"
@@ -54,14 +54,14 @@ const HomeMedicine = () => {
             className="group relative h-48 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 overflow-hidden"
           >
             {/* Background Pattern */}
-            <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${data.color} opacity-10 rounded-bl-[4rem] group-hover:scale-[2.5] transition-transform duration-700`} />
+            <div className={`absolute top-0 right-0 w-24 h-24 bg-linear-to-br ${data.color} opacity-10 rounded-bl-[4rem] group-hover:scale-[2.5] transition-transform duration-700`} />
             
-            <div className="relative h-full p-8 flex flex-col justify-between z-10">
+            <div className="relative h-full px-8 py-6 flex flex-col justify-between z-10">
               <div>
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${data.color} flex items-center justify-center text-white shadow-lg shadow-blue-500/20 mb-4 group-hover:scale-110 transition-transform`}>
+                <div className={`w-11 h-11 rounded-2xl bg-linear-to-br ${data.color} flex items-center justify-center text-white shadow-lg shadow-blue-500/20 mb-4 group-hover:scale-110 transition-transform`}>
                   <Icon size={24} />
                 </div>
-                <h3 className="font-black text-slate-800 text-lg tracking-tight leading-tight uppercase underline-offset-4 decoration-blue-500/30 group-hover:underline">
+                <h3 className="font-black text-slate-800 text-md tracking-tight leading-tight uppercase underline-offset-4 decoration-blue-500/30 group-hover:underline">
                   {data.title}
                 </h3>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">

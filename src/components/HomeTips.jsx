@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Heart, ArrowRight, Zap } from 'lucide-react'
@@ -15,6 +15,13 @@ const tips = [
 ]
 
 const HomeTips = () => {
+
+const [mounted, setMounted] = useState(false);
+
+useEffect(() => {
+  setMounted(true);
+}, []);
+  
   return (
     <section className="py-8">
       <div className="flex gap-6 overflow-x-auto pb-8 snap-x no-scrollbar">
@@ -28,16 +35,20 @@ const HomeTips = () => {
             className="flex-none w-72 snap-start group"
           >
             {/* Main Card */}
-            <div className="relative aspect-[4/5] rounded-[2.5rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 overflow-hidden">
+            <div className="relative h-80 w-full rounded-[2.5rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 overflow-hidden">
               {/* Image Header */}
-              <div className="relative h-[65%] overflow-hidden">
+              <div className="relative h-[50%] overflow-hidden">
+                 {mounted && data.img && (
                 <Image
                   src={data.img}
                   alt={data.title}
                   fill
+                  sizes="100vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  priority={false}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-60" />
+              )}
+                <div className="absolute inset-0 bg-linear-to-t from-white via-transparent to-transparent opacity-60" />
                 
                 {/* Float Category */}
                 <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 bg-white/40 backdrop-blur-md rounded-xl border border-white/20 text-[10px] font-black uppercase tracking-widest text-slate-800">
@@ -77,15 +88,7 @@ const HomeTips = () => {
         ))}
       </div>
 
-      <style jsx global>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
+     
     </section>
   )
 }

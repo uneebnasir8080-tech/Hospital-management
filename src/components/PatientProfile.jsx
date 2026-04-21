@@ -43,26 +43,7 @@ const PatientProfile = ({ response, onClose }) => {
   const [preview, setPreview] = useState(null);
   const router = useRouter();
 
-  // const formSchema = zScehma.pick({ name: true }).extend({
-  //   profileImage: z
-  //     .instanceof(File)
-  //     .optional()
-  //     .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
-  //       message: "Max file size is 5MB",
-  //     })
-  //     .refine(
-  //       (file) =>
-  //         !file ||
-  //         ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
-  //           file.type,
-  //         ),
-  //       { message: "Only JPG, PNG, WEBP allowed" },
-  //     ),
-  //   age: z.string().min(1, "Age is required"),
-  //  gender: z.enum(["male", "female", "other"]).or(z.literal("")),
-  //   blood: z.string().min(1, "Blood is required"),
-  //   history: z.string().min(1, "History is required"),
-  // });
+
 
 const formSchema = useMemo(() => {
   return zScehma.pick({ name: true })
@@ -121,8 +102,8 @@ const formSchema = useMemo(() => {
       gender: response?.patient?.gender || response?.doctor?.gender || "",
       blood: response.patient?.blood || "",
       history: response.patient?.history || "",
-      experience: response?.doctor.experience || "",
-      specialization: response?.doctor.specialization || "",
+      experience: response?.doctor?.experience || "",
+      specialization: response?.doctor?.specialization || "",
       profileImage: undefined,
     });
     if (response.patient?.profile) {
@@ -179,7 +160,7 @@ const formSchema = useMemo(() => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -196,7 +177,7 @@ const formSchema = useMemo(() => {
         className="relative w-full max-w-2xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden"
       >
         {/* Header */}
-        <div className="relative h-32 bg-gradient-to-r from-blue-600 to-indigo-700 p-8 flex items-center justify-between">
+        <div className="relative h-32 bg-linear-to-r from-blue-600 to-indigo-700 p-8 flex items-center justify-between">
           <div className="flex items-center gap-4 text-white">
             <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl">
               <UserCircle2 size={28} />
@@ -336,7 +317,7 @@ const formSchema = useMemo(() => {
                         onValueChange={field.onChange}
                         value={field.value ||''}
                       >
-                        <SelectTrigger className="w-full h-[58px] px-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-700">
+                        <SelectTrigger className="w-full h-14.5 px-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-700">
                           <SelectValue placeholder="Select Gender" />
                         </SelectTrigger>
                         <SelectContent className="z-100 rounded-2xl border-slate-100 shadow-2xl">
@@ -371,7 +352,7 @@ const formSchema = useMemo(() => {
                           onValueChange={field.onChange}
                           value={field.value ||''}
                         >
-                          <SelectTrigger className="w-full h-[58px] px-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-700">
+                          <SelectTrigger className="w-full h-14.5 px-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-700">
                             <SelectValue placeholder="Group" />
                           </SelectTrigger>
                           <SelectContent className="rounded-2xl z-100 overflow-auto border-slate-100 shadow-2xl">
@@ -490,7 +471,7 @@ const formSchema = useMemo(() => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-[2] py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-500/20 transition-all active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2"
+                  className="flex-2 py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-500/20 transition-all active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <>

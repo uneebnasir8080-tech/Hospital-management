@@ -9,7 +9,14 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { showToast } from "@/lib/showToastify";
 import { motion, AnimatePresence } from "framer-motion";
-import { UserCheck, Star, Clock, ChevronRight, Loader2, Search } from "lucide-react";
+import {
+  UserCheck,
+  Star,
+  Clock,
+  ChevronRight,
+  Loader2,
+  Search,
+} from "lucide-react";
 
 const NewAppoint = () => {
   const [docId, setDocId] = useState(null);
@@ -68,9 +75,12 @@ const NewAppoint = () => {
     showToast("error", "Doctor doesn't have Schedule");
   };
 
-  const filteredDoctors = doctor.filter(d => 
-    d.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    d.doctor?.specialization?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDoctors = doctor.filter(
+    (d) =>
+      d.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      d.doctor?.specialization
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -81,8 +91,11 @@ const NewAppoint = () => {
           Select Your Specialist
         </p>
         <div className="relative w-full sm:w-64 group">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
-          <input 
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors"
+          />
+          <input
             type="text"
             placeholder="Search by name or specialty..."
             value={searchTerm}
@@ -125,15 +138,19 @@ const NewAppoint = () => {
                     onClick={() => setDocId(data?.doctor?.id)}
                     className={`
                       relative cursor-pointer transition-all duration-300 rounded-[2rem] border-2 group
-                      ${isSelected 
-                        ? "bg-blue-600 border-blue-600 shadow-xl shadow-blue-500/20" 
-                        : "bg-white border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-slate-200/50"}
+                      ${
+                        isSelected
+                          ? "bg-blue-500 border-blue-500 shadow-xl shadow-blue-500/20"
+                          : "bg-white border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-slate-200/50"
+                      }
                     `}
                   >
-                    <CardContent className="flex gap-5 items-center p-5">
+                    <CardContent className="flex gap-5 items-center px-5">
                       {/* Image Container */}
-                      <div className="relative w-24 h-24 shrink-0">
-                        <div className={`absolute inset-0 rounded-2xl ${isSelected ? "bg-white/10" : "bg-slate-100"}`} />
+                      <div className="relative w-20 h-20 shrink-0">
+                        <div
+                          className={`absolute inset-0 rounded-2xl ${isSelected ? "bg-white/10" : "bg-slate-100"}`}
+                        />
                         <Image
                           src={data?.doctor?.profile || "/doc1.png"}
                           alt="Doctor"
@@ -141,26 +158,35 @@ const NewAppoint = () => {
                           className={`rounded-2xl object-cover p-1 transition-transform group-hover:scale-110 ${isSelected ? "brightness-110" : ""}`}
                           sizes="96px"
                         />
-                        <div className="absolute -top-1 -right-1 bg-amber-400 text-[8px] font-black text-white px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-0.5">
+                        <div className="absolute -top-1 -right-1 bg-amber-400 text-[8px] font-black text-white px-1.5  rounded-full shadow-sm flex items-center gap-0.5">
                           <Star size={8} fill="white" /> 4.9
                         </div>
                       </div>
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
-                        <h1 className={`font-black text-lg capitalize truncate ${isSelected ? "text-white" : "text-slate-800"}`}>
+                        <h1
+                          className={`font-black text-lg capitalize truncate ${isSelected ? "text-white" : "text-slate-800"}`}
+                        >
                           Dr. {data?.name || "Specialist"}
                         </h1>
-                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${isSelected ? "text-blue-100" : "text-blue-600"}`}>
+                        <p
+                          className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${isSelected ? "text-blue-100" : "text-blue-600"}`}
+                        >
                           {data?.doctor?.specialization || "General Medicine"}
                         </p>
-                        
+
                         <div className="flex items-center gap-3">
-                          <div className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${isSelected ? "text-white/70" : "text-slate-400"}`}>
+                          <div
+                            className={`flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${isSelected ? "text-white/70" : "text-slate-400"}`}
+                          >
                             <Clock size={10} /> 10am - 4pm
                           </div>
                           {!isSelected && (
-                            <ChevronRight size={14} className="ml-auto text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                            <ChevronRight
+                              size={14}
+                              className="ml-auto text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all"
+                            />
                           )}
                         </div>
                       </div>
@@ -189,7 +215,11 @@ const NewAppoint = () => {
             <Loader2 className="animate-spin" size={18} />
           ) : (
             <>
-              Confirm & Continue <UserCheck size={18} className="group-hover:scale-125 transition-transform" />
+              Confirm & Continue{" "}
+              <UserCheck
+                size={18}
+                className="group-hover:scale-125 transition-transform"
+              />
             </>
           )}
         </button>
