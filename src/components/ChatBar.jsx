@@ -121,7 +121,7 @@ const ChatBar = () => {
                       {user.lastMsg}
                     </p>
                     {user.unread > 0 ? (
-                      <span className="bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md min-w-[18px] text-center">
+                      <span className="bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md min-w-4.5 text-center">
                         {user.unread}
                       </span>
                     ) : (

@@ -135,7 +135,7 @@ const Sidebar = () => {
       {/* Mobile Sidebar with AnimatePresence */}
       <AnimatePresence>
         {sideBar && (
-          <div className="fixed inset-0 z-[100] md:hidden">
+          <div className="fixed inset-0 z-100 md:hidden">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

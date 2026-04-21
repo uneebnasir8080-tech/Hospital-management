@@ -79,7 +79,7 @@ const AdminSidebar = () => {
     <>
       <AnimatePresence>
         {sideBar && (
-          <div className="fixed inset-0 z-[60] lg:hidden">
+          <div className="fixed inset-0 z-60 lg:hidden">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -95,7 +95,7 @@ const AdminSidebar = () => {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute left-0 top-0 bottom-0 w-[280px] bg-white shadow-2xl overflow-hidden flex flex-col"
+              className="absolute left-0 top-0 bottom-0 w-70 bg-white shadow-2xl overflow-hidden flex flex-col"
             >
               <div className="p-6 flex items-center justify-between border-b border-gray-50">
                 <Image
@@ -152,7 +152,7 @@ const AdminSidebar = () => {
       </AnimatePresence>
 
       {/* Desktop Persistent Sidebar */}
-      <div className="hidden md:flex flex-col w-[260px] lg:w-[300px] h-screen bg-white border-r border-gray-100/80 sticky top-0 shadow-[4px_0_24px_-4px_rgba(0,0,0,0.02)]">
+      <div className="hidden md:flex flex-col w-65 lg:w-75 h-screen bg-white border-r border-gray-100/80 sticky top-0 shadow-[4px_0_24px_-4px_rgba(0,0,0,0.02)]">
         {/* Header */}
         <Link href='/admin/dashboard'>
         <div className="h-27 flex items-center py-3 px-1">

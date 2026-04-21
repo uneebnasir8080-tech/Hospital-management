@@ -79,7 +79,7 @@ const ProfileModal = ({ onClose }) => {
                       <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-600 transform group-hover:translate-x-1 transition-all" />
                     </div>
 
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-blue-50/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 ))}
               </div>
