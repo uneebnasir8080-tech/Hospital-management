@@ -141,7 +141,8 @@ const AdminDoctor = () => {
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto modern-scroll bg-white rounded-md shadow-sm border border-gray-100 max-h-[60vh] overflow-y-auto">
+{/* deleted max-h-[60vh] */}
+      <div className="w-full overflow-x-auto modern-scroll bg-white rounded-md shadow-sm border border-gray-100  overflow-y-auto">
         <div className="min-w-225">
           <div className="grid grid-cols-7 border-b font-medium text-xs lg:text-[15px] text-gray-700 bg-gray-50/50 sticky top-0 z-10">
             {[
@@ -221,7 +222,7 @@ const AdminDoctor = () => {
 
                         <button
                           onClick={() => setDeleteId(items.id)}
-                          className="p-2 text-gray-400 text-red-500 bg-red-50 cursor-pointer rounded-lg transition-all"
+                          className="p-2 text-red-500 bg-red-50 cursor-pointer rounded-lg transition-all"
                         >
                           <X size={18} />
                         </button>
@@ -247,7 +248,7 @@ const AdminDoctor = () => {
 
       <AnimatePresence>
         {deleteId && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center z-[200] p-4">
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center z-200 p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
