@@ -10,6 +10,7 @@ const HomePage = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden rounded-[3rem] bg-linear-to-r from-blue-500 to-indigo-700 p-6 md:p-8 text-white shadow-2xl shadow-blue-500/20">
         <div className="relative z-10 max-w-2xl">
+<<<<<<< HEAD
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4">
             <ShieldCheck size={14} className="text-blue-200" />
             Empowering Your Health
@@ -19,6 +20,17 @@ const HomePage = () => {
             <span className="text-blue-200">Wellness HUB</span>
           </h1>
           <p className="text-blue-100/80 font-bold text-base md:text-sm mb-6 max-w-md leading-relaxed">
+=======
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+            <ShieldCheck size={14} className="text-blue-200" />
+            Empowering Your Health
+          </div>
+          <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-[0.9] mb-6 uppercase">
+            Your Premium <br />
+            <span className="text-blue-200">Wellness HUB</span>
+          </h1>
+          <p className="text-blue-100/80 font-bold text-base md:text-sm mb-8 max-w-md leading-relaxed">
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             Manage appointments, track medications, and explore expert health tips—all in one futuristic interface.
           </p>
           <div className="flex flex-wrap gap-4">

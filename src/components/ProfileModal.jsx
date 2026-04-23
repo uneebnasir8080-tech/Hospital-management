@@ -16,7 +16,11 @@ const ProfileModal = ({ onClose }) => {
   ];
 
   return (
+<<<<<<< HEAD
     <div className="fixed -top-10 left-0 right-0 z-150 h-screen flex items-center justify-center bg-slate-900/20 ">
+=======
+    <div className="fixed inset-0 z-150 h-screen flex items-center justify-center bg-slate-900/20 ">
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
       
       {/* Backdrop */}
       <motion.div
@@ -54,12 +58,20 @@ const ProfileModal = ({ onClose }) => {
               </div>
 
               {/* Menu Items */}
+<<<<<<< HEAD
               <div className="space-y-2">
+=======
+              <div className="space-y-3">
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                 {menuItems.map((item, idx) => (
                   <button
                     key={idx}
                     onClick={item.onClick}
+<<<<<<< HEAD
                     className="w-full group flex items-center justify-between px-4 py-2 hover:bg-white rounded-2xl transition-all duration-300 relative overflow-hidden"
+=======
+                    className="w-full group flex items-center justify-between p-4 hover:bg-white rounded-2xl transition-all duration-300 relative overflow-hidden"
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                   >
                     <div className="flex items-center gap-4 relative z-10">
                       <div className={`p-3 ${item.bg} ${item.color} rounded-xl transition-transform group-hover:scale-110`}>
@@ -85,7 +97,11 @@ const ProfileModal = ({ onClose }) => {
               </div>
 
               {/* Footer */}
+<<<<<<< HEAD
               <div className="pt-8 mt-3 border-t border-slate-100 flex items-center justify-between">
+=======
+              <div className="pt-8 mt-6 border-t border-slate-100 flex items-center justify-between">
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
                     <CreditCard size={18} />

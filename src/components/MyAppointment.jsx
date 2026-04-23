@@ -1,5 +1,6 @@
 "use client";
 
+<<<<<<< HEAD
 import React from "react";
 import Image from "next/image";
 import { Card, CardContent } from "./ui/card";
@@ -19,6 +20,60 @@ const MyAppointment = () => {
   });
 
   const resData = data?.getData?.appointment || [];
+=======
+import React, { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
+import { Card, CardContent } from "./ui/card";
+import { Calendar, Clock, MapPin, Phone, Trash2, ExternalLink, Activity, Sparkles } from "lucide-react";
+import { api } from "@/lib/apiCall";
+import { useSession } from "next-auth/react";
+import { showToast } from "@/lib/showToastify";
+import { motion, AnimatePresence } from "framer-motion";
+
+const MyAppointment = () => {
+  const { data: session, status } = useSession();
+  const [resData, setResData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getData = useCallback(async () => {
+    try {
+      if (!session?.role) return;
+
+      if (session.role !== "patient") {
+        showToast("error", `${session.role} has no appointment`);
+        return;
+      }
+
+      setLoading(true);
+
+      const res = await api.get("/patient/appointment", {
+        params: {
+          userId: session?.id,
+        },
+        headers: {
+          Authorization: `Bearer ${session?.token}`,
+        },
+      });
+
+      const appointments = res?.data?.getData?.appointment || [];
+      setResData(appointments);
+    } catch (error) {
+      console.error("Appointment Fetch Error:", error);
+      showToast(
+        "error",
+        error?.response?.data?.message || "Failed to fetch appointments",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [session?.token]);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      getData();
+    }
+  }, [status, getData]);
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -46,7 +101,11 @@ const MyAppointment = () => {
       <div className="max-h-[60vh] overflow-y-auto modern-scroll pr-4">
         <div className="grid grid-cols-1 gap-4">
           <AnimatePresence>
+<<<<<<< HEAD
             {isLoading ? (
+=======
+            {loading ? (
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
               Array.from({ length: 3 }).map((_, index) => (
                 <Card key={`loading-${index}`} className="border-none bg-slate-50 animate-pulse rounded-[2rem] h-40" />
               ))

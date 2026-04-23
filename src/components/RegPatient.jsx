@@ -11,11 +11,16 @@ import { zScehma } from "@/lib/zodSchema";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+<<<<<<< HEAD
 import { FaSpinner } from "react-icons/fa";
+=======
+import {  FaSpinner } from "react-icons/fa";
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 import { Button } from "@/components/ui/button";
 import { IoPersonOutline } from "react-icons/io5";
 import { TfiEmail } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
+<<<<<<< HEAD
 import { showToast } from "@/lib/showToastify";
 import RegData from "./RegData";
 import { motion } from "framer-motion";
@@ -31,6 +36,25 @@ const RegPatient = ({ onClose }) => {
     email: true,
     password: true,
   });
+=======
+import  {api}  from "@/lib/apiCall";
+import { showToast } from "@/lib/showToastify";
+import { useRouter } from "next/navigation";
+import RegData from "./RegData";
+import { motion } from "framer-motion";
+
+const RegPatient = ({onClose}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const[storeId, setStoreId]= useState()
+  const [next, setNext]= useState(false)
+
+  const formSchema = zScehma
+    .pick({
+      name: true,
+      email: true,
+      password: true,
+    })
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,6 +64,7 @@ const RegPatient = ({ onClose }) => {
     },
   });
 
+<<<<<<< HEAD
   // mutation
 
   const addPatientMutation = useMutation({
@@ -59,6 +84,31 @@ const RegPatient = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/20 z-150 flex items-center">
+=======
+  const handleOnSubmit = async(values, e) => {
+    try {
+    setIsLoading(true);
+
+    const res = await api.post("/create", values);
+    const ids= res?.data.data.id
+    setStoreId(ids)
+    // Success handling
+    showToast("success", res.data.message || "Account created successfully");
+    form.reset();
+    setNext(()=>!next)
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Something went wrong. Please try again.";
+
+    showToast("error", message);
+  } finally {
+    setIsLoading(false);
+  }
+  };
+  return (
+    <div className="fixed inset-0 bg-black/20 z-150 flex items-center">
+
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
       {!next && (
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -83,9 +133,13 @@ const RegPatient = ({ onClose }) => {
 
               <form
                 className="space-y-3 px-7 my-5 w-full"
+<<<<<<< HEAD
                 onSubmit={form.handleSubmit((data) => {
                   addPatientMutation.mutate(data);
                 })}
+=======
+                onSubmit={form.handleSubmit(handleOnSubmit)}
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
               >
                 <Form {...form}>
                   <div className="">
@@ -184,10 +238,17 @@ const RegPatient = ({ onClose }) => {
                   </Button>
                   <Button
                     type="submit"
+<<<<<<< HEAD
                     disabled={addPatientMutation.isPending}
                     className={`bg-[#3497F9] py-5 text-lg w-50 hover:bg-[#106ecc] cursor-pointer`}
                   >
                     {addPatientMutation.isPending ? (
+=======
+                    disabled={isLoading}
+                    className={`bg-[#3497F9] py-5 text-lg w-50 hover:bg-[#106ecc] cursor-pointer`}
+                  >
+                    {isLoading ? (
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                       <FaSpinner className="animate-spin text-2xl text-white" />
                     ) : (
                       "Next"
@@ -199,7 +260,11 @@ const RegPatient = ({ onClose }) => {
           </Card>
         </motion.div>
       )}
+<<<<<<< HEAD
       {next && <RegData onClose={onClose} ids={storeId} />}
+=======
+      {next && <RegData onClose={onClose} ids={storeId}/>}
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
     </div>
   );
 };

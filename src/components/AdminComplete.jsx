@@ -1,13 +1,23 @@
 import { FaSearch } from "react-icons/fa";
+<<<<<<< HEAD
 import React, { useState } from "react";
+=======
+import React, { useState, useEffect, useCallback } from "react";
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 import { DatePicker } from "./ui/DatePicker";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { calculateAge, formatDate } from "@/lib/utils";
 
 import Pagination from "./Pagination";
+<<<<<<< HEAD
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { getAppointmentTable } from "@/services/appointment/appointmentApi";
+=======
+import { api } from "@/lib/apiCall";
+import { useSession } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
 const SkeletonRow = () => (
   <div className="grid grid-cols-7 py-3 border-b animate-pulse text-xs lg:text-[16px]">
@@ -23,6 +33,7 @@ const SkeletonRow = () => (
 );
 
 const AdminComplete = ({ refresh }) => {
+<<<<<<< HEAD
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const limit = 5;
@@ -47,6 +58,19 @@ const AdminComplete = ({ refresh }) => {
   const filteredAppointments = React.useMemo(() => {
     if (!data?.getData) return [];
     return data.getData.filter((item) => {
+=======
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const { data: session, status } = useSession();
+  const [page, setPage] = useState(1);
+  const limit = 5;
+
+  const filteredAppointments = React.useMemo(() => {
+    return appointments.filter((item) => {
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
       const searchStr = searchTerm.toLowerCase();
       return (
         item?.patientId?.userId?.name?.toLowerCase().includes(searchStr) ||
@@ -55,7 +79,45 @@ const AdminComplete = ({ refresh }) => {
         (item?.date && formatDate(item.date).toLowerCase().includes(searchStr))
       );
     });
+<<<<<<< HEAD
   }, [data, searchTerm]);
+=======
+  }, [appointments, searchTerm]);
+
+  const getAppointments = useCallback(async () => {
+    if (!session?.token) return;
+
+    try {
+      setLoading(true);
+      const res = await api.get(
+        `/patient/all-appointment?page=${page}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session.token}`,
+          },
+        },
+      );
+
+      const allData = res?.data?.getData || [];
+      const completed = allData.filter(
+        (app) => app.status === "confirmed" || app.status === "pending",
+      );
+      setAppointments(completed);
+      setCount(res?.data?.pagination?.totalPage || "");
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to fetch appointments", "error");
+    } finally {
+      setLoading(false);
+    }
+  }, [session?.token, page, limit]);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      getAppointments();
+    }
+  }, [status, getAppointments, refresh, page]);
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
   return (
     <div className="px-3 lg:px-5">
@@ -104,8 +166,12 @@ const AdminComplete = ({ refresh }) => {
             </p>
           </div>
 
+<<<<<<< HEAD
           {/* Loading Skeleton */}
           {isLoading && !data && (
+=======
+          {loading && (
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             <>
               {Array(limit)
                 .fill(0)
@@ -114,6 +180,7 @@ const AdminComplete = ({ refresh }) => {
                 ))}
             </>
           )}
+<<<<<<< HEAD
           {isFetching && !isLoading && (
             <p className="text-sm text-gray-400 px-3 py-2">Updating data...</p>
           )}
@@ -134,6 +201,22 @@ const AdminComplete = ({ refresh }) => {
             <div className="relative">
               <AnimatePresence mode="popLayout">
                 {filteredAppointments.map((items, index) => (
+=======
+
+          {!loading && (
+            <div className="relative">
+              <AnimatePresence mode="popLayout">
+                {filteredAppointments.length === 0 ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-10 text-gray-500"
+                  >
+                    No completed appointments found
+                  </motion.div>
+                ) : (
+                  filteredAppointments.map((items, index) => (
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                     <motion.div
                       layout
                       initial={{ opacity: 0, y: 10 }}
@@ -177,7 +260,12 @@ const AdminComplete = ({ refresh }) => {
                         Request Fee
                       </button>
                     </motion.div>
+<<<<<<< HEAD
                   ))}
+=======
+                  ))
+                )}
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
               </AnimatePresence>
             </div>
           )}
@@ -185,7 +273,11 @@ const AdminComplete = ({ refresh }) => {
       </div>
 
       <Pagination
+<<<<<<< HEAD
         totalPages={data?.pagination?.totalPage || 1}
+=======
+        totalPages={count}
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
         currentPage={page}
         onPageChange={setPage}
       />

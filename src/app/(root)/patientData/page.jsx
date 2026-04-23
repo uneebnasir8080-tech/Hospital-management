@@ -21,15 +21,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
 import { MdArrowForward } from "react-icons/md";
 import { z } from "zod";
+<<<<<<< HEAD
+=======
+import Image from "next/image";
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 import ImageDropField from "@/components/ImageDropField";
 import { showToast } from "@/lib/showToastify";
+<<<<<<< HEAD
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { submitPatientData } from "@/services/patient/partientApi";
 
 const PatientData = () => {
+=======
+import { api } from "@/lib/apiCall";
+import { useRouter } from "next/navigation";
+
+const PatientData = () => {
+  const [isLoading, setIsLoading] = useState(false);
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { data, update } = useSession();
   const [preview, setPreview] = useState(null);
@@ -78,18 +90,43 @@ const PatientData = () => {
     field.onChange(file);
   };
 
+<<<<<<< HEAD
   const { mutate: handleSubmitPatient, isPending: isLoading } = useMutation({
     mutationFn: (formData) => submitPatientData(formData, data?.id),
     onSuccess: async (res) => {
       showToast("success", res.message);
       await update({
         detail: res?.patient,
+=======
+  const handleOnSubmit = async (values) => {
+    try {
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("patient", values.profileImage);
+      formData.append("age", values.age);
+      formData.append("history", values.history);
+      formData.append("gender", values.gender);
+      formData.append("blood", values.blood);
+      const res = await api.post("/patient", formData, {
+        params: {
+          id: data?.id,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${data?.token}`,
+        },
+      });
+      showToast("success", res.data.message);
+      await update({
+        detail: res?.data.patient,
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
       });
       setIsSubmitted(true);
       setTimeout(() => {
         router.push("/user/home");
         form.reset();
       }, 500);
+<<<<<<< HEAD
     },
     onError: (error) => {
       showToast("error", error.response?.data?.message || "Upload failed");
@@ -105,6 +142,13 @@ const PatientData = () => {
     formData.append("blood", values.blood);
 
     handleSubmitPatient(formData);
+=======
+    } catch (error) {
+      showToast("error", error.response?.data?.message || "Upload failed");
+    } finally {
+      setIsLoading(false);
+    }
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   };
 
   return (

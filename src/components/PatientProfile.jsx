@@ -26,6 +26,10 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
+<<<<<<< HEAD
+=======
+import { api } from "@/lib/apiCall";
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 import {
   Select,
   SelectContent,
@@ -35,6 +39,7 @@ import {
 } from "./ui/select";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+<<<<<<< HEAD
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserProfile } from "@/services/patient/partientApi";
 
@@ -43,6 +48,15 @@ const PatientProfile = ({ response, onClose }) => {
   const [preview, setPreview] = useState(null);
   const router = useRouter();
   const queryClient = useQueryClient();
+=======
+
+const PatientProfile = ({ response, onClose }) => {
+  const { data } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const router = useRouter();
+
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
 
 const formSchema = useMemo(() => {
@@ -123,6 +137,7 @@ const formSchema = useMemo(() => {
     field.onChange(file);
   };
 
+<<<<<<< HEAD
   const { mutate: handleUpdate, isPending: isLoading } = useMutation({
     mutationFn: (formData) => updateUserProfile(formData, data?.id),
     onSuccess: (res) => {
@@ -152,6 +167,42 @@ const formSchema = useMemo(() => {
     formData.append("specialization", values.specialization);
 
     handleUpdate(formData);
+=======
+  const handleOnSubmit = async (values) => {
+    try {
+      console.log("values are :", values);
+      setIsLoading(true);
+      const formData = new FormData();
+
+      if (values.profileImage) {
+        formData.append("profileImage", values.profileImage);
+      }
+
+      formData.append("name", values.name);
+      formData.append("age", values.age);
+      formData.append("gender", values.gender);
+      formData.append("history", values.history);
+      formData.append("blood", values.blood);
+      formData.append("experience", values.experience);
+      formData.append("specialization", values.specialization);
+
+      const res = await api.put("/update-user", formData, {
+        params: { id: data?.id },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${data?.token}`,
+        },
+      });
+
+      showToast("success", res.data.message);
+      router.refresh();
+      onClose();
+    } catch (error) {
+      showToast("error", error.response?.data?.message || "Update failed");
+    } finally {
+      setIsLoading(false);
+    }
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   };
 
   return (

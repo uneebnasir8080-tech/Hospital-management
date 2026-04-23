@@ -67,7 +67,11 @@ export default async function ProfilePage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc]">
       {/* ---------------- HEADER ---------------- */}
+<<<<<<< HEAD
       <div className="bg-white/80 backdrop-blur-md sticky top-0 z-20 ">
+=======
+      <div className="bg-white/80 backdrop-blur-md sticky top-0 z-50 ">
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
         <div className="max-w-4xl mx-auto px-6 h-15 flex items-center justify-between">
           <h1 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">Patient Profile</h1>
           <SettingsActions />

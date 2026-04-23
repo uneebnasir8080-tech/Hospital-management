@@ -1,16 +1,26 @@
 "use client";
 
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
+=======
+import React, { useEffect, useState, useCallback } from "react";
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 import { Card, CardContent } from "./ui/card";
 import { X } from "lucide-react";
 import { Button } from "./ui/button";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Payment from "./Payment";
+<<<<<<< HEAD
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getDoctorSchedule } from "@/services/doctor/doctorApi";
 import { bookAppointment } from "@/services/patient/partientApi";
+=======
+import { api } from "@/lib/apiCall";
+import { useSession } from "next-auth/react";
+import { showToast } from "@/lib/showToastify";
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
 const Booking = ({ onClose, docId, Loading, patientId }) => {
   // states
@@ -18,10 +28,18 @@ const Booking = ({ onClose, docId, Loading, patientId }) => {
   const [date, setDate] = useState("");
   const [slots, setSlots] = useState([]);
   const [saveId, setSaveId] = useState();
+<<<<<<< HEAD
   const [payment, setPayment] = useState(false);
 
   const { data: session, status } = useSession();
   const queryClient = useQueryClient();
+=======
+  const [doctor, setDoctor] = useState(null);
+  const [payment, setPayment] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const { data: session, status } = useSession();
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -72,6 +90,7 @@ const Booking = ({ onClose, docId, Loading, patientId }) => {
     return result;
   };
 
+<<<<<<< HEAD
   // ---------------- QUERY: Doctor Schedule ----------------
 
   const { data: scheduleData } = useQuery({
@@ -85,6 +104,37 @@ const Booking = ({ onClose, docId, Loading, patientId }) => {
   // generate slots when date or schedule changes
   useEffect(() => {
     if (!doctor?.schedule?.startTime || !doctor?.schedule?.endTime) return;
+=======
+  // ---------------- API ----------------
+
+  const fetchDoctorSchedule = useCallback(async () => {
+    if (!session?.token || !docId) return;
+
+    try {
+      const res = await api.get("/doctor/schedule", {
+        params: { docId },
+        headers: { Authorization: `Bearer ${session?.token}` },
+      });
+      // console.log("response of booking", res)
+      setDoctor(res.data.getDoctor);
+    } catch (error) {
+      console.error(error);
+      showToast(
+        "error",
+        error?.response?.data?.message || "Failed to fetch doctor schedule",
+      );
+    }
+  }, [session?.token, docId]);
+
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    fetchDoctorSchedule();
+  }, [status, fetchDoctorSchedule]);
+
+  // generate slots when date or schedule changes
+  useEffect(() => {
+    if (!doctor?.schedule.startTime || !doctor?.schedule.endTime) return;
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
     setSelectedSlot(null); // reset on date change
 
@@ -96,6 +146,7 @@ const Booking = ({ onClose, docId, Loading, patientId }) => {
     setSlots(generated);
   }, [doctor, date]);
 
+<<<<<<< HEAD
   // ---------------- MUTATION: Book Appointment ----------------
 
   const { mutate: submitBooking, isPending: submitting } = useMutation({
@@ -111,6 +162,11 @@ const Booking = ({ onClose, docId, Loading, patientId }) => {
   });
 
   const handleSubmit = () => {
+=======
+  // ---------------- SUBMIT ----------------
+
+  const handleSubmit = async () => {
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
     if (!date || !selectedSlot) {
       showToast("warning", "Please select date and time");
       return;
@@ -124,6 +180,7 @@ const Booking = ({ onClose, docId, Loading, patientId }) => {
       setSaveId(patientId);
       tempid = patientId;
     }
+<<<<<<< HEAD
 
     submitBooking({
       doctorId: docId,
@@ -133,6 +190,32 @@ const Booking = ({ onClose, docId, Loading, patientId }) => {
     });
   };
 
+=======
+    // console.log("ideed", saveId);
+    try {
+      setSubmitting(true);
+
+      const payload = {
+        doctorId: docId,
+        patientId: tempid,
+        date,
+        time: selectedSlot,
+      };
+
+      await api.post("/patient/appointment", payload, {
+        headers: { Authorization: `Bearer ${session.token}` },
+      });
+
+      showToast("success", "Clear Payment");
+      setPayment(true);
+    } catch (error) {
+      console.error(error);
+      showToast("error", error?.response?.data?.message || "Booking failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   const getDayName = (selectedDate) => {
     if (!selectedDate) return "";
 

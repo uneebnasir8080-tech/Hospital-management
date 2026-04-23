@@ -117,10 +117,16 @@ const AdminSidebar = () => {
                 {logo.map((data) => {
                   const isActive = pathname.startsWith(data.link);
                   return (
+<<<<<<< HEAD
                     <Link
                       key={data.id}
                       href={data.link}
                       onClick={open}
+=======
+                    <a
+                      key={data.id}
+                      href={data.link}
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                       className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold transition-all ${
                         isActive
                           ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
@@ -131,7 +137,11 @@ const AdminSidebar = () => {
                       <span className="text-sm tracking-tight">
                         {data.title}
                       </span>
+<<<<<<< HEAD
                     </Link>
+=======
+                    </a>
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                   );
                 })}
               </div>
@@ -174,7 +184,11 @@ const AdminSidebar = () => {
           {logo.map((data) => {
             const isActive = pathname.startsWith(data.link);
             return (
+<<<<<<< HEAD
               <Link
+=======
+              <a
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                 key={data.id}
                 href={data.link}
                 className={`relative flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold transition-all group ${
@@ -193,7 +207,11 @@ const AdminSidebar = () => {
                   {data.icon}
                 </div>
                 <span className="text-[15px] tracking-tight">{data.title}</span>
+<<<<<<< HEAD
               </Link>
+=======
+              </a>
+>>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             );
           })}
         </div>
