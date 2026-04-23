@@ -1,0 +1,94 @@
+import HomeAppointment from "@/components/HomeAppointment";
+import HomeMedicine from "@/components/HomeMedicine";
+import HomeTips from "@/components/HomeTips";
+import React from "react";
+import { ArrowRight, Activity, Calendar, ShieldCheck } from "lucide-react";
+
+const HomePage = () => {
+  return (
+    <div className="p-4 md:p-6 space-y-12 ">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden rounded-[3rem] bg-linear-to-r from-blue-500 to-indigo-700 p-6 md:p-8 text-white shadow-2xl shadow-blue-500/20">
+        <div className="relative z-10 max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+            <ShieldCheck size={14} className="text-blue-200" />
+            Empowering Your Health
+          </div>
+          <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-[0.9] mb-4 uppercase">
+            Your Premium <br />
+            <span className="text-blue-200">Wellness HUB</span>
+          </h1>
+          <p className="text-blue-100/80 font-bold text-base md:text-sm mb-6 max-w-md leading-relaxed">
+            Manage appointments, track medications, and explore expert health tips—all in one futuristic interface.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <a href="/user/doctor" className="px-6 py-3 bg-white text-blue-600 font-black text-[11px] uppercase tracking-widest rounded-2xl shadow-xl hover:bg-blue-50 transition-all flex items-center gap-2">
+              Book Appointment <ArrowRight size={16} />
+            </a>
+            <div className="flex -space-x-3 items-center pl-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-9 h-9 rounded-full border-2 border-blue-500 bg-blue-400 overflow-hidden ring-4 ring-blue-600/20">
+                  <img src={`/doc${i}.png`} alt="" className="w-full h-full object-cover" />
+                </div>
+              ))}
+              <span className="ml-6 text-xs font-black text-blue-200 uppercase tracking-widest">+50 Experts Online</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative Elements */}
+        <Activity className="absolute bottom-[-20%] right-[-10%] w-96 h-96 text-white/5 rotate-12" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+      </section>
+
+      {/* Appointments Section */}
+      <section>
+        <div className="flex items-center justify-between mb-8 px-2">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-blue-50 rounded-2xl text-blue-600 shadow-sm">
+              <Calendar size={24} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase">My Appointments</h2>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active & Upcoming Consultations</p>
+            </div>
+          </div>
+          <a href="/user/doctor" className="flex items-center gap-1.5 text-[11px] font-black text-blue-600 uppercase tracking-tighter hover:underline decoration-2">
+            View All <ArrowRight size={14} />
+          </a>
+        </div>
+        <HomeAppointment />
+      </section>
+
+      {/* Medicine Section */}
+      <section>
+        <div className="flex items-center gap-4 mb-8 px-2">
+          <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600 shadow-sm">
+            <ShieldCheck size={24} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase">Health Marketplace</h2>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Order Medications & Essentials</p>
+          </div>
+        </div>
+        <HomeMedicine />
+      </section>
+
+      {/* Tips Section */}
+      <section>
+        <div className="flex items-center gap-4 mb-8 px-2">
+          <div className="p-3 bg-amber-50 rounded-2xl text-amber-600 shadow-sm">
+            <Activity size={24} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase">Health Insights</h2>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Curated Expert Tips for You</p>
+          </div>
+        </div>
+        <HomeTips />
+      </section>
+    </div>
+  );
+};
+
+export default HomePage;
