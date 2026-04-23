@@ -1,5 +1,0 @@
-1:"$Sreact.fragment"
-2:I[62227,["/_next/static/chunks/9cbb0949c065b3d9.js","/_next/static/chunks/874122036fd27585.js","/_next/static/chunks/73b5ac17e289942e.js","/_next/static/chunks/3a48dffa52884acb.js","/_next/static/chunks/33d92c6630c260f1.js","/_next/static/chunks/f54ef79303c0f0e8.js","/_next/static/chunks/028c5e9918642a0b.js"],"default"]
-3:I[39756,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/e464d6f80c896440.js"],"default"]
-4:I[37457,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/e464d6f80c896440.js"],"default"]
-0:{"buildId":"kuDHYCcmw_AnPr-ncLC9o","rsc":["$","$1","c",{"children":[[["$","script","script-0",{"src":"/_next/static/chunks/028c5e9918642a0b.js","async":true}]],["$","div",null,{"className":"flex flex-4 w-full","children":[["$","div",null,{"className":"flex-1 w-full","children":["$","$L2",null,{}]}],["$","div",null,{"className":"flex-3 content- ","children":["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]}]]}]]}],"loading":null,"isPartial":false}

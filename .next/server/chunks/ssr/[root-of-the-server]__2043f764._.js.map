@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../../src/app/%28root%29/admin/education/page.jsx"],"sourcesContent":["import React from 'react'\n\nconst EducationPage = () => {\n  return (\n    <div>EducationPage</div>\n  )\n}\n\nexport default EducationPage"],"names":[],"mappings":"gXAAA,EAAA,CAAA,CAAA,sBAEsB,IAElB,CAAA,EAAA,EAAA,GAAA,EAAC,MAAA,UAAI"}
