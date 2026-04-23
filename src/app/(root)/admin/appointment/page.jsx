@@ -4,13 +4,10 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useStore } from "@/store/store";
 import AdminNewAppoint from "@/components/AdminNewAppoint";
 import AdminComplete from "@/components/AdminComplete";
-import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
-import { showToast } from "@/lib/showToastify";
 import PatientModal from "@/components/PatientModal";
 
 const AppointmentPage = () => {
-  const { data: session } = useSession();
   const [isClose, setIsClose] = useState(false);
 
   const appointment = useStore((state) => state.appointment);

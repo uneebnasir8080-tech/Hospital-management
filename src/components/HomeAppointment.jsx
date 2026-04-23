@@ -1,6 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
 import React from "react";
 import Image from "next/image";
 import { Card, CardContent } from "./ui/card";
@@ -20,55 +19,6 @@ const HomeAppointment = () => {
   });
 
   const resData = data?.getData?.appointment || [];
-=======
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { Card, CardContent } from "./ui/card";
-import { Calendar, User, Clock, ArrowRight, Activity } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { showToast } from "@/lib/showToastify";
-import { api } from "@/lib/apiCall";
-import { motion, AnimatePresence } from "framer-motion";
-
-const HomeAppointment = () => {
-  const { data: session, status } = useSession();
-  const [resData, setResData] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (status !== "authenticated") return;
-
-    const getData = async () => {
-      try {
-        if (session?.role !== "patient") {
-          setLoading(false);
-          return;
-        }
-
-        const res = await api.get("/patient/appointment", {
-          params:{
-            userId:session?.id
-          },
-          headers: {
-            Authorization: `Bearer ${session?.token}`,
-          },
-        });
-
-        setResData(res?.data?.getData?.appointment || []);
-      } catch (error) {
-        console.error("Appointment Fetch Error:", error);
-        showToast(
-          "error",
-          error?.response?.data?.message || "Failed to fetch appointments"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getData();
-  }, [status, session?.token, session?.id, session?.role]);
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -82,15 +32,9 @@ const HomeAppointment = () => {
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-<<<<<<< HEAD
         {/* Skeleton Loader */}
         <AnimatePresence>
           {isLoading &&
-=======
-        {/* 🔹 Skeleton Loader */}
-        <AnimatePresence>
-          {loading &&
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             Array.from({ length: 4 }).map((_, i) => (
               <motion.div
                 key={`skeleton-${i}`}
@@ -112,13 +56,8 @@ const HomeAppointment = () => {
             ))}
         </AnimatePresence>
 
-<<<<<<< HEAD
         {/* No Appointment Box */}
         {!isLoading && resData.length === 0 && (
-=======
-        {/* 🔹 No Appointment Box */}
-        {!loading && resData.length === 0 && (
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -137,13 +76,8 @@ const HomeAppointment = () => {
           </motion.div>
         )}
 
-<<<<<<< HEAD
         {/* Real Data */}
         {!isLoading &&
-=======
-        {/* 🔹 Real Data */}
-        {!loading &&
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
           resData.length > 0 &&
           resData.map((data, index) => (
             <motion.div

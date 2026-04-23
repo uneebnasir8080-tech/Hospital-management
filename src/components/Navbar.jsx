@@ -4,11 +4,6 @@ import { useStore } from "@/store/store";
 import React from "react";
 import { Bell, User, Search, Menu, X } from "lucide-react";
 import Notification from "./Notification";
-<<<<<<< HEAD
-=======
-import { motion } from "framer-motion";
-import Image from "next/image";
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
 const Navbar = () => {
   const isOpen = useStore((state) => state.isOpen);
@@ -17,25 +12,11 @@ const Navbar = () => {
   const sideBar = useStore((state) => state.sideBar);
   const openSideBar = useStore((state) => state.openSideBar);
 
-<<<<<<< HEAD
   return (
     <div className="sticky top-0 z-30 w-full bg-slate-50/80 backdrop-blur-xl border-b border-slate-200/60 h-20 px-6 md:px-10">
       <div className="flex justify-between items-center h-full max-w-400 mx-auto">
         {/* Mobile Menu Toggle */}
         <button
-=======
-  
-
-  return (
-    <motion.div 
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      className="sticky top-0 z-30 w-full bg-slate-50/80 backdrop-blur-xl border-b border-slate-200/60 h-20 px-6 md:px-10"
-    >
-      <div className="flex justify-between items-center h-full max-w-400 mx-auto">
-        {/* Mobile Menu Toggle */}
-        <button 
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
           onClick={openSideBar}
           className="md:hidden p-3 bg-white border border-slate-100 rounded-2xl shadow-sm text-slate-500 hover:text-blue-600 transition-all active:scale-95"
         >
@@ -45,7 +26,6 @@ const Navbar = () => {
         {/* Welcome Text / Search Bar */}
         <div className="hidden md:flex items-center gap-4 flex-1">
           <div className="relative w-full max-w-md group">
-<<<<<<< HEAD
             <Search
               size={18}
               className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors"
@@ -53,12 +33,6 @@ const Navbar = () => {
             <input
               type="text"
               placeholder="Search appointments, health tips..."
-=======
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
-            <input 
-              type="text" 
-              placeholder="Search appointments, health tips..." 
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
               className="w-full bg-slate-100 border-none rounded-2xl py-3 pl-12 pr-4 text-sm font-bold text-slate-600 focus:ring-4 focus:ring-blue-500/10 placeholder:text-slate-400 outline-none transition-all"
             />
           </div>
@@ -71,14 +45,10 @@ const Navbar = () => {
             onClick={open}
             className="p-3 bg-white border border-slate-100 rounded-2xl shadow-sm text-slate-500 hover:text-blue-600 hover:shadow-md transition-all active:scale-95 relative group"
           >
-<<<<<<< HEAD
             <Bell
               size={20}
               className="group-hover:rotate-12 transition-transform"
             />
-=======
-            <Bell size={20} className="group-hover:rotate-12 transition-transform" />
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
           </button>
 
@@ -87,41 +57,24 @@ const Navbar = () => {
             href="/user/profile"
             className="flex items-center gap-3 p-1.5 pr-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-all active:scale-95"
           >
-<<<<<<< HEAD
-=======
-          
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
               <User size={20} />
             </div>
             <div className="hidden sm:block text-left">
-<<<<<<< HEAD
               <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
                 Patient
               </p>
               <p className="text-sm font-bold text-slate-700 leading-none">
                 View Profile
               </p>
-=======
-              <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Patient</p>
-              <p className="text-sm font-bold text-slate-700 leading-none">View Profile</p>
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             </div>
           </a>
         </div>
       </div>
 
       {isOpen && <Notification onClose={close} />}
-<<<<<<< HEAD
     </div>
-=======
-    </motion.div>
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   );
 };
 
 export default Navbar;
-<<<<<<< HEAD
-=======
-
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6

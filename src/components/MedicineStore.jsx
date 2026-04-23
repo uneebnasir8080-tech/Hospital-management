@@ -1,14 +1,9 @@
 "use client";
-<<<<<<< HEAD
 import React, { useState, useMemo } from "react";
-=======
-import React, { useEffect, useState, useCallback } from "react";
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 import { Card, CardContent } from "./ui/card";
 import { Search, ShoppingCart, Heart, Star, Package, Star as StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-<<<<<<< HEAD
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
@@ -16,23 +11,11 @@ import { getMedicines } from "@/services/patient/partientApi";
 
 const MedicineStore = () => {
   const { status } = useSession();
-=======
-import { api } from "@/lib/apiCall";
-import { useSession } from "next-auth/react";
-import { showToast } from "@/lib/showToastify";
-import { motion, AnimatePresence } from "framer-motion";
-
-const MedicineStore = () => {
-  const { data: session, status } = useSession();
-  const [medicines, setMedicines] = useState([]);
-  const [loading, setLoading] = useState(true);
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
 
   const categories = ["All", "Prescription", "OTC", "Supplements", "First Aid"];
 
-<<<<<<< HEAD
   const { data, isLoading } = useQuery({
     queryKey: ["medicines"],
     queryFn: getMedicines,
@@ -48,37 +31,6 @@ const MedicineStore = () => {
       (category === "All" || med.category === category)
     );
   }, [medicines, searchTerm, category]);
-=======
-  const getMedicines = useCallback(async () => {
-    try {
-      if (!session?.token) return;
-      setLoading(true);
-      const res = await api.get("/patient/medicine", {
-        headers: {
-          Authorization: `Bearer ${session?.token}`,
-        },
-      });
-      setMedicines(res?.data?.medicine || []);
-    } catch (error) {
-      console.error("Medicine Fetch Error:", error);
-      showToast("error", "Failed to fetch medicines");
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.token]);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      getMedicines();
-    }
-  }, [status, getMedicines]);
-
-  const filteredMedicines = medicines.filter(med => 
-    (med.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     med.description?.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (category === "All" || med.category === category)
-  );
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
   return (
     <div className="space-y-10">
@@ -116,11 +68,7 @@ const MedicineStore = () => {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-2 max-h-[60vh] overflow-y-auto modern-scroll pr-4">
         <AnimatePresence>
-<<<<<<< HEAD
           {isLoading ? (
-=======
-          {loading ? (
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             Array.from({ length: 8 }).map((_, i) => (
               <motion.div
                 key={`skeleton-${i}`}
@@ -155,7 +103,7 @@ const MedicineStore = () => {
                 <Card className="group relative border-none bg-white hover:bg-slate-50 transition-all duration-500 rounded-[2.5rem] shadow-xl shadow-slate-200/30 hover:shadow-2xl hover:shadow-blue-500/10 overflow-hidden text-center flex flex-col items-center p-6">
                   {/* Image Container */}
                   <Link href={`/user/medicine/${med._id}`} className="relative w-full aspect-square mb-6 overflow-hidden rounded-[2rem]">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 transition-transform duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-linear-to-br from-blue-50 to-indigo-50 transition-transform duration-700 group-hover:scale-110" />
                     <Image
                       src={med.images?.[0] || "/med1.png"}
                       alt={med.name}

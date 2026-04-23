@@ -4,23 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiMedicineBottleFill } from "react-icons/ri";
 import { BiSolidReport } from "react-icons/bi";
-<<<<<<< HEAD
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { countAppointments, countPatients } from "@/services/doctor/doctorApi";
-=======
-import { api } from "@/lib/apiCall";
-import { useSession } from "next-auth/react";
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
 
 const DashAppointment = () => {
   const { data: session, status } = useSession(null)
-<<<<<<< HEAD
-=======
-  const [appoint, setAppoint] = useState()
-  const [patient, setPatient] = useState()
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   const [selectedPeriod, setSelectedPeriod] = useState("Weekly")
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -38,7 +28,6 @@ const DashAppointment = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-<<<<<<< HEAD
   const { data: appointData } = useQuery({
     queryKey: ["doctorCountAppoint"],
     queryFn: countAppointments,
@@ -53,31 +42,6 @@ const DashAppointment = () => {
 
   const appoint = appointData?.totalAppoint || 0;
   const patient = patientData?.totalPatient || 0;
-=======
-  const getData = async () => {
-    const appointment = await api.get("/doctor/count-appoint", {
-      headers: {
-        Authorization: `Bearer ${session?.token}`
-      }
-    })
-    const patient = await api.get("/doctor/count-patient", {
-      headers: {
-        Authorization: `Bearer ${session?.token}`
-      }
-    })
-    const appointmentCounting = appointment?.data.totalAppoint
-    setAppoint(appointmentCounting)
-    const patientCounting = patient?.data?.totalPatient
-    setPatient(patientCounting)
-  }
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      getData()
-    }
-  }, [status])
-
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
   return (
     <div className="">
@@ -122,11 +86,7 @@ const DashAppointment = () => {
           <p className="text-lg xl:text-2xl pb-1">
             <IoDocumentTextOutline />
           </p>
-<<<<<<< HEAD
           <p className="text-[11px] xl:text-xs leading-tight">{appoint}</p>
-=======
-          <p className="text-[11px] xl:text-xs leading-tight">{appoint || 0}</p>
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
           <p className="text-[11px] xl:text-xs leading-tight">Appointments</p>
         </div>
         <div
@@ -135,11 +95,7 @@ const DashAppointment = () => {
           <p className="text-lg xl:text-2xl pb-1">
             <MdPeopleAlt />
           </p>
-<<<<<<< HEAD
           <p className="text-[11px] xl:text-xs leading-tight">{patient}</p>
-=======
-          <p className="text-[11px] xl:text-xs leading-tight">{patient || 0}</p>
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
           <p className="text-[11px] xl:text-xs leading-tight">New Patients</p>
         </div>
         <div

@@ -22,25 +22,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-<<<<<<< HEAD
 import { showToast } from "@/lib/showToastify";
 import { motion } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPatient } from "@/services/patient/partientApi";
 
 const RegData = ({ onClose, ids }) => {
-=======
-import { useSession } from "next-auth/react";
-import { showToast } from "@/lib/showToastify";
-import  {api}  from "@/lib/apiCall";
-import { motion } from "framer-motion";
-
-
-const RegData = ({onClose,ids}) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { data, status } = useSession();
-  const [next, setNext]= useState(null)
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   const [preview, setPreview] = useState(null);
   const formSchema = zScehma
     .pick({
@@ -87,7 +74,6 @@ const RegData = ({onClose,ids}) => {
     field.onChange(file);
   };
 
-<<<<<<< HEAD
   const formData = (values) => {
     const formData = new FormData();
     formData.append("patient", values.profileImage);
@@ -110,39 +96,6 @@ const RegData = ({onClose,ids}) => {
     },
   });
 
-=======
-  const handleOnSubmit = async (values) => {
-    try {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append("patient", values.profileImage);
-      formData.append("age", values.age);
-      formData.append("history", values.history);
-      formData.append("gender", values.gender);
-      formData.append("blood", values.blood);
-      const res = await api.post("/patient", formData, {
-        params:{
-            id:ids
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${data?.token}`,
-        },
-      });
-
-      showToast("success", res.data.message);
-      setNext(onClose)
-      if(next!==null){
-        next
-      }
-      form.reset();
-    } catch (error) {
-      showToast("error", error.response?.data?.message || "Upload failed");
-    } finally {
-      setIsLoading(false);
-    }
-  };
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   return (
     <div className="flex min-h-screen py-8 px-4 bg-transparent mx-auto">
       <motion.div
@@ -165,13 +118,9 @@ const RegData = ({onClose,ids}) => {
 
             <form
               className="space-y-4 px-7 my-5 w-full"
-<<<<<<< HEAD
               onSubmit={form.handleSubmit((values) =>
                 addPatientData.mutate(values),
               )}
-=======
-              onSubmit={form.handleSubmit(handleOnSubmit)}
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             >
               <Form {...form}>
                 {/* <ImageDropField form={form} /> */}
@@ -321,17 +270,10 @@ const RegData = ({onClose,ids}) => {
               </Form>
               <Button
                 type="submit"
-<<<<<<< HEAD
                 disabled={addPatientData.isPending}
                 className={`bg-[#3497F9] py-5 text-lg  hover:bg-[#106ecc] cursor-pointer w-full mt-3 mb-5`}
               >
                 {addPatientData.isPending ? (
-=======
-                disabled={isLoading}
-                className={`bg-[#3497F9] py-5 text-lg  hover:bg-[#106ecc] cursor-pointer w-full mt-3 mb-5`}
-              >
-                {isLoading ? (
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                   <FaSpinner className="animate-spin text-2xl text-white" />
                 ) : (
                   "Submit"

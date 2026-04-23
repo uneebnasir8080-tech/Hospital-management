@@ -156,7 +156,7 @@ const ChatScreen = () => {
                   <div className={`
                     px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm
                     ${data.id % 2 === 0 
-                      ? "bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-tr-none" 
+                      ? "bg-linear-to-br from-blue-600 to-indigo-700 text-white rounded-tr-none" 
                       : "bg-gray-100 text-gray-800 rounded-tl-none border border-gray-200/50"}
                   `}>
                     {data.msg}

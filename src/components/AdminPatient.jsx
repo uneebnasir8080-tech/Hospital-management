@@ -1,31 +1,18 @@
 "use client";
 
-<<<<<<< HEAD
 import React, { useState, useMemo } from "react";
-=======
-import React, { useEffect, useState, useCallback, useMemo } from "react";
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 import { FaSearch } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { TiInfoLarge } from "react-icons/ti";
 import { BiSolidMessageRounded } from "react-icons/bi";
 import { X } from "lucide-react";
 import { DatePicker } from "./ui/DatePicker";
-<<<<<<< HEAD
 import { calculateAge } from "@/lib/utils";
 import Pagination from "./Pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deletePatient, getPaitentTable } from "@/services/patient/partientApi";
 import { showToast } from "@/lib/showToastify";
-=======
-import { api } from "@/lib/apiCall";
-import { useSession } from "next-auth/react";
-import { showToast } from "@/lib/showToastify";
-import { calculateAge } from "@/lib/utils";
-import Pagination from "./Pagination";
-import { motion, AnimatePresence } from "framer-motion";
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
 const SkeletonRow = () => (
   <div className="grid grid-cols-5 py-3 border-b animate-pulse">
@@ -40,7 +27,6 @@ const SkeletonRow = () => (
   </div>
 );
 
-<<<<<<< HEAD
 const AdminPatient = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,21 +44,6 @@ const AdminPatient = () => {
   const filteredPatients = useMemo(() => {
     if (!data?.getData) return [];
     return data?.getData.filter((patient) => {
-=======
-const AdminPatient = ({ refresh }) => {
-  const [response, setResponse] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState();
-  const [deleteId, setDeleteId] = useState(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const { data: session, status } = useSession();
-  const [page, setPage] = useState(1);
-  const limit = 5;
-
-  const filteredPatients = useMemo(() => {
-    return response.filter((patient) => {
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
       const search = searchTerm.toLowerCase();
       return (
         patient?.name?.toLowerCase().includes(search) ||
@@ -83,7 +54,6 @@ const AdminPatient = ({ refresh }) => {
         patient?.email?.toLowerCase().includes(search)
       );
     });
-<<<<<<< HEAD
   }, [searchTerm, data]);
 
   const queryClient = useQueryClient();
@@ -100,79 +70,6 @@ const AdminPatient = ({ refresh }) => {
       showToast("error", err?.message || "Failed to delete patient");
     },
   });
-=======
-  }, [response, searchTerm]);
-
-  const getPatient = useCallback(async () => {
-    if (!session?.token) {
-      showToast("error", "Authentication token missing");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const res = await api.get(`/all-patient?page=${page}&limit=${limit}`, {
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      });
-
-      setResponse(res?.data?.getData || []);
-      setCount(res?.data?.pagination?.totalPage || "");
-    } catch (err) {
-      console.error(err);
-      showToast(
-        "error",
-        err?.response?.data?.message || "Failed to fetch patients",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.token, page, limit]);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      getPatient();
-    }
-  }, [status, getPatient, refresh, page]);
-
-  const deletePatient = async () => {
-    if (!deleteId) return;
-
-    if (!session?.token) {
-      showToast("error", "Authentication token missing");
-      return;
-    }
-
-    try {
-      setIsDeleting(true);
-
-      const res = await api.delete(`/patient/${deleteId}`, {
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      });
-
-      setResponse((prev) => prev.filter((p) => p._id !== deleteId));
-      setDeleteId(null);
-
-      showToast(
-        "success",
-        res?.data?.message || "Patient deleted successfully",
-      );
-    } catch (err) {
-      console.error(err);
-      showToast(
-        "error",
-        err?.response?.data?.message || "Failed to delete patient",
-      );
-    } finally {
-      setIsDeleting(false);
-      getPatient();
-    }
-  };
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
 
   return (
     <div className="px-3 xl:px-5 w-full">
@@ -191,11 +88,7 @@ const AdminPatient = ({ refresh }) => {
           <DatePicker />
         </div>
       </div>
-<<<<<<< HEAD
       {/* max-h-[60vh]. deleted  */}
-=======
-{/* max-h-[60vh]. deleted  */}
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
       <div className="w-full overflow-x-auto modern-scroll bg-white rounded-md shadow-sm border border-gray-100  overflow-y-auto">
         <div className="min-w-225">
           {/* Table Header */}
@@ -220,11 +113,7 @@ const AdminPatient = ({ refresh }) => {
           </div>
 
           {/* Loading Skeleton */}
-<<<<<<< HEAD
           {isLoading && !data && (
-=======
-          {loading && (
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             <>
               {Array(limit)
                 .fill(0)
@@ -233,7 +122,6 @@ const AdminPatient = ({ refresh }) => {
                 ))}
             </>
           )}
-<<<<<<< HEAD
           {isFetching && !isLoading && (
             <p className="text-sm text-gray-400 px-3 py-2">Updating data...</p>
           )}
@@ -245,24 +133,14 @@ const AdminPatient = ({ refresh }) => {
           )}
           {/* No Data */}
           {!isLoading && filteredPatients.length === 0 && (
-=======
-
-          {/* No Data */}
-          {!loading && filteredPatients.length === 0 && (
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
             <p className="text-center py-6 text-gray-500">No patients found</p>
           )}
 
           {/* Patient Data */}
           <div className="relative">
             <AnimatePresence mode="popLayout">
-<<<<<<< HEAD
               {!isLoading &&
                 filteredPatients.length !== 0 &&
-=======
-              {!loading &&
-                filteredPatients.length > 0 &&
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
                 filteredPatients.map((items, index) => (
                   <motion.div
                     layout
@@ -314,11 +192,7 @@ const AdminPatient = ({ refresh }) => {
       </div>
 
       <Pagination
-<<<<<<< HEAD
         totalPages={data?.pagination?.totalPage || 1}
-=======
-        totalPages={count}
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
         currentPage={page}
         onPageChange={setPage}
       />
@@ -335,29 +209,17 @@ const AdminPatient = ({ refresh }) => {
               <button
                 onClick={() => setDeleteId(null)}
                 className="px-3 py-1 border rounded-sm text-gray-600"
-<<<<<<< HEAD
                 disabled={deletPatientMutation.isPending}
-=======
-                disabled={isDeleting}
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
               >
                 Cancel
               </button>
 
               <button
-<<<<<<< HEAD
                 onClick={() => deletPatientMutation.mutate()}
                 className="px-3 py-1 bg-red-500 text-white rounded-sm"
                 disabled={deletPatientMutation.isPending}
               >
                 {deletPatientMutation.isPending ? "Deleting..." : "Delete"}
-=======
-                onClick={deletePatient}
-                className="px-3 py-1 bg-red-500 text-white rounded-sm"
-                disabled={isDeleting}
-              >
-                {isDeleting ? "Deleting..." : "Delete"}
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
               </button>
             </div>
           </div>

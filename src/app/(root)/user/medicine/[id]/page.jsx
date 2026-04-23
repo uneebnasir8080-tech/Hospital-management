@@ -75,7 +75,7 @@ const SinglePage = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             className="relative aspect-square bg-white rounded-[3rem] shadow-2xl shadow-slate-200 overflow-hidden group"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50" />
+                            <div className="absolute inset-0 bg-linear-to-br from-blue-50/50 to-indigo-50/50" />
                             <Image
                                 src={medicine.images?.[activeImage] || "/medi3.png"}
                                 alt={medicine.name}
@@ -121,7 +121,7 @@ const SinglePage = () => {
                                 </span>
                             </div>
                             
-                            <h1 className="text-4xl lg:text-5xl font-black text-slate-800 tracking-tighter uppercase mb-4 leading-none text-blue-600">
+                            <h1 className="text-4xl lg:text-5xl font-black text-blue-600 tracking-tighter uppercase mb-4 leading-none text-blue-600">
                                 {medicine.name}
                             </h1>
                             

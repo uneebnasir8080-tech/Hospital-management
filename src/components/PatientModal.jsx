@@ -73,7 +73,7 @@ const PatientModal = ({ onClose }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-150 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -176,7 +176,7 @@ const PatientModal = ({ onClose }) => {
             >
               <span className="relative z-10">Continue to Schedule</span>
               <ArrowRight className="relative z-10 group-hover:translate-x-1 transition-transform" size={18} />
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-linear-to-r from-blue-400 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>
           </div>
         </motion.div>

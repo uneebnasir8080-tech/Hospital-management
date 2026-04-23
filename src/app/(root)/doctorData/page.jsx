@@ -26,19 +26,11 @@ import {
 
 import { zScehma } from "@/lib/zodSchema";
 import { showToast } from "@/lib/showToastify";
-<<<<<<< HEAD
 import Schedule from "@/components/Schedule";
 import { useMutation } from "@tanstack/react-query";
 import { submitDoctorData } from "@/services/doctor/doctorApi";
 
 const DoctorData = () => {
-=======
-import { api } from "@/lib/apiCall";
-import Schedule from "@/components/Schedule";
-
-const DoctorData = () => {
-  const [isLoading, setIsLoading] = useState(false);
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   const [isStatus, setIsStatus] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [preview, setPreview] = useState(null);
@@ -95,51 +87,19 @@ const DoctorData = () => {
     }
   };
 
-<<<<<<< HEAD
   const { mutate: handleSubmitDoctor, isPending: isLoading } = useMutation({
     mutationFn: (formData) => submitDoctorData(formData),
     onSuccess: async (res) => {
       showToast("success", res?.message || "Details added");
-=======
-  const handleOnSubmit = async (values) => {
-    setIsLoading(true);
-    try {
-      if (!data?.token) {
-        showToast("error", "Authentication failed");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("doctor", values.profileImage);
-      formData.append("age", values.age);
-      formData.append("specialization", values.specialization);
-      formData.append("gender", values.gender);
-      formData.append("experience", values.experience);
-      formData.append("role", data?.role || "");
-
-      const res = await api.post("/doctor", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${data.token}`,
-        },
-      });
-
-      showToast("success", res?.data?.message || "Details added");
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
       await update({ ...data, detail: true });
 
       setIsSubmitted(true);
       setTimeout(async () => {
-<<<<<<< HEAD
         await update(); // fetch new session
-=======
-        const refreshed = await update(); // fetch new session
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
         setIsStatus(true);
         form.reset();
         setPreview(null);
       }, 500);
-<<<<<<< HEAD
     },
     onError: (error) => {
       const message =
@@ -163,18 +123,6 @@ const DoctorData = () => {
     formData.append("role", data?.role || "");
 
     handleSubmitDoctor(formData);
-=======
-    } catch (error) {
-      console.error(error);
-
-      const message =
-        error?.response?.data?.message || error?.message || "Upload failed";
-
-      showToast("error", message);
-    } finally {
-      setIsLoading(false);
-    }
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   };
 
   return (

@@ -3,10 +3,7 @@ import { getSession, signOut } from "next-auth/react";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND || "http://localhost:5000",
-<<<<<<< HEAD
   // withCredentials: true,
-=======
->>>>>>> ce95edb81eabee8d726dafaf06f7fc22d11154f6
   headers: {
     "Content-Type": "application/json",
   },
