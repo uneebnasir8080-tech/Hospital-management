@@ -52,7 +52,7 @@ export default async function SettingPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Header Profile Card */}
-      <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-400 to-indigo-600 p-8 md:p-12 shadow-2xl shadow-blue-200/50 mb-8">
+      <div className="relative overflow-hidden rounded-[2rem] bg-linear-to-br from-blue-400 to-indigo-600 p-8 md:p-12 shadow-2xl shadow-blue-200/50 mb-8">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-300/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />

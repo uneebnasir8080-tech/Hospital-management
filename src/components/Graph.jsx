@@ -26,19 +26,19 @@ const Graph = () => {
         {/* Legend */}
         <div className="flex flex-row flex-wrap lg:flex-col gap-x-3 gap-y-1 justify-center">
           <div className="text-[10px] sm:text-xs flex items-center gap-1.5">
-            <div className="bg-blue-500 w-2.5 h-2.5 rounded-full flex-shrink-0"></div>
+            <div className="bg-blue-500 w-2.5 h-2.5 rounded-full shrink-0"></div>
             <p>Paracetamol</p>
           </div>
           <div className="text-[10px] sm:text-xs flex items-center gap-1.5">
-            <div className="bg-yellow-500 w-2.5 h-2.5 rounded-full flex-shrink-0"></div>
+            <div className="bg-yellow-500 w-2.5 h-2.5 rounded-full shrink-0"></div>
             <p>Vitamin Tablets</p>
           </div>
           <div className="text-[10px] sm:text-xs flex items-center gap-1.5">
-            <div className="bg-green-500 w-2.5 h-2.5 rounded-full flex-shrink-0"></div>
+            <div className="bg-green-500 w-2.5 h-2.5 rounded-full shrink-0"></div>
             <p>Antacid Tablets</p>
           </div>
           <div className="text-[10px] sm:text-xs flex items-center gap-1.5">
-            <div className="bg-purple-500 w-2.5 h-2.5 rounded-full flex-shrink-0"></div>
+            <div className="bg-purple-500 w-2.5 h-2.5 rounded-full shrink-0"></div>
             <p>Other</p>
           </div>
         </div>

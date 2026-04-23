@@ -1,49 +1,29 @@
 "use client";
-import  {api}  from "@/lib/apiCall";
-import { showToast } from "@/lib/showToastify";
 import { formatDate } from "@/lib/utils";
-import { useSession } from "next-auth/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TbArrowsDiagonalMinimize } from "react-icons/tb";
+import { useQuery } from "@tanstack/react-query";
+import { getAllAppointments } from "@/services/appointment/appointmentApi";
+
+const SkeletonRow = ({ cols }) => (
+  <tr className="animate-pulse">
+    {Array.from({ length: cols }).map((_, index) => (
+      <td key={index} className="px-4 py-3">
+        <div className="h-3 bg-gray-200 rounded w-20"></div>
+      </td>
+    ))}
+  </tr>
+);
 
 const AdminTable = () => {
   const [pages, setPages] = useState("new");
-  const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState([]);
-  const [error, setError] = useState(null);
 
-  const { data: session, status } = useSession();
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["adminDashboardAppointments"],
+    queryFn: getAllAppointments,
+  });
 
-  const getData = useCallback(async () => {
-    if (!session?.token) return;
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      const res = await api.get("/patient/all-appointment",{
-        headers:{
-          Authorization:`Bearer ${session?.token}`
-        }
-      });
-
-      const resp = res?.data?.getData ?? [];
-      setResponse(resp);
-    } catch (err) {
-      console.error("API Error:", err);
-      setError("Failed to fetch appointments");
-      showToast("Failed to fetch appointments", "error");
-      setResponse([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.token]);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      getData();
-    }
-  }, [status, getData]);
+  const response = data?.getData ?? [];
 
   return (
     <div className="w-full h-67 bg-white rounded-lg flex flex-col shadow-sm">
@@ -95,44 +75,26 @@ const AdminTable = () => {
 
             <tbody className="divide-y text-xs">
 
-              {/* 🔹 Loading Skeleton */}
-              {loading &&
+              {/* Loading Skeleton */}
+              {isLoading &&
                 Array.from({ length: 5 }).map((_, index) => (
-                  <tr key={index} className="animate-pulse">
-                    <td className="px-4 py-3">
-                      <div className="h-3 bg-gray-200 rounded w-16"></div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="h-3 bg-gray-200 rounded w-20"></div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="h-3 bg-gray-200 rounded w-28"></div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="h-3 bg-gray-200 rounded w-24"></div>
-                    </td>
-                    {pages === "old" && (
-                      <td className="px-4 py-3">
-                        <div className="h-3 bg-gray-200 rounded w-16"></div>
-                      </td>
-                    )}
-                  </tr>
+                  <SkeletonRow key={index} cols={pages === "old" ? 5 : 4} />
                 ))}
 
-              {/* 🔹 Error State */}
-              {!loading && error && (
+              {/* Error State */}
+              {!isLoading && isError && (
                 <tr>
                   <td
                     colSpan={pages === "old" ? 5 : 4}
                     className="text-center py-6 text-red-400"
                   >
-                    {error}
+                    Failed to fetch appointments
                   </td>
                 </tr>
               )}
 
-              {/* 🔹 Empty State */}
-              {!loading && !error && response.length === 0 && (
+              {/* Empty State */}
+              {!isLoading && !isError && response.length === 0 && (
                 <tr>
                   <td
                     colSpan={pages === "old" ? 5 : 4}
@@ -143,9 +105,9 @@ const AdminTable = () => {
                 </tr>
               )}
 
-              {/* 🔹 Actual Data */}
-              {!loading &&
-                !error &&
+              {/* Actual Data */}
+              {!isLoading &&
+                !isError &&
                 response.map((item) => (
                   <tr key={item._id} className="hover:bg-gray-50">
                     <td className="px-4 py-2">{item?.time || "-"}</td>

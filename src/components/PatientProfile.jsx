@@ -26,7 +26,6 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
-import { api } from "@/lib/apiCall";
 import {
   Select,
   SelectContent,
@@ -36,13 +35,14 @@ import {
 } from "./ui/select";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateUserProfile } from "@/services/patient/partientApi";
 
 const PatientProfile = ({ response, onClose }) => {
   const { data } = useSession();
-  const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const router = useRouter();
-
+  const queryClient = useQueryClient();
 
 
 const formSchema = useMemo(() => {
@@ -123,40 +123,35 @@ const formSchema = useMemo(() => {
     field.onChange(file);
   };
 
-  const handleOnSubmit = async (values) => {
-    try {
-      console.log("values are :", values);
-      setIsLoading(true);
-      const formData = new FormData();
-
-      if (values.profileImage) {
-        formData.append("profileImage", values.profileImage);
-      }
-
-      formData.append("name", values.name);
-      formData.append("age", values.age);
-      formData.append("gender", values.gender);
-      formData.append("history", values.history);
-      formData.append("blood", values.blood);
-      formData.append("experience", values.experience);
-      formData.append("specialization", values.specialization);
-
-      const res = await api.put("/update-user", formData, {
-        params: { id: data?.id },
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${data?.token}`,
-        },
-      });
-
-      showToast("success", res.data.message);
+  const { mutate: handleUpdate, isPending: isLoading } = useMutation({
+    mutationFn: (formData) => updateUserProfile(formData, data?.id),
+    onSuccess: (res) => {
+      showToast("success", res.message);
+      queryClient.invalidateQueries({ queryKey: ["patientAppointments"] });
       router.refresh();
       onClose();
-    } catch (error) {
+    },
+    onError: (error) => {
       showToast("error", error.response?.data?.message || "Update failed");
-    } finally {
-      setIsLoading(false);
+    },
+  });
+
+  const handleOnSubmit = (values) => {
+    const formData = new FormData();
+
+    if (values.profileImage) {
+      formData.append("profileImage", values.profileImage);
     }
+
+    formData.append("name", values.name);
+    formData.append("age", values.age);
+    formData.append("gender", values.gender);
+    formData.append("history", values.history);
+    formData.append("blood", values.blood);
+    formData.append("experience", values.experience);
+    formData.append("specialization", values.specialization);
+
+    handleUpdate(formData);
   };
 
   return (

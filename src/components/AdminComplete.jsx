@@ -1,13 +1,13 @@
 import { FaSearch } from "react-icons/fa";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { DatePicker } from "./ui/DatePicker";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { calculateAge, formatDate } from "@/lib/utils";
 
 import Pagination from "./Pagination";
-import { api } from "@/lib/apiCall";
-import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { getAppointmentTable } from "@/services/appointment/appointmentApi";
 
 const SkeletonRow = () => (
   <div className="grid grid-cols-7 py-3 border-b animate-pulse text-xs lg:text-[16px]">
@@ -23,17 +23,30 @@ const SkeletonRow = () => (
 );
 
 const AdminComplete = ({ refresh }) => {
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState();
   const [searchTerm, setSearchTerm] = useState("");
-
-  const { data: session, status } = useSession();
   const [page, setPage] = useState(1);
   const limit = 5;
 
+  const { data, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["appointmentTable", "complete", page, limit],
+    queryFn: () => getAppointmentTable(page, limit),
+    placeholderData: (prev) => prev,
+    select: (rawData) => {
+      // Filter for confirmed/pending appointments (same logic as before)
+      const allData = rawData?.getData || [];
+      const completed = allData.filter(
+        (app) => app.status === "confirmed" || app.status === "pending",
+      );
+      return {
+        ...rawData,
+        getData: completed,
+      };
+    },
+  });
+
   const filteredAppointments = React.useMemo(() => {
-    return appointments.filter((item) => {
+    if (!data?.getData) return [];
+    return data.getData.filter((item) => {
       const searchStr = searchTerm.toLowerCase();
       return (
         item?.patientId?.userId?.name?.toLowerCase().includes(searchStr) ||
@@ -42,41 +55,7 @@ const AdminComplete = ({ refresh }) => {
         (item?.date && formatDate(item.date).toLowerCase().includes(searchStr))
       );
     });
-  }, [appointments, searchTerm]);
-
-  const getAppointments = useCallback(async () => {
-    if (!session?.token) return;
-
-    try {
-      setLoading(true);
-      const res = await api.get(
-        `/patient/all-appointment?page=${page}&limit=${limit}`,
-        {
-          headers: {
-            Authorization: `Bearer ${session.token}`,
-          },
-        },
-      );
-
-      const allData = res?.data?.getData || [];
-      const completed = allData.filter(
-        (app) => app.status === "confirmed" || app.status === "pending",
-      );
-      setAppointments(completed);
-      setCount(res?.data?.pagination?.totalPage || "");
-    } catch (err) {
-      console.error(err);
-      showToast("Failed to fetch appointments", "error");
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.token, page, limit]);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      getAppointments();
-    }
-  }, [status, getAppointments, refresh, page]);
+  }, [data, searchTerm]);
 
   return (
     <div className="px-3 lg:px-5">
@@ -125,7 +104,8 @@ const AdminComplete = ({ refresh }) => {
             </p>
           </div>
 
-          {loading && (
+          {/* Loading Skeleton */}
+          {isLoading && !data && (
             <>
               {Array(limit)
                 .fill(0)
@@ -134,20 +114,26 @@ const AdminComplete = ({ refresh }) => {
                 ))}
             </>
           )}
+          {isFetching && !isLoading && (
+            <p className="text-sm text-gray-400 px-3 py-2">Updating data...</p>
+          )}
 
-          {!loading && (
+          {isError && (
+            <div className="p-6 text-red-500">
+              Failed to load appointments. Please try again.
+            </div>
+          )}
+
+          {!isLoading && filteredAppointments.length === 0 && (
+            <p className="text-center py-6 text-gray-500">
+              No completed appointments found
+            </p>
+          )}
+
+          {!isLoading && filteredAppointments.length !== 0 && (
             <div className="relative">
               <AnimatePresence mode="popLayout">
-                {filteredAppointments.length === 0 ? (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-center py-10 text-gray-500"
-                  >
-                    No completed appointments found
-                  </motion.div>
-                ) : (
-                  filteredAppointments.map((items, index) => (
+                {filteredAppointments.map((items, index) => (
                     <motion.div
                       layout
                       initial={{ opacity: 0, y: 10 }}
@@ -191,8 +177,7 @@ const AdminComplete = ({ refresh }) => {
                         Request Fee
                       </button>
                     </motion.div>
-                  ))
-                )}
+                  ))}
               </AnimatePresence>
             </div>
           )}
@@ -200,7 +185,7 @@ const AdminComplete = ({ refresh }) => {
       </div>
 
       <Pagination
-        totalPages={count}
+        totalPages={data?.pagination?.totalPage || 1}
         currentPage={page}
         onPageChange={setPage}
       />

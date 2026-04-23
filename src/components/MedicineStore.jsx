@@ -1,52 +1,36 @@
 "use client";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Search, ShoppingCart, Heart, Star, Package, Star as StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
-import { showToast } from "@/lib/showToastify";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { getMedicines } from "@/services/patient/partientApi";
 
 const MedicineStore = () => {
-  const { data: session, status } = useSession();
-  const [medicines, setMedicines] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { status } = useSession();
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
 
   const categories = ["All", "Prescription", "OTC", "Supplements", "First Aid"];
 
-  const getMedicines = useCallback(async () => {
-    try {
-      if (!session?.token) return;
-      setLoading(true);
-      const res = await api.get("/patient/medicine", {
-        headers: {
-          Authorization: `Bearer ${session?.token}`,
-        },
-      });
-      setMedicines(res?.data?.medicine || []);
-    } catch (error) {
-      console.error("Medicine Fetch Error:", error);
-      showToast("error", "Failed to fetch medicines");
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.token]);
+  const { data, isLoading } = useQuery({
+    queryKey: ["medicines"],
+    queryFn: getMedicines,
+    enabled: status === "authenticated",
+  });
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      getMedicines();
-    }
-  }, [status, getMedicines]);
+  const medicines = data?.medicine || [];
 
-  const filteredMedicines = medicines.filter(med => 
-    (med.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     med.description?.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (category === "All" || med.category === category)
-  );
+  const filteredMedicines = useMemo(() => {
+    return medicines.filter(med => 
+      (med.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+       med.description?.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (category === "All" || med.category === category)
+    );
+  }, [medicines, searchTerm, category]);
 
   return (
     <div className="space-y-10">
@@ -84,7 +68,7 @@ const MedicineStore = () => {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-2 max-h-[60vh] overflow-y-auto modern-scroll pr-4">
         <AnimatePresence>
-          {loading ? (
+          {isLoading ? (
             Array.from({ length: 8 }).map((_, i) => (
               <motion.div
                 key={`skeleton-${i}`}
@@ -119,7 +103,7 @@ const MedicineStore = () => {
                 <Card className="group relative border-none bg-white hover:bg-slate-50 transition-all duration-500 rounded-[2.5rem] shadow-xl shadow-slate-200/30 hover:shadow-2xl hover:shadow-blue-500/10 overflow-hidden text-center flex flex-col items-center p-6">
                   {/* Image Container */}
                   <Link href={`/user/medicine/${med._id}`} className="relative w-full aspect-square mb-6 overflow-hidden rounded-[2rem]">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 transition-transform duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-linear-to-br from-blue-50 to-indigo-50 transition-transform duration-700 group-hover:scale-110" />
                     <Image
                       src={med.images?.[0] || "/med1.png"}
                       alt={med.name}

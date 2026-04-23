@@ -21,16 +21,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaSpinner } from "react-icons/fa";
 import { MdArrowForward } from "react-icons/md";
 import { z } from "zod";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
-import ImageDropField from "@/components/ImageDropField";
 import { showToast } from "@/lib/showToastify";
-import { api } from "@/lib/apiCall";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { submitPatientData } from "@/services/patient/partientApi";
 
 const PatientData = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { data, update } = useSession();
   const [preview, setPreview] = useState(null);
@@ -79,38 +77,33 @@ const PatientData = () => {
     field.onChange(file);
   };
 
-  const handleOnSubmit = async (values) => {
-    try {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append("patient", values.profileImage);
-      formData.append("age", values.age);
-      formData.append("history", values.history);
-      formData.append("gender", values.gender);
-      formData.append("blood", values.blood);
-      const res = await api.post("/patient", formData, {
-        params: {
-          id: data?.id,
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${data?.token}`,
-        },
-      });
-      showToast("success", res.data.message);
+  const { mutate: handleSubmitPatient, isPending: isLoading } = useMutation({
+    mutationFn: (formData) => submitPatientData(formData, data?.id),
+    onSuccess: async (res) => {
+      showToast("success", res.message);
       await update({
-        detail: res?.data.patient,
+        detail: res?.patient,
       });
       setIsSubmitted(true);
       setTimeout(() => {
         router.push("/user/home");
         form.reset();
       }, 500);
-    } catch (error) {
+    },
+    onError: (error) => {
       showToast("error", error.response?.data?.message || "Upload failed");
-    } finally {
-      setIsLoading(false);
-    }
+    },
+  });
+
+  const handleOnSubmit = (values) => {
+    const formData = new FormData();
+    formData.append("patient", values.profileImage);
+    formData.append("age", values.age);
+    formData.append("history", values.history);
+    formData.append("gender", values.gender);
+    formData.append("blood", values.blood);
+
+    handleSubmitPatient(formData);
   };
 
   return (

@@ -71,7 +71,7 @@ const ClientProfile = ({ resData }) => {
             className="relative"
           >
             {/* Background Decorative Element */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] shadow-2xl shadow-blue-200" />
+            <div className="absolute inset-0 bg-linear-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] shadow-2xl shadow-blue-200" />
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl" />
             
             <div className="relative p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">

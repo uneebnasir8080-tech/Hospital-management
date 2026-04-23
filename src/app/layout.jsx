@@ -14,8 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Hospital Management System",
-  description: "A comprehensive hospital management system for patients, doctors, and administrators",
+  title: "JHC - Hospital Management System",
+  description:
+    "A comprehensive hospital management system for patients, doctors, and administrators",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {

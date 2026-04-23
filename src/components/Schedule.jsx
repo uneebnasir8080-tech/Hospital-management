@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
   Form,
   FormControl,
@@ -16,8 +16,9 @@ import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { showToast } from "@/lib/showToastify";
-import { api } from "@/lib/apiCall";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { submitSchedule } from "@/services/doctor/doctorApi";
 
 const timeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i;
 const slotRegex = /^\d+\s?(min|minutes)$/i;
@@ -49,8 +50,6 @@ const weekDays = [
 ];
 
 const Schedule = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const { data } = useSession();
   const router = useRouter();
 
@@ -65,51 +64,41 @@ const Schedule = () => {
     },
   });
 
-  const handleOnSubmit = async (values) => {
+  const { mutate: handleSubmitSchedule, isPending: isLoading } = useMutation({
+    mutationFn: (payload) => submitSchedule(payload),
+    onSuccess: (res) => {
+      showToast("success", res?.message || "Schedule added");
+      setTimeout(() => {
+        form.reset();
+        router.push("/admin/dashboard");
+      }, 500);
+    },
+    onError: (error) => {
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong";
+      showToast("error", message);
+    },
+  });
+
+  const handleOnSubmit = (values) => {
     if (!data?.token) {
       showToast("error", "Authentication failed");
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      const payload = {
-        ...values,
-        doctorId: data?.id,
-        days: values.days.map((day) => dayMap[day]),
-      };
-
-      const res = await api.post("/doctor/schedule", payload, {
-        headers: {
-          Authorization: `Bearer ${data.token}`,
-        },
-      });
-
-      showToast("success", res?.data?.message || "Schedule added");
-      setIsSubmitted(true);
-      setTimeout(() => {
-        form.reset();
-        router.push("/admin/dashboard");
-      }, 500);
-    } catch (error) {
-      console.error("Schedule Error:", error);
-
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Something went wrong";
-
-      showToast("error", message);
-    } finally {
-      setIsLoading(false);
-    }
+    handleSubmitSchedule({
+      ...values,
+      doctorId: data?.id,
+      days: values.days.map((day) => dayMap[day]),
+    });
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 sm:p-8">
       <AnimatePresence>
-        {!isSubmitted && (
+        {!isLoading && (
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

@@ -74,7 +74,7 @@ const RegisterPage = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 sm:p-8">
       <div className="flex w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl bg-white min-h-[600px]">
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex-col items-center justify-center relative overflow-hidden">
+        <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 flex-col items-center justify-center relative overflow-hidden">
           {/* Decorative background glows */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-20 left-10 w-72 h-72 bg-teal-500 rounded-full blur-3xl"></div>

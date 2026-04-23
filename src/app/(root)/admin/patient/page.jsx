@@ -1,11 +1,10 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import AdminPatient from "@/components/AdminPatient";
 import RegPatient from "@/components/RegPatient";
 
 const PatientPage = () => {
-  const [active, setActive]= useState(false)
-  const [refresh, setRefresh] =useState(0)
+  const [active, setActive] = useState(false);
   return (
     <div className="bg-white  rounded-lg ">
       <div className="">
@@ -19,17 +18,24 @@ const PatientPage = () => {
             </button>
           </div>
           <div className=" ">
-            <button onClick={()=>setActive(!active)}  className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer text-xs px-2 rounded-sm text-white gap-1 flex items-center">
+            <button
+              onClick={() => setActive(!active)}
+              className="bg-[#3497F9] hover:bg-[#3497F9] cursor-pointer text-xs px-2 rounded-sm text-white gap-1 flex items-center"
+            >
               <span className="text-[16px] lg:text-xl pb-1">+</span>{" "}
-              <span  className="hidden md:block">New Publish</span>
+              <span className="hidden md:block">New Publish</span>
             </button>
           </div>
         </div>
         {/* pages  */}
-        <AdminPatient refresh={refresh}/>
-      {active && <RegPatient onClose={()=>{setActive(!active)
-        setRefresh(prev=>prev+1)
-       }}/>}
+        <AdminPatient />
+        {active && (
+          <RegPatient
+            onClose={() => {
+              setActive(!active);
+            }}
+          />
+        )}
       </div>
     </div>
   );

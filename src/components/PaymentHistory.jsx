@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { Card, CardContent } from "./ui/card";
-import { ChevronLeft, CreditCard, Calendar, ArrowUpRight, DollarSign, ExternalLink } from "lucide-react";
+import { ChevronLeft, CreditCard,  DollarSign, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
 const historyData = [

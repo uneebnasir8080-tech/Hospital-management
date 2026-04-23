@@ -1,7 +1,7 @@
 "use client";
 
 import { FaSearch } from "react-icons/fa";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { DatePicker } from "./ui/DatePicker";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { calculateAge, formatDate } from "@/lib/utils";
@@ -9,10 +9,11 @@ import { deleteAppointment } from "@/app/actions/deleteAppointment";
 import { showToast } from "@/lib/showToastify";
 
 import Pagination from "./Pagination";
-import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAppointmentTable } from "@/services/appointment/appointmentApi";
 
 const SkeletonRow = () => (
   <div className="grid grid-cols-6 py-3 border-b animate-pulse text-xs lg:text-[15px]">
@@ -28,20 +29,35 @@ const SkeletonRow = () => (
 );
 
 const AdminNewAppoint = ({ refresh }) => {
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState();
-  const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [deleteId, setDeleteId]= useState()
+  const [deleteId, setDeleteId] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [page, setPage] = useState(1);
   const limit = 5;
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["appointmentTable", "new", page, limit],
+    queryFn: () => getAppointmentTable(page, limit),
+    placeholderData: (prev) => prev,
+    select: (rawData) => {
+      // Filter for pending/confirmed appointments (same logic as before)
+      const allData = rawData?.getData || [];
+      const pending = allData.filter(
+        (app) => app.status === "pending" || app.status === "confirmed",
+      );
+      return {
+        ...rawData,
+        getData: pending,
+      };
+    },
+  });
 
   const filteredAppointments = React.useMemo(() => {
-    return appointments.filter((item) => {
+    if (!data?.getData) return [];
+    return data.getData.filter((item) => {
       const searchStr = searchTerm.toLowerCase();
       return (
         item?.patientId?.userId?.name?.toLowerCase().includes(searchStr) ||
@@ -50,71 +66,36 @@ const AdminNewAppoint = ({ refresh }) => {
         (item?.date && formatDate(item.date).toLowerCase().includes(searchStr))
       );
     });
-  }, [appointments, searchTerm]);
+  }, [data, searchTerm]);
 
-  const getAppointments = useCallback(async () => {
-    if (!session?.token) return;
-
-    try {
-      setLoading(true);
-      const res = await api.get(
-        `/patient/all-appointment?page=${page}&limit=${limit}`,
-        {
-          headers: {
-            Authorization: `Bearer ${session.token}`,
-          },
-        },
-      );
-
-      const allData = res?.data?.getData || [];
-      const pending = allData.filter(
-        (app) => app.status === "pending" || app.status === "confirmed",
-      );
-      setAppointments(pending);
-      setCount(res?.data?.pagination?.totalPage || "");
-    } catch (err) {
-      console.error(err);
-      showToast("Failed to fetch appointments", "error");
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.token, page, limit]);
-
-    useEffect(() => {
-    if (status === "authenticated") {
-      getAppointments();
-    }
-  }, [status, getAppointments, refresh, page]);
   /* ========================
-      DELETE FUNCTION
+      DELETE MUTATION
   ======================== */
-
-  const handleDelete = async () => {
-    try {
-      setDeleting(true);
-
+  const { mutate: handleDelete, isPending: deleting } = useMutation({
+    mutationFn: async (id) => {
       const formData = new FormData();
-      formData.append("id", deleteId);
+      formData.append("id", id);
       formData.append("token", session?.token);
-
-      const res = await deleteAppointment(formData);
-
+      return deleteAppointment(formData);
+    },
+    onSuccess: (res) => {
       if (res?.success) {
-        setAppointments((prev) => prev.filter((item) => item._id !== deleteId));
         showToast("Appointment deleted successfully ✅", "success");
       } else {
         showToast("Failed to delete appointment ❌", "error");
       }
-    } catch (error) {
-      console.error("Delete Error:", error);
-      showToast("Something went wrong ❌", "error");
-    } finally {
-      setDeleting(false);
       setShowModal(false);
       setDeleteId(null);
-      getAppointments();
-    }
-  };
+      // Invalidate both new and complete appointment queries
+      queryClient.invalidateQueries({ queryKey: ["appointmentTable"] });
+    },
+    onError: (error) => {
+      console.error("Delete Error:", error);
+      showToast("Something went wrong ❌", "error");
+      setShowModal(false);
+      setDeleteId(null);
+    },
+  });
 
 
 
@@ -165,7 +146,8 @@ const AdminNewAppoint = ({ refresh }) => {
             </p>
           </div>
 
-          {loading && (
+          {/* Loading Skeleton */}
+          {isLoading && !data && (
             <>
               {Array(limit)
                 .fill(0)
@@ -174,20 +156,26 @@ const AdminNewAppoint = ({ refresh }) => {
                 ))}
             </>
           )}
+          {isFetching && !isLoading && (
+            <p className="text-sm text-gray-400 px-3 py-2">Updating data...</p>
+          )}
 
-          {!loading && (
+          {isError && (
+            <div className="p-6 text-red-500">
+              Failed to load appointments. Please try again.
+            </div>
+          )}
+
+          {!isLoading && filteredAppointments.length === 0 && (
+            <p className="text-center py-6 text-gray-500">
+              No new appointments found
+            </p>
+          )}
+
+          {!isLoading && filteredAppointments.length !== 0 && (
             <div className="relative">
               <AnimatePresence mode="popLayout">
-                {filteredAppointments.length === 0 ? (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-center py-10 text-gray-500"
-                  >
-                    No new appointments found
-                  </motion.div>
-                ) : (
-                  filteredAppointments.map((item, index) => (
+                {filteredAppointments.map((item, index) => (
                     <motion.div
                       layout
                       initial={{ opacity: 0, y: 10 }}
@@ -229,8 +217,7 @@ const AdminNewAppoint = ({ refresh }) => {
                         </button>
                       </div>
                     </motion.div>
-                  ))
-                )}
+                  ))}
               </AnimatePresence>
             </div>
           )}
@@ -238,7 +225,7 @@ const AdminNewAppoint = ({ refresh }) => {
       </div>
 
       <Pagination
-        totalPages={count}
+        totalPages={data?.pagination?.totalPage || 1}
         currentPage={page}
         onPageChange={setPage}
       />
@@ -286,7 +273,7 @@ const AdminNewAppoint = ({ refresh }) => {
 
                 <button
                   disabled={deleting}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(deleteId)}
                   className="flex-1 px-4 py-3 rounded-xl text-white bg-red-500 font-semibold hover:bg-red-600 transition disabled:opacity-50 shadow-lg shadow-red-100"
                 >
                   {deleting ? "Deleting..." : "Delete Now"}

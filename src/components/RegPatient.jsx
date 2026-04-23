@@ -11,28 +11,26 @@ import { zScehma } from "@/lib/zodSchema";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {  FaSpinner } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { IoPersonOutline } from "react-icons/io5";
 import { TfiEmail } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
-import  {api}  from "@/lib/apiCall";
 import { showToast } from "@/lib/showToastify";
-import { useRouter } from "next/navigation";
 import RegData from "./RegData";
 import { motion } from "framer-motion";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createPatient } from "@/services/patient/partientApi";
 
-const RegPatient = ({onClose}) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const[storeId, setStoreId]= useState()
-  const [next, setNext]= useState(false)
+const RegPatient = ({ onClose }) => {
+  const [storeId, setStoreId] = useState();
+  const [next, setNext] = useState(false);
 
-  const formSchema = zScehma
-    .pick({
-      name: true,
-      email: true,
-      password: true,
-    })
+  const formSchema = zScehma.pick({
+    name: true,
+    email: true,
+    password: true,
+  });
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,29 +40,25 @@ const RegPatient = ({onClose}) => {
     },
   });
 
-  const handleOnSubmit = async(values, e) => {
-    try {
-    setIsLoading(true);
+  // mutation
 
-    const res = await api.post("/create", values);
-    const ids= res?.data.data.id
-    setStoreId(ids)
-    // Success handling
-    showToast("success", res.data.message || "Account created successfully");
-    form.reset();
-    setNext(()=>!next)
-  } catch (error) {
-    const message =
-      error.response?.data?.message || "Something went wrong. Please try again.";
+  const addPatientMutation = useMutation({
+    mutationFn: (values) => createPatient(values),
+    onSuccess: (res) => {
+      if (res?.data?.id) {
+        setStoreId(res?.data?.id);
+      }
 
-    showToast("error", message);
-  } finally {
-    setIsLoading(false);
-  }
-  };
+      setNext(() => !next);
+    },
+
+    onError: () => {
+      showToast("error", "Failed to add patient");
+    },
+  });
+
   return (
     <div className="fixed inset-0 bg-black/20 z-150 flex items-center">
-
       {!next && (
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -89,7 +83,9 @@ const RegPatient = ({onClose}) => {
 
               <form
                 className="space-y-3 px-7 my-5 w-full"
-                onSubmit={form.handleSubmit(handleOnSubmit)}
+                onSubmit={form.handleSubmit((data) => {
+                  addPatientMutation.mutate(data);
+                })}
               >
                 <Form {...form}>
                   <div className="">
@@ -188,10 +184,10 @@ const RegPatient = ({onClose}) => {
                   </Button>
                   <Button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={addPatientMutation.isPending}
                     className={`bg-[#3497F9] py-5 text-lg w-50 hover:bg-[#106ecc] cursor-pointer`}
                   >
-                    {isLoading ? (
+                    {addPatientMutation.isPending ? (
                       <FaSpinner className="animate-spin text-2xl text-white" />
                     ) : (
                       "Next"
@@ -203,7 +199,7 @@ const RegPatient = ({onClose}) => {
           </Card>
         </motion.div>
       )}
-      {next && <RegData onClose={onClose} ids={storeId}/>}
+      {next && <RegData onClose={onClose} ids={storeId} />}
     </div>
   );
 };

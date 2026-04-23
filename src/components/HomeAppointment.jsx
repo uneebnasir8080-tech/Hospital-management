@@ -1,52 +1,24 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { Card, CardContent } from "./ui/card";
-import { Calendar, User, Clock, ArrowRight, Activity } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Activity } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { showToast } from "@/lib/showToastify";
-import { api } from "@/lib/apiCall";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { getPatientAppointments } from "@/services/patient/partientApi";
 
 const HomeAppointment = () => {
   const { data: session, status } = useSession();
-  const [resData, setResData] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (status !== "authenticated") return;
+  const { data, isLoading } = useQuery({
+    queryKey: ["patientAppointments", session?.id],
+    queryFn: () => getPatientAppointments(session?.id),
+    enabled: status === "authenticated" && session?.role === "patient",
+  });
 
-    const getData = async () => {
-      try {
-        if (session?.role !== "patient") {
-          setLoading(false);
-          return;
-        }
-
-        const res = await api.get("/patient/appointment", {
-          params:{
-            userId:session?.id
-          },
-          headers: {
-            Authorization: `Bearer ${session?.token}`,
-          },
-        });
-
-        setResData(res?.data?.getData?.appointment || []);
-      } catch (error) {
-        console.error("Appointment Fetch Error:", error);
-        showToast(
-          "error",
-          error?.response?.data?.message || "Failed to fetch appointments"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getData();
-  }, [status, session?.token, session?.id, session?.role]);
+  const resData = data?.getData?.appointment || [];
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -60,9 +32,9 @@ const HomeAppointment = () => {
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* 🔹 Skeleton Loader */}
+        {/* Skeleton Loader */}
         <AnimatePresence>
-          {loading &&
+          {isLoading &&
             Array.from({ length: 4 }).map((_, i) => (
               <motion.div
                 key={`skeleton-${i}`}
@@ -84,8 +56,8 @@ const HomeAppointment = () => {
             ))}
         </AnimatePresence>
 
-        {/* 🔹 No Appointment Box */}
-        {!loading && resData.length === 0 && (
+        {/* No Appointment Box */}
+        {!isLoading && resData.length === 0 && (
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -104,8 +76,8 @@ const HomeAppointment = () => {
           </motion.div>
         )}
 
-        {/* 🔹 Real Data */}
-        {!loading &&
+        {/* Real Data */}
+        {!isLoading &&
           resData.length > 0 &&
           resData.map((data, index) => (
             <motion.div

@@ -121,7 +121,7 @@ const Message = () => {
                 }`}
               >
                 {/* Avatar with Status */}
-                <div className="relative flex-shrink-0">
+                <div className="relative shrink-0">
                   <div
                     className={`w-12 h-12 rounded-2xl overflow-hidden shadow-sm border-2 ${click === item.id ? "border-blue-400" : "border-white"}`}
                   >
@@ -158,7 +158,7 @@ const Message = () => {
                       {item.desc}
                     </p>
                     {item.unread > 0 && click !== item.id ? (
-                      <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg h-5 min-w-[20px] flex items-center justify-center">
+                      <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg h-5 min-w-5 flex items-center justify-center">
                         {item.unread}
                       </span>
                     ) : (

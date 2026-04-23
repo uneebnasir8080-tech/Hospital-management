@@ -1,12 +1,9 @@
 "use client";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
-import { Button } from "./ui/button";
 import Booking from "./Booking";
-import { api } from "@/lib/apiCall";
 import { useSession } from "next-auth/react";
-import { toast } from "react-toastify";
 import { showToast } from "@/lib/showToastify";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,43 +14,34 @@ import {
   Loader2,
   Search,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getAllDoctors } from "@/services/doctor/doctorApi";
 
 const NewAppoint = () => {
   const [docId, setDocId] = useState(null);
-  const [doctor, setDoctor] = useState([]);
   const [isActive, setIsActive] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
-  const getData = useCallback(async () => {
-    if (!session?.token) return;
+  const { data, isLoading } = useQuery({
+    queryKey: ["allDoctors"],
+    queryFn: getAllDoctors,
+    enabled: status === "authenticated",
+  });
 
-    try {
-      setLoading(true);
-      const res = await api.get("/all-doctors", {
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      });
+  const doctor = data?.getData ?? [];
 
-      const doctors = res?.data?.getData ?? [];
-      setDoctor(Array.isArray(doctors) ? doctors : []);
-    } catch (error) {
-      console.error("Doctor Fetch Error:", error);
-      toast.error(error?.response?.data?.message || "Failed to fetch doctors");
-      setDoctor([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.token]);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      getData();
-    }
-  }, [status, getData]);
+  const filteredDoctors = useMemo(() => {
+    if (!Array.isArray(doctor)) return [];
+    return doctor.filter(
+      (d) =>
+        d.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        d.doctor?.specialization
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()),
+    );
+  }, [doctor, searchTerm]);
 
   const handleSubmit = async () => {
     if (!Array.isArray(doctor) || !docId) return;
@@ -74,14 +62,6 @@ const NewAppoint = () => {
 
     showToast("error", "Doctor doesn't have Schedule");
   };
-
-  const filteredDoctors = doctor.filter(
-    (d) =>
-      d.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.doctor?.specialization
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()),
-  );
 
   return (
     <div className="space-y-8">
@@ -108,7 +88,7 @@ const NewAppoint = () => {
       {/* Doctor List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[50vh] overflow-y-auto modern-scroll pr-2">
         <AnimatePresence>
-          {loading ? (
+          {isLoading ? (
             Array.from({ length: 4 }).map((_, index) => (
               <motion.div
                 key={`loading-${index}`}
@@ -207,11 +187,11 @@ const NewAppoint = () => {
       {/* Continue Action */}
       <div className="pt-4 border-t border-slate-100">
         <button
-          disabled={!docId || loading}
+          disabled={!docId || isLoading}
           onClick={handleSubmit}
           className="w-full flex items-center justify-center gap-3 py-5 bg-slate-900 hover:bg-black text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed group"
         >
-          {loading ? (
+          {isLoading ? (
             <Loader2 className="animate-spin" size={18} />
           ) : (
             <>
